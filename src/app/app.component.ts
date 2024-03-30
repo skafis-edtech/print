@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,16 +23,24 @@ export class AppComponent {
   titleForm: FormGroup;
 
   constructor(private fb: FormBuilder) {
-    // Initialize the form with a single control for the title
     this.titleForm = this.fb.group({
-      title: ['', Validators.required], // Make the title field required
+      title: ['', Validators.required],
+      questions: this.fb.array([]),
     });
+
+    this.addQuestion();
   }
 
-  // Function to be called when the form is submitted
+  get questions(): FormArray {
+    return this.titleForm.get('questions') as FormArray;
+  }
+
+  addQuestion(): void {
+    this.questions.push(this.fb.control(''));
+  }
+
   saveTitle(): void {
-    const titleValue = this.titleForm.get('title')!.value;
-    console.log('Saved Title:', titleValue);
-    // Here you would typically handle the state update to save the title
+    const value = this.titleForm.value;
+    console.log('value: ', value);
   }
 }

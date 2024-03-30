@@ -1,24 +1,44 @@
 <form [formGroup]="titleForm" (ngSubmit)="saveTitle()">
   <h1>Math test maker</h1>
   <p>
-    Generates HTML file with or without ability to check answers. Without
-    ability to check answer for student itself, the encrypted signed answer file
-    will be generated
+    Generates HTML file with or without ability to check answers. Without the
+    ability to check the answer for the student itself, the encrypted signed
+    answer file will be generated.
   </p>
   <mat-form-field appearance="fill">
     <mat-label>Enter Title</mat-label>
     <input matInput placeholder="Enter a title" formControlName="title" />
-    <mat-error *ngIf="titleForm.controls['title'].errors?.['required']">
+    <mat-error *ngIf="titleForm.get('title')?.errors?.['required']">
       Title is required.
     </mat-error>
   </mat-form-field>
 
+  <div formArrayName="questions">
+    <div *ngFor="let questionControl of questions.controls; let i = index">
+      <mat-form-field appearance="fill">
+        <mat-label>Question {{ i + 1 }}</mat-label>
+        <input
+          matInput
+          [placeholder]="'Enter question ' + (i + 1)"
+          [formControlName]="i"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+  <button
+    type="button"
+    mat-raised-button
+    color="secondary"
+    (click)="addQuestion()"
+  >
+    Add question
+  </button>
   <button
     mat-raised-button
     color="primary"
     type="submit"
     [disabled]="titleForm.invalid"
   >
-    Save Title
+    Download HTML
   </button>
 </form>
