@@ -1,27 +1,16 @@
-# TestMaker
+# Test maker
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.1.
+Website for teachers to make tests and assignments - both online and to print.  
 
-## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Tech
 
-## Code scaffolding
+- Angular
+- Github pages
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Version plan
+1. Only one choice test, only text questions/answers > html which requires name and then it generates a file (signed or sth with encryption so can't be forged).
+2. Multiple choice, insert text, latex questions/answers > html or pdf with answer sheet.
+3. Insert pictures, drawn problems, check answers from html generated file. 
+4. Host generated test with link, sends answers to teacher, check answers also with a link for teachers. 
+5. kahoot type quiz demonstration.
