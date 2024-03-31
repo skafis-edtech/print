@@ -84,7 +84,7 @@ export class AppComponent {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Math Quiz</title>
+        <title>${this.titleForm.value.title}</title>
         <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
         <style>
           body {
@@ -173,7 +173,7 @@ export class AppComponent {
         </style>
       </head>
       <body>
-        <div class="description"></div>
+        <div class="description"><h1>${this.titleForm.value.title}</h1></div>
     
         <div class="container">
           <!-- Questions will be inserted here by JavaScript -->
