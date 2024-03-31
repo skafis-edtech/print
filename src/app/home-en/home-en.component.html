@@ -1,9 +1,9 @@
 <form [formGroup]="titleForm" (ngSubmit)="generateHTML()">
-  <h1>Matematikos testų gaminimo priemonė "sukurktesta.lt"</h1>
+  <h1>Math test maker "sukurktesta.lt"</h1>
   <p>
-    Šis tinklapis sugeneruoja HTML failą su klausimais, kur tik vienas atsakymo
-    variantas yra teisingas. HTML failo naudotojas tuomet gali atsakyti
-    klausimus ir pasitikrinti atsakymus
+    This website generates HTML file with questionaire, where only one answer
+    option is correct. The HTML file user then can answer questions and check
+    the answers
   </p>
   <button
     type="button"
@@ -11,16 +11,13 @@
     color="secondary"
     (click)="changeLanguage()"
   >
-    English
+    Lietuvių
   </button>
   <mat-form-field appearance="fill">
-    <mat-label data-translate>Įveskite pavadinimą</mat-label>
+    <mat-label>Enter Title</mat-label>
     <input matInput placeholder="Enter a title" formControlName="title" />
-    <mat-error
-      *ngIf="titleForm.get('title')?.errors?.['required']"
-      data-translate
-    >
-      Pavadinimas yra privalomas.
+    <mat-error *ngIf="titleForm.get('title')?.errors?.['required']">
+      Title is required.
     </mat-error>
   </mat-form-field>
 
@@ -30,7 +27,7 @@
       [formGroupName]="i"
     >
       <mat-form-field appearance="fill">
-        <mat-label>Klausimo formuluotė</mat-label>
+        <mat-label>Question Text</mat-label>
         <input
           matInput
           placeholder="Enter question text"
@@ -46,7 +43,7 @@
           <div *ngFor="let ctrl of getOptions(i).controls; let j = index">
             <mat-radio-button [value]="j"></mat-radio-button>
             <mat-form-field appearance="fill">
-              <mat-label data-translate>Pasirinkimas</mat-label>
+              <mat-label>Option</mat-label>
               <input
                 matInput
                 [placeholder]="'Option Text'"
@@ -65,7 +62,7 @@
     color="secondary"
     (click)="addQuestion()"
   >
-    Pridėti klausimą
+    Add question
   </button>
 
   <button
@@ -75,7 +72,7 @@
     color="warn"
     (click)="removeLastQuestion()"
   >
-    Pašalinti paskutinį klausimą
+    Remove last question
   </button>
 
   <button
@@ -84,6 +81,6 @@
     type="submit"
     [disabled]="titleForm.invalid"
   >
-    Atsisiųsti užduočių HTML
+    Download questionaire HTML
   </button>
 </form>

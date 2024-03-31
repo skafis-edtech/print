@@ -2,8 +2,9 @@ import { FormControl } from '@angular/forms';
 
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-
-import { Router } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
+import { TRANSLATIONS } from '../app.tranlastions';
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface Questionaire {
   title: FormControl<string>;
@@ -17,10 +18,10 @@ interface Question {
 }
 
 @Component({
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  templateUrl: './home-en.component.html',
+  styleUrls: ['./home-en.component.scss'],
 })
-export class HomeComponent {
+export class HomeEnComponent {
   titleForm: FormGroup<Questionaire>;
 
   constructor(private fb: FormBuilder, private router: Router) {
@@ -28,6 +29,7 @@ export class HomeComponent {
       title: this.fb.nonNullable.control<string>('', Validators.required),
       questions: this.fb.nonNullable.array<Question>([]),
     });
+
     this.addQuestion();
   }
 
@@ -110,6 +112,6 @@ export class HomeComponent {
   }
 
   changeLanguage(): void {
-    window.location.href = 'en';
+    window.location.href = '';
   }
 }
