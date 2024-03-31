@@ -1,6 +1,9 @@
-<h1>Math test maker</h1>
-<p>Generates HTML file with or without ability to check answers...</p>
-<p data-translate>Math test maker</p>
+<h1 data-translate>Math test maker</h1>
+<p data-translate>
+  This website generates HTML file with questionaire, where only one answer
+  option is correct. The HTML file user then can answer questions and check the
+  answers
+</p>
 <button
   type="button"
   mat-raised-button
@@ -12,9 +15,12 @@
 
 <form [formGroup]="titleForm" (ngSubmit)="generateHTML()">
   <mat-form-field appearance="fill">
-    <mat-label>Enter Title</mat-label>
+    <mat-label data-translate>Enter Title</mat-label>
     <input matInput placeholder="Enter a title" formControlName="title" />
-    <mat-error *ngIf="titleForm.get('title')?.errors?.['required']">
+    <mat-error
+      *ngIf="titleForm.get('title')?.errors?.['required']"
+      data-translate
+    >
       Title is required.
     </mat-error>
   </mat-form-field>
@@ -25,7 +31,7 @@
       [formGroupName]="i"
     >
       <mat-form-field appearance="fill">
-        <mat-label>Question Text</mat-label>
+        <mat-label data-translate>Question Text</mat-label>
         <input
           matInput
           placeholder="Enter question text"
@@ -41,7 +47,7 @@
           <div *ngFor="let ctrl of getOptions(i).controls; let j = index">
             <mat-radio-button [value]="j"></mat-radio-button>
             <mat-form-field appearance="fill">
-              <mat-label>Option{{ j }}</mat-label>
+              <mat-label data-translate>Option</mat-label>
               <input
                 matInput
                 [placeholder]="'Option Text'"
@@ -59,6 +65,7 @@
     mat-raised-button
     color="secondary"
     (click)="addQuestion()"
+    data-translate
   >
     Add question
   </button>
@@ -69,8 +76,9 @@
     mat-raised-button
     color="warn"
     (click)="removeLastQuestion()"
+    data-translate
   >
-    Remove Last Question
+    Remove last question
   </button>
 
   <button
@@ -78,6 +86,7 @@
     color="primary"
     type="submit"
     [disabled]="titleForm.invalid"
+    data-translate
   >
     Download HTML
   </button>
