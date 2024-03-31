@@ -1,10 +1,7 @@
-<form [formGroup]="titleForm" (ngSubmit)="saveTitle()">
+<form [formGroup]="titleForm" (ngSubmit)="generateHTML()">
   <h1>Math test maker</h1>
-  <p>
-    Generates HTML file with or without ability to check answers. Without the
-    ability to check the answer for the student itself, the encrypted signed
-    answer file will be generated.
-  </p>
+  <p>Generates HTML file with or without ability to check answers...</p>
+
   <mat-form-field appearance="fill">
     <mat-label>Enter Title</mat-label>
     <input matInput placeholder="Enter a title" formControlName="title" />
@@ -14,17 +11,40 @@
   </mat-form-field>
 
   <div formArrayName="questions">
-    <div *ngFor="let questionControl of questions.controls; let i = index">
+    <div
+      *ngFor="let question of questions.controls; let i = index"
+      [formGroupName]="i"
+    >
       <mat-form-field appearance="fill">
-        <mat-label>Question {{ i + 1 }}</mat-label>
+        <mat-label>Question Text</mat-label>
         <input
           matInput
-          [placeholder]="'Enter question ' + (i + 1)"
-          [formControlName]="i"
+          placeholder="Enter question text"
+          formControlName="text"
         />
       </mat-form-field>
+
+      <mat-radio-group
+        aria-label="Select an option"
+        formControlName="selectedOption"
+      >
+        <div formArrayName="options">
+          <div *ngFor="let ctrl of getOptions(i).controls; let j = index">
+            <mat-radio-button [value]="j"></mat-radio-button>
+            <mat-form-field appearance="fill">
+              <mat-label>Option{{ j }}</mat-label>
+              <input
+                matInput
+                [placeholder]="'Option Text'"
+                [formControlName]="j"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-radio-group>
     </div>
   </div>
+
   <button
     type="button"
     mat-raised-button
@@ -33,6 +53,17 @@
   >
     Add question
   </button>
+
+  <button
+    *ngIf="questions.length > 1"
+    type="button"
+    mat-raised-button
+    color="warn"
+    (click)="removeLastQuestion()"
+  >
+    Remove Last Question
+  </button>
+
   <button
     mat-raised-button
     color="primary"
