@@ -1,89 +1,137 @@
-<form [formGroup]="titleForm" (ngSubmit)="generateHTML()">
-  <h1>Matematikos testų gaminimo priemonė "sukurktesta.lt"</h1>
+<main>
+  <header>
+    <button
+      type="button"
+      mat-mini-fab
+      color="secondary"
+      (click)="changeLanguage()"
+    >
+      EN
+    </button>
+
+    <h1>skafis</h1>
+    <h2><em>Testus kurk lengvai!</em></h2>
+  </header>
   <p>
     Šis tinklapis sugeneruoja HTML failą su klausimais, kur tik vienas atsakymo
     variantas yra teisingas. HTML failo naudotojas tuomet gali atsakyti
-    klausimus ir pasitikrinti atsakymus
+    klausimus ir pasitikrinti atsakymus. Tinklapis tobulinamas.
   </p>
-  <button
-    type="button"
-    mat-raised-button
-    color="secondary"
-    (click)="changeLanguage()"
-  >
-    English
-  </button>
-  <mat-form-field appearance="fill">
-    <mat-label data-translate>Įveskite pavadinimą</mat-label>
-    <input matInput placeholder="Enter a title" formControlName="title" />
-    <mat-error
-      *ngIf="titleForm.get('title')?.errors?.['required']"
-      data-translate
-    >
-      Pavadinimas yra privalomas.
-    </mat-error>
-  </mat-form-field>
 
-  <div formArrayName="questions">
-    <div
-      *ngFor="let question of questions.controls; let i = index"
-      [formGroupName]="i"
-    >
-      <mat-form-field appearance="fill">
-        <mat-label>Klausimo formuluotė</mat-label>
-        <input
-          matInput
-          placeholder="Enter question text"
-          formControlName="text"
-        />
-      </mat-form-field>
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <h4>
+        <strong>Hmm, matai? Nėra reklamų! Tegu taip ir išlieka ;)</strong>
+      </h4>
+      <p>Būčiau labai dėkingas už piniginę paramą, už įdėtą darbą.</p>
+      <p>
+        <li>
+          Pavedimu (paskirtis: skafis parama):
+          <br />
+          Naglis Šuliokas LT943250092929077836
+          <button type="button" color="secondary" (click)="copyBankDetails()">
+            {{ copied ? "Nukopijuota" : "Kopijuoti" }}
+          </button>
+        </li>
+      </p>
+    </mat-card-content>
+  </mat-card>
 
-      <mat-radio-group
-        aria-label="Select an option"
-        formControlName="selectedOption"
+  <form [formGroup]="titleForm" (ngSubmit)="generateHTML()">
+    <mat-form-field appearance="fill">
+      <mat-label data-translate>Pavadinimas</mat-label>
+      <input
+        matInput
+        placeholder="Įveskite pavadinimą"
+        formControlName="title"
+      />
+      <mat-error
+        *ngIf="titleForm.get('title')?.errors?.['required']"
+        data-translate
       >
-        <div formArrayName="options">
-          <div *ngFor="let ctrl of getOptions(i).controls; let j = index">
-            <mat-radio-button [value]="j"></mat-radio-button>
-            <mat-form-field appearance="fill">
-              <mat-label data-translate>Pasirinkimas</mat-label>
-              <input
-                matInput
-                [placeholder]="'Option Text'"
-                [formControlName]="j"
-              />
-            </mat-form-field>
+        Pavadinimas yra privalomas
+      </mat-error>
+    </mat-form-field>
+
+    <div formArrayName="questions">
+      <div
+        *ngFor="let question of questions.controls; let i = index"
+        [formGroupName]="i"
+      >
+        <mat-form-field appearance="fill">
+          <mat-label>Klausimas</mat-label>
+          <input
+            matInput
+            placeholder="Įveskite klausimo formuluotę"
+            formControlName="text"
+          />
+        </mat-form-field>
+
+        <mat-radio-group
+          aria-label="Select an option"
+          formControlName="selectedOption"
+        >
+          <div formArrayName="options">
+            <div *ngFor="let ctrl of getOptions(i).controls; let j = index">
+              <div>{{ "A" }}</div>
+              <mat-form-field appearance="fill">
+                <mat-label data-translate>Pasirinkimas</mat-label>
+                <input
+                  matInput
+                  [placeholder]="'Įveskite pasirinkimo formuluotė'"
+                  [formControlName]="j"
+                />
+              </mat-form-field>
+              <mat-radio-button [value]="j"></mat-radio-button>
+            </div>
           </div>
-        </div>
-      </mat-radio-group>
+        </mat-radio-group>
+      </div>
     </div>
-  </div>
 
-  <button
-    type="button"
-    mat-raised-button
-    color="secondary"
-    (click)="addQuestion()"
-  >
-    Pridėti klausimą
-  </button>
+    <button
+      type="button"
+      mat-raised-button
+      color="secondary"
+      (click)="addQuestion()"
+    >
+      Pridėti klausimą
+    </button>
 
-  <button
-    *ngIf="questions.length > 1"
-    type="button"
-    mat-raised-button
-    color="warn"
-    (click)="removeLastQuestion()"
-  >
-    Pašalinti paskutinį klausimą
-  </button>
+    <button
+      *ngIf="questions.length > 1"
+      type="button"
+      mat-raised-button
+      color="warn"
+      (click)="removeLastQuestion()"
+    >
+      Pašalinti paskutinį klausimą
+    </button>
 
-  <button
-    mat-raised-button
-    color="primary"
-    type="submit"
-    [disabled]="titleForm.invalid"
-  >
-    Atsisiųsti užduočių HTML
-  </button>
-</form>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="titleForm.invalid"
+    >
+      Atsisiųsti užduočių HTML
+    </button>
+  </form>
+</main>
+
+<footer>
+  <p>
+    Tinklapio kodas:
+    <a
+      href="https://github.com/naglissul/skafis"
+      target="_blank"
+      rel="noreferrer"
+      >github.com/naglissul/skafis</a
+    >
+  </p>
+  <p>Paskutinį kartą atnaujinta: 2024-04-02</p>
+  <p>
+    Mano blog'as bei daugiau įdomių dalykų čia:
+    <a href="https://www.npw.lt" target="_blank" rel="noreferrer">npw.lt</a>
+  </p>
+</footer>

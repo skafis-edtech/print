@@ -11,6 +11,8 @@ import { CommonModule } from '@angular/common';
 import { MatRadioModule } from '@angular/material/radio';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeEnComponent } from './home-en/home-en.component';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, HomeEnComponent],
@@ -25,6 +27,8 @@ import { HomeEnComponent } from './home-en/home-en.component';
     CommonModule,
     MatRadioModule,
     BrowserAnimationsModule,
+    ClipboardModule,
+    MatCardModule,
   ],
   bootstrap: [AppComponent],
 })

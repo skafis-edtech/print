@@ -5,7 +5,7 @@ Website for teachers to make tests and assignments - both online and to print.
 ## Tech
 
 - Angular
-- Github pages
+- AWS Amplify and S3
 
 ## Version plan
 
@@ -15,10 +15,12 @@ Website for teachers to make tests and assignments - both online and to print.
 4. Host generated test with link, sends answers to teacher, check answers also with a link for teachers.
 5. kahoot type quiz demonstration.
 
-## How did it go
+## Money
 
-Started at 19:30 2024-03-30 with no knowledge about Angular and with little knowledge about React and Typescript.
+sukurktesta.lt domain price is 7.99e, 8.99e, 8.99e... per year (Hostinger)
 
-For the history, see commits...
+AWS is complicated...
 
-Almost everything was done using chatgpt. So here are my prompts.
+Idea is to buy the domain, start hosting on AWS for what is free tier and hope to gather money from donations to payback the domain and a little bit forward for the AWS pricing. And then track how much is spent on website and how much money received from donations.
+
+All of that while paying taxes as for "Individuali veikla" form FR0468

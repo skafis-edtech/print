@@ -1,9 +1,8 @@
 import { FormControl } from '@angular/forms';
-
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-
 import { Router } from '@angular/router';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 interface Questionaire {
   title: FormControl<string>;
@@ -22,8 +21,13 @@ interface Question {
 })
 export class HomeComponent {
   titleForm: FormGroup<Questionaire>;
+  copied: boolean = false;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private clipboard: Clipboard
+  ) {
     this.titleForm = this.fb.nonNullable.group({
       title: this.fb.nonNullable.control<string>('', Validators.required),
       questions: this.fb.nonNullable.array<Question>([]),
@@ -111,5 +115,10 @@ export class HomeComponent {
 
   changeLanguage(): void {
     window.location.href = 'en';
+  }
+
+  copyBankDetails() {
+    this.clipboard.copy('Naglis Šuliokas LT943250092929077836');
+    this.copied = true;
   }
 }
