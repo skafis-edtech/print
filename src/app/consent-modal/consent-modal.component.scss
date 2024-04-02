@@ -1,23 +1,40 @@
-mat-dialog-content,
-mat-dialog-actions {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-mat-dialog-content > h1,
-mat-dialog-content > h3 {
-  padding-bottom: 10px;
-}
-
-mat-dialog-content > * {
+div {
   margin: auto;
+  width: 480px;
+  text-align: center;
+  margin-top: 40px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-.sth {
-  padding-top: 10px;
+#consent-btn {
+  padding: 0 10px 0 10px;
 }
 
-button {
-  margin-left: 10px;
+h1 {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  div {
+    width: 90%;
+    overflow-y: auto;
+    max-height: 100%;
+    min-height: 100%;
+  }
+}
+
+#priv {
+  max-height: 200px;
+  overflow-y: scroll;
+  margin: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0;
+  border: 1px solid black;
+}
+
+.end-priv {
+  margin-top: 10px;
 }

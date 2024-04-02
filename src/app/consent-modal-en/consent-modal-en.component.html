@@ -1,22 +1,17 @@
-<mat-dialog-content>
-  <h1 mat-dialog-title>
-    Privacy policy consent
-    <button
-      type="button"
-      mat-mini-fab
-      color="secondary"
-      (click)="changeLanguage()"
-    >
-      <strong>LT</strong>
-    </button>
-  </h1>
-  <h3>Privacy policy:</h3>
-
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title> Google Analytics</mat-panel-title>
-      <mat-panel-description>Expand</mat-panel-description>
-    </mat-expansion-panel-header>
+<div>
+  <h1>Privacy policy consent</h1>
+  <button
+    type="button"
+    mat-mini-fab
+    color="secondary"
+    (click)="changeLanguage()"
+    id="lang-btn"
+  >
+    <strong>LT</strong>
+  </button>
+  <h3>Privacy policy (scroll):</h3>
+  <div id="priv">
+    <strong> Google Analytics </strong>
     <p>
       This website uses Google Analytics and tracks only the general analytic
       information - number of website's visits together with devices' locations
@@ -28,30 +23,27 @@
         >Google privacy and terms</a
       >.
     </p>
-  </mat-expansion-panel>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header
-      ><mat-panel-title>LocalStorage</mat-panel-title>
-      <mat-panel-description>Expand</mat-panel-description>
-    </mat-expansion-panel-header>
-    In addition, website uses your browser local storage to store information on
-    whether you agreed with this website's privacy policy. The purpose - user
-    convenience, no consent pop up repetition everytime the website is opened.
-  </mat-expansion-panel>
-  <p class="sth">
+    <strong>LocalStorage</strong>
+    <p>
+      In addition, website uses your browser local storage to store information
+      on whether you agreed with this website's privacy policy. The purpose -
+      user convenience, no pop up repetition for getting consent everytime the
+      website is opened.
+    </p>
+  </div>
+  <p class="end-priv">
     All this privacy policy you can always find in the footer of this website.
   </p>
-</mat-dialog-content>
 
-<mat-dialog-actions>
   <button
     mat-button
     mat-raised-button
     mat-dialog-close
     (click)="consent()"
     color="primary"
+    id="consent-btn"
   >
     Agree and proceed to the website
   </button>
-  <p>If you disagree, you cannot use this website</p>
-</mat-dialog-actions>
+  <p class="end-priv">If you disagree, you cannot use this website</p>
+</div>

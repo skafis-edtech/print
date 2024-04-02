@@ -29,7 +29,7 @@ export const TRANSLATIONS: { en: string; lt: string }[] = [
   },
   {
     en: 'Create tests easily!',
-    lt: 'Testus kurk lengvai!',
+    lt: 'Kurk testus lengvai!',
   },
   {
     en: 'This website generates HTML files with questions, where only one answer option is correct. The user of HTML file can then answer the questions and check the answers (each problem separately).',
@@ -152,7 +152,7 @@ export const TRANSLATIONS: { en: string; lt: string }[] = [
     lt: 'Išskleisti',
   },
   {
-    en: "In addition, website uses your browser local storage to store information on whether you agreed with this website's privacy policy. The purpose - user convenience, no consent pop up repetition everytime the website is opened.",
-    lt: 'Taip pat, tinklapis naudoja Jūsų naršyklės atmintį, kad patalpintų informaciją apie Jūsų sutikimą su šio tinklapio privatumo politika. Tikslas – naudotojo patogumas, neiššoka sutikimo langas kiekvieną kartą atidarius puslapį.',
+    en: "In addition, website uses your browser local storage to store information on whether you agreed with this website's privacy policy. The purpose - user convenience, no pop up repetition for getting consent everytime the website is opened.",
+    lt: 'Taip pat tinklapis naudoja jūsų naršyklės vietinę talpą, kad patalpintų informaciją apie sutikimą su šio tinklapio privatumo politika. Tikslas – tinklapio naudotojo patogumas, neiššokantis tas pats pranešimas kiekvieną kartą atsidarius tinklapį.',
   },
 ];
