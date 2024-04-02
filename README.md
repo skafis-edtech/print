@@ -4,7 +4,7 @@ Website for teachers to make tests and assignments - both online and to print.
 
 You can find the website deployed here: [https://www.skafis.com](https://www.skafis.com)
 
-Currently v1.0.0 which means website can only generate HTML files with single choice questions for students to be able to check answers immediately.
+Currently v1.0.1 which means website can only generate HTML files with single choice questions for students to be able to check answers immediately.
 
 ## Screenshots
 
