@@ -1,0 +1,23 @@
+mat-dialog-content,
+mat-dialog-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+mat-dialog-content > h1,
+mat-dialog-content > h3 {
+  padding-bottom: 10px;
+}
+
+mat-dialog-content > * {
+  margin: auto;
+}
+
+.sth {
+  padding-top: 10px;
+}
+
+button {
+  margin-left: 10px;
+}

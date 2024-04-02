@@ -13,6 +13,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeEnComponent } from './home-en/home-en.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
+import {
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogTitle,
+  MatDialogContent,
+} from '@angular/material/dialog';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, HomeEnComponent],
@@ -29,6 +36,11 @@ import { MatCardModule } from '@angular/material/card';
     BrowserAnimationsModule,
     ClipboardModule,
     MatCardModule,
+    MatDialogModule,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogTitle,
+    MatDialogContent,
   ],
   bootstrap: [AppComponent],
 })

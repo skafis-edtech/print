@@ -1,0 +1,57 @@
+<mat-dialog-content>
+  <h1 mat-dialog-title>
+    Privatumo politikos sutikimas
+    <button
+      type="button"
+      mat-mini-fab
+      color="secondary"
+      (click)="changeLanguage()"
+    >
+      <strong>EN</strong>
+    </button>
+  </h1>
+  <h3>Privatumo politika:</h3>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Google Analytics</mat-panel-title>
+      <mat-panel-description>Išskleisti</mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>
+      Tinklapis naudoja Google Analytics ir seka tik bendrą analitinę
+      informaciją – tinklapio apsilankymų skaičių su prisijungimo vietomis
+      miesto tikslumu. Duomenų rinkimo tikslas – turėti reklaminio sėkmingumo
+      grįžtamąjį ryšį ir pagal tai keisti tinklapio tobulinimo veiklą. Kaip
+      Google naudoja renkamą informaciją, skaitykite apie
+      <a href="https://policies.google.com/" target="_blank" rel="noreferrer"
+        >Google privatumą ir sąlygas</a
+      >.
+    </p>
+  </mat-expansion-panel>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header
+      ><mat-panel-title>LocalStorage</mat-panel-title>
+      <mat-panel-description>Išskleisti</mat-panel-description>
+    </mat-expansion-panel-header>
+    Taip pat, tinklapis naudoja Jūsų naršyklės atmintį, kad patalpintų
+    informaciją apie Jūsų sutikimą su šio tinklapio privatumo politika. Tikslas
+    – naudotojo patogumas, neiššoka sutikimo langas kiekvieną kartą atidarius
+    puslapį.
+  </mat-expansion-panel>
+  <p class="sth">
+    Visą šią privatumo politiką Jūs galite visuomet rasti tinklapio poraštėje.
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button
+    mat-button
+    mat-raised-button
+    mat-dialog-close
+    (click)="consent()"
+    color="primary"
+  >
+    Sutikti ir tęsti lankymąsi tinklapyje
+  </button>
+  <p>Jeigu nesutinkate, Jūs negalite naudotis šiuo tinklapiu</p>
+</mat-dialog-actions>

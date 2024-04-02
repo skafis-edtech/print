@@ -13,10 +13,19 @@
     <h2><em>Testus kurk lengvai!</em></h2>
   </header>
   <p>
-    Šis tinklapis sugeneruoja HTML failą su klausimais, kur tik vienas atsakymo
-    variantas yra teisingas. HTML failo naudotojas tuomet gali atsakyti
-    klausimus ir pasitikrinti atsakymus. Tinklapis tobulinamas.
+    Šis tinklapis generuoja HTML failus su klausimais, kur tik vienas atsakymo
+    variantas yra teisingas. HTML failo naudotojas tuomet gali atsakyti į
+    klausimus ir pasitikrinti atsakymus (kiekvienos užduoties atskirai).
   </p>
+  <p>
+    Ši Skafis versija labiausiai tinka greitam turinio kartojimui bei mokinių
+    įsivertinimui.
+  </p>
+  <mat-card class="alert-card warn-alert">
+    <mat-card-content>
+      Procesas neišsisaugo! Perkrovus puslapį visa informacija pranyks!
+    </mat-card-content>
+  </mat-card>
 
   <mat-card appearance="outlined">
     <mat-card-content>
@@ -26,7 +35,7 @@
       <p>Būčiau labai dėkingas už piniginę paramą, už įdėtą darbą.</p>
       <p>
         <li>
-          Pavedimu (paskirtis: skafis parama):
+          Pavedimu (Pervedimo paskirtis: Skafis tinklapio parama):
           <br />
           Naglis Šuliokas LT943250092929077836
           <button type="button" color="secondary" (click)="copyBankDetails()">
@@ -38,17 +47,14 @@
   </mat-card>
 
   <form [formGroup]="titleForm" (ngSubmit)="generateHTML()">
-    <mat-form-field appearance="fill">
-      <mat-label data-translate>Pavadinimas</mat-label>
+    <mat-form-field appearance="outline">
+      <mat-label>Pavadinimas</mat-label>
       <input
         matInput
         placeholder="Įveskite pavadinimą"
         formControlName="title"
       />
-      <mat-error
-        *ngIf="titleForm.get('title')?.errors?.['required']"
-        data-translate
-      >
+      <mat-error *ngIf="titleForm.get('title')?.errors?.['required']">
         Pavadinimas yra privalomas
       </mat-error>
     </mat-form-field>
@@ -58,34 +64,47 @@
         *ngFor="let question of questions.controls; let i = index"
         [formGroupName]="i"
       >
-        <mat-form-field appearance="fill">
-          <mat-label>Klausimas</mat-label>
-          <input
-            matInput
-            placeholder="Įveskite klausimo formuluotę"
-            formControlName="text"
-          />
-        </mat-form-field>
+        <div class="question-number">{{ i + 1 }}.</div>
+        <div>
+          <mat-form-field appearance="outline" [style.width.%]="100">
+            <mat-label>Klausimas</mat-label>
+            <input
+              matInput
+              placeholder="Įveskite klausimo formuluotę"
+              formControlName="text"
+            />
+          </mat-form-field>
 
-        <mat-radio-group
-          aria-label="Select an option"
-          formControlName="selectedOption"
-        >
-          <div formArrayName="options">
-            <div *ngFor="let ctrl of getOptions(i).controls; let j = index">
-              <div>{{ "A" }}</div>
-              <mat-form-field appearance="fill">
-                <mat-label data-translate>Pasirinkimas</mat-label>
-                <input
-                  matInput
-                  [placeholder]="'Įveskite pasirinkimo formuluotė'"
-                  [formControlName]="j"
-                />
-              </mat-form-field>
-              <mat-radio-button [value]="j"></mat-radio-button>
+          <mat-radio-group
+            aria-label="Select an option"
+            formControlName="selectedOption"
+          >
+            <div formArrayName="options">
+              <div *ngFor="let ctrl of getOptions(i).controls; let j = index">
+                <div class="option-letter">
+                  {{ j === 0 ? "A" : j === 1 ? "B" : j === 2 ? "C" : "D" }}
+                </div>
+                <mat-form-field appearance="outline">
+                  <mat-label>Pasirinkimas</mat-label>
+                  <input
+                    matInput
+                    [placeholder]="'Įveskite pasirinkimo formuluotę'"
+                    [formControlName]="j"
+                  />
+                </mat-form-field>
+                <mat-radio-button [value]="j"></mat-radio-button>
+                <div>
+                  {{
+                    titleForm.get(["questions", i, "selectedOption"])?.value ===
+                    j
+                      ? "Teisingas atsakymas"
+                      : "Neteisingas atsakymas"
+                  }}
+                </div>
+              </div>
             </div>
-          </div>
-        </mat-radio-group>
+          </mat-radio-group>
+        </div>
       </div>
     </div>
 
@@ -120,6 +139,25 @@
 </main>
 
 <footer>
+  <h2>Privatumo politika:</h2>
+  <p>
+    <strong>Google Analytics.</strong> Tinklapis naudoja Google Analytics ir
+    seka tik bendrą analitinę informaciją – tinklapio apsilankymų skaičių su
+    prisijungimo vietomis miesto tikslumu. Duomenų rinkimo tikslas – turėti
+    reklaminio sėkmingumo grįžtamąjį ryšį ir pagal tai keisti tinklapio
+    tobulinimo veiklą. Kaip Google naudoja renkamą informaciją, skaitykite apie
+    <a href="https://policies.google.com/" target="_blank" rel="noreferrer"
+      >Google privatumą ir sąlygas</a
+    >.
+  </p>
+  <p>
+    <strong>LocalStorage.</strong> Taip pat tinklapis naudoja jūsų naršyklės
+    vietinę talpą, kad patalpintų informaciją apie sutikimą su šio tinklapio
+    privatumo politika. Tikslas – tinklapio naudotojo patogumas, neiššokantis
+    tas pats pranešimas kiekvieną kartą atsidarius tinklapį.
+  </p>
+  <br />
+  <br />
   <p>
     Tinklapio kodas:
     <a
@@ -129,6 +167,7 @@
       >github.com/naglissul/skafis</a
     >
   </p>
+  <p>v1.0.0</p>
   <p>Paskutinį kartą atnaujinta: 2024-04-02</p>
   <p>
     Mano blog'as bei daugiau įdomių dalykų čia:
