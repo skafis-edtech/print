@@ -37,6 +37,21 @@ Run locally:
 
 Code was copied here [https://www.freeformatter.com/javascript-escape.html](https://www.freeformatter.com/javascript-escape.html) and then pasted to the code as a constant string.
 
+## AWS Process
+
+Using AWS Amplify. Everything is a pretty simple step by step process, but yeah, idk about money. I just know that it should be free for the first 12 months (or sth like that).
+
+For DNS records you need:
+
+1. CAA record to amazontrust.com (or other), flag 0, issue
+2. CNAME record to with the first string as a name, second string as an address (It is given by AWS in a form \<first-string\> CNAME \<second-string\>)
+3. Delete all other CAA records if there are any.
+
+NO. LET'S TRY aws s3
+[https://www.npmjs.com/package/@jefiozie/ngx-aws-deploy](https://www.npmjs.com/package/@jefiozie/ngx-aws-deploy)
+
+NAH. just gonna deploy to firebase...
+
 ## Version plan
 
 1. Only one choice test, only text questions/answers > html which requires name and then it generates a file (signed or something with encryption so can't be forged).
