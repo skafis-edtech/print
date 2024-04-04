@@ -135,6 +135,14 @@
     >
       Atsisiųsti užduočių HTML
     </button>
+    <button
+      mat-raised-button
+      color="warn"
+      [disabled]="titleForm.invalid"
+      (click)="generatePDF()"
+    >
+      Atsisiųsti užduočių PDF
+    </button>
   </form>
 </main>
 

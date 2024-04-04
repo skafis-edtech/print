@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { MatDialog } from '@angular/material/dialog';
 import { ConsentModalComponent } from '../consent-modal/consent-modal.component';
+import { jsPDF } from 'jspdf';
 
 interface Questionaire {
   title: FormControl<string>;
@@ -176,5 +177,12 @@ export class HomeComponent {
       exitAnimationDuration,
     });
     document.getElementById('body')?.classList.add('block-scroll');
+  }
+
+  generatePDF(): void {
+    const doc = new jsPDF();
+
+    doc.text('Hello world!', 10, 10);
+    doc.save('a4.pdf');
   }
 }
