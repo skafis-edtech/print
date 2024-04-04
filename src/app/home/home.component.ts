@@ -8,13 +8,13 @@ import { jsPDF } from 'jspdf';
 
 interface Questionaire {
   title: FormControl<string>;
-  questions: FormArray<FormControl<Question>>;
+  questions?: FormArray<FormControl<Question>>;
 }
 
 interface Question {
-  text: FormControl<string>;
-  options: FormArray<FormControl<string>>;
-  selectedOption: FormControl<number>;
+  text?: FormControl<string>;
+  options?: FormArray<FormControl<string>>;
+  selectedOption?: FormControl<number>;
 }
 
 @Component({
@@ -48,7 +48,7 @@ export class HomeComponent {
       document.getElementById('head')?.appendChild(script);
       document.getElementById('head')?.appendChild(script2);
     }
-    this.titleForm = this.fb.nonNullable.group({
+    this.titleForm = this.fb.nonNullable.group<Questionaire>({
       title: this.fb.nonNullable.control<string>('', Validators.required),
       questions: this.fb.nonNullable.array<Question>([]),
     });
@@ -65,12 +65,12 @@ export class HomeComponent {
 
   addQuestion(): void {
     const questionGroup = this.fb.group<Question>({
-      text: this.fb.nonNullable.control<string>('', Validators.required),
+      text: this.fb.nonNullable.control<string>(''),
       options: this.fb.nonNullable.array<FormControl<string>>([
-        this.fb.nonNullable.control<string>('', Validators.required),
-        this.fb.nonNullable.control<string>('', Validators.required),
-        this.fb.nonNullable.control<string>('', Validators.required),
-        this.fb.nonNullable.control<string>('', Validators.required),
+        this.fb.nonNullable.control<string>(''),
+        this.fb.nonNullable.control<string>(''),
+        this.fb.nonNullable.control<string>(''),
+        this.fb.nonNullable.control<string>(''),
       ]),
       selectedOption: this.fb.nonNullable.control<number>(
         0,
@@ -103,7 +103,7 @@ export class HomeComponent {
           ? 'correct'
           : ''
       } />
-        <strong>A&ensp;&ensp;&ensp;</strong>${question.options.at(0)}</label
+        <strong>A&ensp;&ensp;&ensp;</strong>${question.options?.at(0)}</label
       >
       <label
         ><input type="radio" name="question${index}" ${
@@ -111,7 +111,7 @@ export class HomeComponent {
           ? 'correct'
           : ''
       }/>
-        <strong>B&ensp;&ensp;&ensp;</strong>${question.options.at(1)}</label
+        <strong>B&ensp;&ensp;&ensp;</strong>${question.options?.at(1)}</label
       >
       <label
         ><input type="radio" name="question${index}" ${
@@ -119,7 +119,7 @@ export class HomeComponent {
           ? 'correct'
           : ''
       }/>
-        <strong>C&ensp;&ensp;&ensp;</strong>${question.options.at(2)}</label
+        <strong>C&ensp;&ensp;&ensp;</strong>${question.options?.at(2)}</label
       >
       <label
         ><input type="radio" name="question${index}" ${
@@ -127,7 +127,7 @@ export class HomeComponent {
           ? 'correct'
           : ''
       }/>
-        <strong>D&ensp;&ensp;&ensp;</strong>${question.options.at(3)}</label
+        <strong>D&ensp;&ensp;&ensp;</strong>${question.options?.at(3)}</label
       >
     </div>
   
@@ -180,9 +180,73 @@ export class HomeComponent {
   }
 
   generatePDF(): void {
-    const doc = new jsPDF();
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4',
+    });
 
-    doc.text('Hello world!', 10, 10);
-    doc.save('a4.pdf');
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageCenter = pageWidth / 2;
+    let positionY = 10;
+    doc.setFontSize(15);
+
+    const title = this.titleForm.get('title')?.value || '';
+    doc.setFont('helvetica', 'bold');
+    doc.text(title, pageCenter / 2, positionY, { align: 'center' });
+    doc.text(title, pageCenter + pageCenter / 2, positionY, {
+      align: 'center',
+    });
+    positionY += 6;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+
+    doc.setLineWidth(0.1);
+    const pageHeight = doc.internal.pageSize.getHeight();
+    doc.line(pageCenter, 0, pageCenter, pageHeight);
+
+    (this.titleForm.get('questions') as FormArray).controls.forEach(
+      (questionGroup, index) => {
+        const question = questionGroup.value;
+        positionY += 6;
+
+        if (positionY >= doc.internal.pageSize.getHeight() - 5) {
+          doc.addPage();
+          positionY = 5;
+        }
+
+        doc.text(`${index + 1}. ${question.text}`, 10, positionY);
+        doc.text(`${index + 1}. ${question.text}`, pageCenter + 10, positionY);
+        let optionPositionX =
+          10 +
+          (doc.getStringUnitWidth(`${index + 1}. ${question.text}`) *
+            doc.getFontSize()) /
+            2 +
+          2;
+        positionY += 5;
+        question.options.forEach((option: string, optionIndex: number) => {
+          if (optionPositionX >= pageCenter - 5) {
+            positionY += 5;
+            optionPositionX = 10;
+          }
+
+          const optionLetter = String.fromCharCode(65 + optionIndex);
+          doc.setFont('helvetica', 'bold');
+          doc.text(`${optionLetter}`, optionPositionX, positionY);
+          doc.text(`${optionLetter}`, pageCenter + optionPositionX, positionY);
+          doc.setFont('helvetica', 'normal');
+          optionPositionX +=
+            (doc.getStringUnitWidth(`${optionLetter}:`) * doc.getFontSize()) /
+              2 +
+            2;
+          doc.text(option, optionPositionX, positionY);
+          doc.text(option, pageCenter + optionPositionX, positionY);
+          optionPositionX +=
+            (doc.getStringUnitWidth(option) * doc.getFontSize()) / 2 + 5;
+        });
+      }
+    );
+
+    doc.save('questionnaire.pdf');
   }
 }

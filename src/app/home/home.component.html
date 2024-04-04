@@ -46,7 +46,7 @@
     </mat-card-content>
   </mat-card>
 
-  <form [formGroup]="titleForm" (ngSubmit)="generateHTML()">
+  <form [formGroup]="titleForm">
     <mat-form-field appearance="outline">
       <mat-label>Pavadinimas</mat-label>
       <input
@@ -69,6 +69,7 @@
           <mat-form-field appearance="outline" [style.width.%]="100">
             <mat-label>Klausimas</mat-label>
             <input
+              [required]="false"
               matInput
               placeholder="Įveskite klausimo formuluotę"
               formControlName="text"
@@ -90,6 +91,7 @@
                     matInput
                     [placeholder]="'Įveskite pasirinkimo formuluotę'"
                     [formControlName]="j"
+                    [required]="false"
                   />
                 </mat-form-field>
                 <mat-radio-button [value]="j"></mat-radio-button>
@@ -132,12 +134,13 @@
       color="primary"
       type="submit"
       [disabled]="titleForm.invalid"
+      (click)="generateHTML()"
     >
       Atsisiųsti užduočių HTML
     </button>
     <button
       mat-raised-button
-      color="warn"
+      color="accent"
       [disabled]="titleForm.invalid"
       (click)="generatePDF()"
     >
