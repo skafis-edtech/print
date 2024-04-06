@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ABCD Questions on Canvas</title>
+    <style>
+      #canvas {
+        border: 1px solid #000;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="420" height="595"></canvas>
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      ctx.font = "10px Arial";
+      ctx.textBaseline = "top";
+
+      const questions = [
+        {
+          question: "What is the capital of France?",
+          options: ["A) Paris", "B) Berlin", "C) Rome", "D) Madrid"],
+          correct: "A",
+        },
+        {
+          question: "Which planet is known as the Red Planet?",
+          options: ["A) Earth", "B) Mars", "C) Jupiter", "D) Venus"],
+          correct: "B",
+        },
+        {
+          question: "What is the largest mammal?",
+          options: [
+            "A) ElephantElephantElephantElephantElephantElephantElepElephant",
+            "B) Blue Whale",
+            "C) Giraffe",
+            "D) Bear",
+          ],
+          correct: "B",
+        },
+      ];
+
+      let yPos = 10;
+      const canvasWidth = canvas.width;
+
+      questions.forEach((q, index) => {
+        ctx.fillText(`${index + 1}. ${q.question}`, 10, yPos);
+        yPos += 20;
+
+        let optionsText = "";
+        q.options.forEach((option, i) => {
+          const tempText = i === 0 ? option : `${optionsText}  ${option}`;
+          const textWidth = ctx.measureText(tempText).width;
+
+          if (textWidth > canvasWidth - 20) {
+            // Check if adding this option exceeds the canvas width
+            // If it does, draw the current optionsText and start a new line
+            ctx.fillText(optionsText, 20, yPos);
+            yPos += 15;
+            optionsText = option; // Start with the current option in the new line
+          } else {
+            optionsText = tempText; // Add the current option to the line
+          }
+        });
+        // Draw remaining options text
+        if (optionsText) {
+          ctx.fillText(optionsText, 20, yPos);
+          yPos += 15;
+        }
+
+        yPos += 10; // Additional space after each question set
+      });
+    </script>
+  </body>
+</html>

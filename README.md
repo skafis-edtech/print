@@ -2,9 +2,9 @@
 
 Website for teachers to make tests and assignments - both online and to print.
 
-You can find the website deployed here: [https://www.skafis.com](https://www.skafis.com)
+You can find the website deployed here: [https://www.skafis.lt](https://www.skafis.lt)
 
-Currently v1.0.1 which means website can only generate HTML files with single choice questions for students to be able to check answers immediately.
+Currently v1.1.0 which means website can only generate HTML files with single choice questions for students to be able to check answers immediately AND generate PDF without lithuanian characters.
 
 ## Screenshots
 
@@ -59,17 +59,3 @@ NAH. just gonna deploy to firebase...
 3. Insert pictures, drawn problems, check answers from html generated file.
 4. Host generated test with link, sends answers to teacher, check answers also with a link for teachers.
 5. Kahoot type quiz demonstration.
-
-Started developing 2024-03-30 19:30 with absolutely no experience with Angular. Only with react and ChatGPT :D 2024-04-02 I already have v1.0.0 which I am really proud of :D (and it wasn't 24/7 coding, just a lot of chatGPT help).
-
-## Money
-
-skafis.com domain 12.30 EUR for 1 year (Hostinger).
-
-AWS is complicated.
-
-Idea is to buy the domain, start hosting on AWS for what is free tier and hope to gather money from donations to payback the domain and a little bit forward for the AWS pricing. And then track how much is spent on website and how much money received from donations.
-
-All of that while paying taxes as for "Individuali veikla" form FR0468.
-
-Under code 856000, since this is what a person on a phone from "Valstybės duomenų agentūra" told me. And then I just added this to already existing "individualios veiklos pažyma" and gonna be writing "sąskaitas faktūras" for each person sending me money on Revolut.

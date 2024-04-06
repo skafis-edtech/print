@@ -18,14 +18,13 @@
     klausimus ir pasitikrinti atsakymus (kiekvienos užduoties atskirai).
   </p>
   <p>
+    Taip pat yra generuojama PDF failai su atsakymais apačioje, tačiau jie dar
+    turi trūkumų (informacija mėlyname pranešime).
+  </p>
+  <p>
     Ši Skafis versija labiausiai tinka greitam turinio kartojimui bei mokinių
     įsivertinimui.
   </p>
-  <mat-card class="alert-card warn-alert">
-    <mat-card-content>
-      Procesas neišsisaugo! Perkrovus puslapį visa informacija pranyks!
-    </mat-card-content>
-  </mat-card>
 
   <mat-card appearance="outlined">
     <mat-card-content>
@@ -45,8 +44,26 @@
       </p>
     </mat-card-content>
   </mat-card>
+  <mat-card class="alert-card info-alert">
+    <mat-card-content>
+      PDF generavimo apribojimai: <br />1. Daugiausia 60 simbolių pavadinimui.
+      <br />2. Daugiausia 80 simbolių klausimo formuluotei ar pasirinkimui.
+      <br />3. Bendram vieno klausimo pasirinkimų tekstų simbolių skaičių sumai
+      esant daugiau nei 60, visi to klausimo pasirinkimai išdėstomi atskirose
+      eilutėse (vadiname DIDELIU klausimu), kitu atveju vienoje eilutėje
+      (vadiname MAŽU klausimu).<br />
+      4. Ne daugiau 10 MAŽŲ klausimų. DIDELIS klausimas vertas 2 MAŽŲ klausimų
+      (kalbant apie kiekio limitą). <br />
+      5. Negalimos lietuviškos raidės.
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="alert-card warn-alert">
+    <mat-card-content>
+      Procesas neišsisaugo! Perkrovus puslapį visa informacija pranyks!
+    </mat-card-content>
+  </mat-card>
 
-  <form [formGroup]="titleForm" (ngSubmit)="generateHTML()">
+  <form [formGroup]="titleForm">
     <mat-form-field appearance="outline">
       <mat-label>Pavadinimas</mat-label>
       <input
@@ -69,6 +86,7 @@
           <mat-form-field appearance="outline" [style.width.%]="100">
             <mat-label>Klausimas</mat-label>
             <input
+              [required]="false"
               matInput
               placeholder="Įveskite klausimo formuluotę"
               formControlName="text"
@@ -90,6 +108,7 @@
                     matInput
                     [placeholder]="'Įveskite pasirinkimo formuluotę'"
                     [formControlName]="j"
+                    [required]="false"
                   />
                 </mat-form-field>
                 <mat-radio-button [value]="j"></mat-radio-button>
@@ -132,8 +151,17 @@
       color="primary"
       type="submit"
       [disabled]="titleForm.invalid"
+      (click)="generateHTML()"
     >
       Atsisiųsti užduočių HTML
+    </button>
+    <button
+      mat-raised-button
+      color="accent"
+      [disabled]="titleForm.invalid"
+      (click)="generatePDF()"
+    >
+      Atsisiųsti užduočių PDF
     </button>
   </form>
 </main>
@@ -167,8 +195,8 @@
       >github.com/naglissul/skafis</a
     >
   </p>
-  <p>v1.0.1</p>
-  <p>Paskutinį kartą atnaujinta: 2024-04-02</p>
+  <p>v1.1.0</p>
+  <p>Paskutinį kartą atnaujinta: 2024-04-06</p>
   <p>
     Mano blog'as bei daugiau įdomių dalykų čia:
     <a href="https://www.npw.lt" target="_blank" rel="noreferrer">npw.lt</a>
