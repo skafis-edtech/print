@@ -16,11 +16,9 @@
       const canvas = document.getElementById("canvas");
       const ctx = canvas.getContext("2d");
 
-      // Set up styles
       ctx.font = "10px Arial";
       ctx.textBaseline = "top";
 
-      // Sample questions and answers
       const questions = [
         {
           question: "What is the capital of France?",
@@ -34,22 +32,45 @@
         },
         {
           question: "What is the largest mammal?",
-          options: ["A) Elephant", "B) Blue Whale", "C) Giraffe", "D) Bear"],
+          options: [
+            "A) ElephantElephantElephantElephantElephantElephantElepElephant",
+            "B) Blue Whale",
+            "C) Giraffe",
+            "D) Bear",
+          ],
           correct: "B",
         },
       ];
 
       let yPos = 10;
+      const canvasWidth = canvas.width;
 
-      // Loop through and display questions and options
       questions.forEach((q, index) => {
         ctx.fillText(`${index + 1}. ${q.question}`, 10, yPos);
         yPos += 20;
-        q.options.forEach((option) => {
-          ctx.fillText(option, 20, yPos);
-          yPos += 15;
+
+        let optionsText = "";
+        q.options.forEach((option, i) => {
+          const tempText = i === 0 ? option : `${optionsText}  ${option}`;
+          const textWidth = ctx.measureText(tempText).width;
+
+          if (textWidth > canvasWidth - 20) {
+            // Check if adding this option exceeds the canvas width
+            // If it does, draw the current optionsText and start a new line
+            ctx.fillText(optionsText, 20, yPos);
+            yPos += 15;
+            optionsText = option; // Start with the current option in the new line
+          } else {
+            optionsText = tempText; // Add the current option to the line
+          }
         });
-        yPos += 10; // Extra space after each question
+        // Draw remaining options text
+        if (optionsText) {
+          ctx.fillText(optionsText, 20, yPos);
+          yPos += 15;
+        }
+
+        yPos += 10; // Additional space after each question set
       });
     </script>
   </body>
