@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ABCD Questions on Canvas</title>
+    <style>
+      #canvas {
+        border: 1px solid #000;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="420" height="595"></canvas>
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      // Set up styles
+      ctx.font = "10px Arial";
+      ctx.textBaseline = "top";
+
+      // Sample questions and answers
+      const questions = [
+        {
+          question: "What is the capital of France?",
+          options: ["A) Paris", "B) Berlin", "C) Rome", "D) Madrid"],
+          correct: "A",
+        },
+        {
+          question: "Which planet is known as the Red Planet?",
+          options: ["A) Earth", "B) Mars", "C) Jupiter", "D) Venus"],
+          correct: "B",
+        },
+        {
+          question: "What is the largest mammal?",
+          options: ["A) Elephant", "B) Blue Whale", "C) Giraffe", "D) Bear"],
+          correct: "B",
+        },
+      ];
+
+      let yPos = 10;
+
+      // Loop through and display questions and options
+      questions.forEach((q, index) => {
+        ctx.fillText(`${index + 1}. ${q.question}`, 10, yPos);
+        yPos += 20;
+        q.options.forEach((option) => {
+          ctx.fillText(option, 20, yPos);
+          yPos += 15;
+        });
+        yPos += 10; // Extra space after each question
+      });
+    </script>
+  </body>
+</html>

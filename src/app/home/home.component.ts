@@ -96,7 +96,7 @@ export class HomeComponent {
     let questionData = '';
     this.titleForm.value.questions?.forEach((question, index) => {
       questionData += `      <div class="question">
-      <h3>${question.text}</h3>
+      <h3>${index + 1}. ${question.text}</h3>
       <label
         ><input type="radio" name="question${index}" ${
         this.titleForm.get(['questions', index, 'selectedOption'])?.value === 0
@@ -180,73 +180,96 @@ export class HomeComponent {
   }
 
   generatePDF(): void {
-    const doc = new jsPDF({
+    const pdf = new jsPDF({
       orientation: 'landscape',
       unit: 'mm',
       format: 'a4',
     });
 
-    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageWidth = pdf.internal.pageSize.getWidth();
     const pageCenter = pageWidth / 2;
-    let positionY = 10;
-    doc.setFontSize(15);
+    const title = 'Sample Questions';
 
-    const title = this.titleForm.get('title')?.value || '';
-    doc.setFont('helvetica', 'bold');
-    doc.text(title, pageCenter / 2, positionY, { align: 'center' });
-    doc.text(title, pageCenter + pageCenter / 2, positionY, {
-      align: 'center',
-    });
-    positionY += 6;
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8);
+    // Adding a title at the top of the PDF
+    pdf.setFontSize(14);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text(title, pageWidth / 4, 10, { align: 'center' }); // Center title in the first half
+    pdf.text(title, (pageWidth / 4) * 3, 10, { align: 'center' }); // Center title in the second half
 
-    doc.setLineWidth(0.1);
-    const pageHeight = doc.internal.pageSize.getHeight();
-    doc.line(pageCenter, 0, pageCenter, pageHeight);
+    // 6 questions MAX
+    const questions = [
+      {
+        question: 'What is the capital of France?',
+        options: ['Paris', 'Berlin', 'Rome', 'Madrid'],
+        correct: 'A',
+      },
+      {
+        question: 'What is the capital of France?',
+        options: ['Paris', 'Berlin', 'Rome', 'Madrid'],
+        correct: 'A',
+      },
+      {
+        question: 'What is the capital of France?',
+        options: ['Paris', 'Berlin', 'Rome', 'Madrid'],
+        correct: 'A',
+      },
+      {
+        question: 'What is the capital of France?',
+        options: ['Paris', 'Berlin', 'Rome', 'Madrid'],
+        correct: 'A',
+      },
+      {
+        question: 'What is the capital of France?',
+        options: ['Paris', 'Berlin', 'Rome', 'Madrid'],
+        correct: 'A',
+      },
+      {
+        question: 'What is the capital of France?',
+        options: ['Paris', 'Berlin', 'Rome', 'Madrid'],
+        correct: 'A',
+      },
+    ];
 
-    (this.titleForm.get('questions') as FormArray).controls.forEach(
-      (questionGroup, index) => {
-        const question = questionGroup.value;
-        positionY += 6;
+    const drawQuestions = (
+      doc: jsPDF,
+      questions: any[],
+      startX: number,
+      startY: number
+    ) => {
+      let yPos = startY;
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
 
-        if (positionY >= doc.internal.pageSize.getHeight() - 5) {
-          doc.addPage();
-          positionY = 5;
-        }
+      questions.forEach((q, index) => {
+        doc.text(`${index + 1}. ${q.question}`, startX, yPos);
+        yPos += 7;
 
-        doc.text(`${index + 1}. ${question.text}`, 10, positionY);
-        doc.text(`${index + 1}. ${question.text}`, pageCenter + 10, positionY);
-        let optionPositionX =
-          10 +
-          (doc.getStringUnitWidth(`${index + 1}. ${question.text}`) *
-            doc.getFontSize()) /
-            2 +
-          2;
-        positionY += 5;
-        question.options.forEach((option: string, optionIndex: number) => {
-          if (optionPositionX >= pageCenter - 5) {
-            positionY += 5;
-            optionPositionX = 10;
-          }
-
-          const optionLetter = String.fromCharCode(65 + optionIndex);
+        q.options.forEach((option: any, optionIndex: number) => {
           doc.setFont('helvetica', 'bold');
-          doc.text(`${optionLetter}`, optionPositionX, positionY);
-          doc.text(`${optionLetter}`, pageCenter + optionPositionX, positionY);
+          doc.text(
+            `${String.fromCharCode(65 + optionIndex)}`,
+            startX + 5,
+            yPos
+          );
           doc.setFont('helvetica', 'normal');
-          optionPositionX +=
-            (doc.getStringUnitWidth(`${optionLetter}:`) * doc.getFontSize()) /
-              2 +
-            2;
-          doc.text(option, optionPositionX, positionY);
-          doc.text(option, pageCenter + optionPositionX, positionY);
-          optionPositionX +=
-            (doc.getStringUnitWidth(option) * doc.getFontSize()) / 2 + 5;
+          doc.text(option, startX + 15, yPos);
+          yPos += 5;
         });
-      }
-    );
+        yPos += 5;
+      });
+    };
 
-    doc.save('questionnaire.pdf');
+    // Start below the title
+    const startY = 20;
+    drawQuestions(pdf, questions, 10, startY); // Draw on the left half of the PDF
+    drawQuestions(pdf, questions, pageCenter + 10, startY); // Draw on the right half of the PDF
+
+    // Draw a vertical line down the middle of the page to separate both sides
+    pdf.setDrawColor(0);
+    pdf.setLineWidth(0.1);
+    pdf.line(pageCenter, 0, pageCenter, pdf.internal.pageSize.getHeight());
+
+    // Save the PDF
+    pdf.save('questions.pdf');
   }
 }
