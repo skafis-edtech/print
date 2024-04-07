@@ -59,6 +59,7 @@
       >Progresas išsisaugo jūsų įrenginyje automatiškai</mat-card-content
     ></mat-card
   >
+
   <form [formGroup]="titleForm">
     <mat-form-field appearance="outline">
       <mat-label>Pavadinimas</mat-label>
@@ -173,6 +174,14 @@
     </button>
     <button type="button" mat-raised-button color="warn" (click)="clearForm()">
       Išvalyti viską
+    </button>
+    <button
+      type="button"
+      mat-raised-button
+      color="primary"
+      (click)="fillExampleForm()"
+    >
+      Užpildyti pavyzdinėmis užduotimis
     </button>
   </form>
 </main>

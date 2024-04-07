@@ -211,8 +211,10 @@ export class HomeComponent {
       doc.setFont('helvetica', 'normal');
 
       questions.forEach((q: any, index: any) => {
-        doc.text(`${index + 1}. ${q.text}`, startX, yPos);
-        yPos += 5;
+        doc.text(`${index + 1}. ${q.text}`, startX, yPos, {
+          maxWidth: pageWidth / 2 - 20,
+        });
+        yPos += doc.splitTextToSize(`${q.text}`, pageWidth / 2 - 20).length * 5;
 
         let optionsText = q.options
           .map(
@@ -230,8 +232,12 @@ export class HomeComponent {
             let optionLabel = `${String.fromCharCode(
               65 + optionIndex
             )}) ${option}`;
-            doc.text(optionLabel, startX, yPos);
-            yPos += 4; // Increment y position for each option
+            doc.text(optionLabel, startX, yPos, {
+              maxWidth: pageWidth / 2 - 20,
+            });
+            yPos +=
+              doc.splitTextToSize(`${option}`, pageWidth / 2 - 20).length * 4;
+            yPos += 1;
           });
         } else {
           // Options fit in one line
@@ -280,6 +286,31 @@ export class HomeComponent {
   }
 
   generateImagePDF(): void {
+    function wrapText(
+      context: any,
+      text: any,
+      x: any,
+      y: any,
+      maxWidth: any,
+      lineHeight: any
+    ) {
+      var words = text.split(' ');
+      var line = '';
+
+      for (var n = 0; n < words.length; n++) {
+        var testLine = line + words[n] + ' ';
+        var metrics = context.measureText(testLine);
+        var testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+          context.fillText(line, x, y);
+          line = words[n] + ' ';
+          y += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+      context.fillText(line, x, y);
+    }
     const SCALING_FACTOR = 3;
 
     var canvas = document.createElement('canvas');
@@ -291,13 +322,15 @@ export class HomeComponent {
     const pageWidth = canvas.width;
     const pageCenter = pageWidth / 2;
     const title = this.titleForm.value.title || 'NO TITLE';
+    const lineHeight = 20 * SCALING_FACTOR; // Set your line height
+    const maxWidth = (pageWidth / 2 - 20) * SCALING_FACTOR; // Set the max width for wrapping
 
     ctx.textBaseline = 'bottom';
 
     // Draw title
     ctx.font = `${20 * SCALING_FACTOR}px Times New Roman`;
     ctx.textAlign = 'center';
-    ctx.fillText(title, pageCenter, 40 * SCALING_FACTOR);
+    ctx.fillText(title, pageCenter, 40 * SCALING_FACTOR); 
     ctx.textAlign = 'left';
 
     const questions = this.titleForm.value.questions;
@@ -310,7 +343,8 @@ export class HomeComponent {
     questions?.forEach((q: any, index: any) => {
       if (!ctx) return;
 
-      ctx.fillText(`${index + 1}. ${q.text}`, 40 * SCALING_FACTOR, yPos);
+      wrapText(ctx, `${index + 1}. ${q.text}`, 40, yPos, maxWidth, lineHeight);
+      // yPos += lineHeight;
       yPos += 20 * SCALING_FACTOR;
 
       let optionsText = q.options
@@ -466,5 +500,81 @@ export class HomeComponent {
     formArray.clear();
     this.titleForm.reset();
     this.addQuestion();
+  }
+
+  fillExampleForm() {
+    const exampleFormJson = {
+      title: 'Kombinatorika. Skaitmenys',
+      questions: [
+        {
+          text: 'Kiek yra trizenkliu naturaliuju skaiciu, kuriu bent vienas skaitmuo 0?',
+          options: ['162', '171', '180', '189'],
+          selectedOption: 1,
+        },
+        {
+          text: 'Kiek yra dvizenkliu naturaliuju skaiciu, kuriu bent vienas skaitmuo yra 7?',
+          options: ['18', '19', '20', '21'],
+          selectedOption: 1,
+        },
+        {
+          text: 'Kiek yra keturzenkliu skaiciu, kuriu pirmasis skaitmuo yra 3 ir jie neturi skaitmens 0?',
+          options: ['729', '999', '1000', '900'],
+          selectedOption: 3,
+        },
+        {
+          text: 'Kiek yra trizenkliu skaiciu, kuriu skaitmenys yra nuo 1 iki 3 ir visi skaitmenys yra skirtingi?',
+          options: ['6', '9', '24', '27'],
+          selectedOption: 1,
+        },
+        {
+          text: 'Jei skaitmenys 1, 2, 3, 4 gali buti naudojami tik viena karta, kiek trizenkliu skaiciu galima is ju sudaryti?',
+          options: ['12', '24', '36', '48'],
+          selectedOption: 1,
+        },
+        {
+          text: 'Kiek yra dvizenkliu skaiciu, kuriu abu skaitmenys yra lyginiai?',
+          options: ['20', '25', '30', '16'],
+          selectedOption: 0,
+        },
+      ],
+    };
+    const exampleFormJson1 = {
+      title: 'Kombinatorika. Skaitmenys',
+      questions: [
+        {
+          text: 'Kiek yra triženklių natūraliųjų skaičių, kurių bent vienas skaitmuo 0?',
+          options: ['162', '171', '180', '189'],
+          selectedOption: 1,
+        },
+        {
+          text: 'Kiek yra dviženklių natūraliųjų skaičių, kurių bent vienas skaitmuo yra 7?',
+          options: ['18', '19', '20', '21'],
+          selectedOption: 1,
+        },
+        {
+          text: 'Kiek yra keturženklių skaičių, kurių pirmasis skaitmuo yra 3 ir jie neturi skaitmens 0??',
+          options: ['729', '999', '1000', '900'],
+          selectedOption: 3,
+        },
+        {
+          text: 'Kiek yra triženklių skaičių, kurių skaitmenys yra nuo 1 iki 3 ir visi skaitmenys yra skirtingi?',
+          options: ['6', '9', '24', '27'],
+          selectedOption: 1,
+        },
+        {
+          text: 'Jei skaitmenys 1, 2, 3, 4 gali būti naudojami tik vieną kartą, kiek triženklių skaičių galima iš jų sudaryti?',
+          options: ['12', '24', '36', '48'],
+          selectedOption: 1,
+        },
+        {
+          text: 'Kiek yra dviženklių skaičių, kurių abu skaitmenys yra lyginiai?',
+          options: ['20', '25', '30', '16'],
+          selectedOption: 0,
+        },
+      ],
+    };
+    // Assuming you have a method to rebuild the form groups for questions and options
+    this.rebuildFormGroups(exampleFormJson.questions);
+    this.titleForm.get('title')?.setValue(exampleFormJson.title);
   }
 }
