@@ -411,8 +411,20 @@ export class HomeComponent {
   }
 
   ngOnInit() {
-    this.loadForm();
-    window.addEventListener('beforeunload', () => this.saveForm());
+    window.addEventListener('consent-just-given', () => {
+      this.loadForm();
+      window.addEventListener('beforeunload', () => this.saveForm());
+      this.titleForm.valueChanges.subscribe(() => {
+        this.saveForm();
+      });
+    });
+    if (localStorage.getItem('CONSENT_GIVEN') === 'true') {
+      this.loadForm();
+      window.addEventListener('beforeunload', () => this.saveForm());
+      this.titleForm.valueChanges.subscribe(() => {
+        this.saveForm();
+      });
+    }
   }
 
   saveForm() {
@@ -420,11 +432,12 @@ export class HomeComponent {
   }
 
   loadForm() {
-    const form = JSON.parse(localStorage.getItem('form') || '{}');
+    const form = localStorage.getItem('form');
+    const formParsed = JSON.parse(form || '{}');
     if (form) {
-      this.titleForm.patchValue(form);
+      this.titleForm.patchValue(formParsed);
       // Assuming you have a method to rebuild the form groups for questions and options
-      this.rebuildFormGroups(form.questions);
+      this.rebuildFormGroups(formParsed.questions);
     }
   }
 

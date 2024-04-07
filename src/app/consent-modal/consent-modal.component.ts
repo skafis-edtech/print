@@ -8,6 +8,7 @@ import {
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { HomeComponent } from '../home/home.component';
 
 @Component({
   selector: 'consent-modal',
@@ -42,6 +43,8 @@ export class ConsentModalComponent {
     gtag("config", "G-9D2B9RSBPT");`;
     document.getElementById('head')?.appendChild(script);
     document.getElementById('head')?.appendChild(script2);
+
+    window.dispatchEvent(new Event('consent-just-given'));
   }
 
   changeLanguage(): void {
