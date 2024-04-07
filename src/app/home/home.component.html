@@ -55,11 +55,10 @@
     </mat-card-content>
   </mat-card>
   <mat-card class="alert-card warn-alert">
-    <mat-card-content>
-      Procesas neišsisaugo! Perkrovus puslapį visa informacija pranyks!
-    </mat-card-content>
-  </mat-card>
-
+    <mat-card-content
+      >Progresas išsisaugo jūsų įrenginyje automatiškai</mat-card-content
+    ></mat-card
+  >
   <form [formGroup]="titleForm">
     <mat-form-field appearance="outline">
       <mat-label>Pavadinimas</mat-label>
@@ -142,6 +141,7 @@
     >
       Pašalinti paskutinį klausimą
     </button>
+
     <br />
     <br />
     <br />
@@ -171,6 +171,9 @@
     >
       Atsisiųsti tekstinį geros kokybės PDF (be lietuviškų raidžių)
     </button>
+    <button type="button" mat-raised-button color="warn" (click)="clearForm()">
+      Išvalyti viską
+    </button>
   </form>
 </main>
 
@@ -189,8 +192,10 @@
   <p>
     <strong>LocalStorage.</strong> Taip pat tinklapis naudoja jūsų naršyklės
     vietinę talpą, kad patalpintų informaciją apie sutikimą su šio tinklapio
-    privatumo politika. Tikslas – tinklapio naudotojo patogumas, neiššokantis
-    tas pats pranešimas kiekvieną kartą atsidarius tinklapį.
+    privatumo politika, bei klausimų pildymo progresą. Tikslas – tinklapio
+    naudotojo patogumas, neiššokantis tas pats pranešimas kiekvieną kartą
+    atsidarius tinklapį, bei netikėtai neišsitrinantis klausimų kūrimo
+    progresas.
   </p>
   <br />
   <br />

@@ -409,4 +409,49 @@ export class HomeComponent {
     );
     doc.save(`${this.titleForm.value.title}.pdf`);
   }
+
+  ngOnInit() {
+    this.loadForm();
+    window.addEventListener('beforeunload', () => this.saveForm());
+  }
+
+  saveForm() {
+    localStorage.setItem('form', JSON.stringify(this.titleForm.value));
+  }
+
+  loadForm() {
+    const form = JSON.parse(localStorage.getItem('form') || '{}');
+    if (form) {
+      this.titleForm.patchValue(form);
+      // Assuming you have a method to rebuild the form groups for questions and options
+      this.rebuildFormGroups(form.questions);
+    }
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('beforeunload', () => this.saveForm());
+    this.saveForm(); // Save when component is destroyed
+  }
+
+  rebuildFormGroups(questions: any) {
+    const formArray = this.titleForm.get('questions') as FormArray;
+    formArray.clear();
+    questions.forEach((question: any) => {
+      const questionGroup = this.fb.group<Question>({
+        text: this.fb.nonNullable.control(question.text),
+        options: this.fb.nonNullable.array(
+          question.options.map((option: any) => this.fb.control(option))
+        ),
+        selectedOption: this.fb.control(question.selectedOption),
+      });
+      formArray.push(questionGroup);
+    });
+  }
+
+  clearForm() {
+    const formArray = this.titleForm.get('questions') as FormArray;
+    formArray.clear();
+    this.titleForm.reset();
+    this.addQuestion();
+  }
 }
