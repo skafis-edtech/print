@@ -22,6 +22,10 @@
     Ši Skafis versija labiausiai tinka greitam turinio kartojimui bei mokinių
     įsivertinimui.
   </p>
+  <p>
+    Galite pasimėginti užpildant pavyzdinėmis užduotimis (mygtukas pačioje
+    apačioje)
+  </p>
 
   <mat-card appearance="outlined">
     <mat-card-content>
@@ -55,13 +59,14 @@
   >
 
   <form [formGroup]="titleForm">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" [style.width.%]="70">
       <mat-label>Pavadinimas</mat-label>
-      <input
+      <textarea
         matInput
         placeholder="Įveskite pavadinimą"
         formControlName="title"
-      />
+        rows="1"
+      ></textarea>
       <mat-error *ngIf="titleForm.get('title')?.errors?.['required']">
         Pavadinimas yra privalomas
       </mat-error>
@@ -76,12 +81,13 @@
         <div>
           <mat-form-field appearance="outline" [style.width.%]="100">
             <mat-label>Klausimas</mat-label>
-            <input
+            <textarea
               [required]="false"
               matInput
               placeholder="Įveskite klausimo formuluotę"
               formControlName="text"
-            />
+              rows="1"
+            ></textarea>
           </mat-form-field>
 
           <mat-radio-group
@@ -95,12 +101,13 @@
                 </div>
                 <mat-form-field appearance="outline">
                   <mat-label>Pasirinkimas</mat-label>
-                  <input
+                  <textarea
                     matInput
                     [placeholder]="'Įveskite pasirinkimo formuluotę'"
                     [formControlName]="j"
                     [required]="false"
-                  />
+                    rows="1"
+                  ></textarea>
                 </mat-form-field>
                 <mat-radio-button [value]="j"></mat-radio-button>
                 <div>
@@ -166,6 +173,8 @@
     >
       Atsisiųsti geresnės kokybės tekstinį PDF (be lietuviškų raidžių)
     </button>
+    <br />
+    <br />
     <button type="button" mat-raised-button color="warn" (click)="clearForm()">
       Išvalyti viską
     </button>

@@ -22,6 +22,23 @@
       rel="stylesheet"
     />
     <link rel="manifest" href="assets/site.webmanifest" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const textareas = document.querySelectorAll("textarea");
+
+        const autoResizeTextarea = function (event) {
+          const textarea = event.target;
+          textarea.style.height = "auto"; // Reset the height
+          textarea.style.height = textarea.scrollHeight + "px"; // Set to scroll height
+        };
+
+        textareas.forEach((textarea) => {
+          textarea.addEventListener("input", autoResizeTextarea);
+          // Initialize resize in case there's text already
+          autoResizeTextarea({ target: textarea });
+        });
+      });
+    </script>
   </head>
   <body id="body" class="mat-typography">
     <app-root></app-root>
