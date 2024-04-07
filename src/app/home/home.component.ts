@@ -194,8 +194,14 @@ export class HomeComponent {
 
     //TITLE
     pdf.setFontSize(14);
-    pdf.text(title, pageWidth / 4, 10, { align: 'center' }); // Center title in the first half
-    pdf.text(title, (pageWidth / 4) * 3, 10, { align: 'center' }); // Center title in the second half
+    pdf.text(title, pageWidth / 4, 10, {
+      align: 'center',
+      maxWidth: pageWidth / 2 - 20,
+    }); // Center title in the first half
+    pdf.text(title, (pageWidth / 4) * 3, 10, {
+      align: 'center',
+      maxWidth: pageWidth / 2 - 20,
+    }); // Center title in the second half
 
     const questions = this.titleForm.value.questions;
     const drawQuestions = (
@@ -272,7 +278,8 @@ export class HomeComponent {
     };
 
     // Start below the title
-    const startY = 20;
+    const startY =
+      20 + pdf.splitTextToSize(`${title}`, pageWidth / 2 - 20).length * 5;
     drawQuestions(pdf, questions, 10, startY); // Draw on the left half of the PDF
     drawQuestions(pdf, questions, pageCenter + 10, startY); // Draw on the right half of the PDF
 
@@ -293,9 +300,10 @@ export class HomeComponent {
       y: any,
       maxWidth: any,
       lineHeight: any
-    ) {
+    ): number {
       var words = text.split(' ');
       var line = '';
+      var lines = 1;
 
       for (var n = 0; n < words.length; n++) {
         var testLine = line + words[n] + ' ';
@@ -305,11 +313,14 @@ export class HomeComponent {
           context.fillText(line, x, y);
           line = words[n] + ' ';
           y += lineHeight;
+          lines++;
         } else {
           line = testLine;
         }
       }
       context.fillText(line, x, y);
+
+      return lines; // This will give you the count of lines that were wrapped and drawn
     }
     const SCALING_FACTOR = 3;
 
@@ -323,19 +334,26 @@ export class HomeComponent {
     const pageCenter = pageWidth / 2;
     const title = this.titleForm.value.title || 'NO TITLE';
     const lineHeight = 20 * SCALING_FACTOR; // Set your line height
-    const maxWidth = (pageWidth / 2 - 20) * SCALING_FACTOR; // Set the max width for wrapping
+    const maxWidth = 1550; // THIS NUMBER IS JUST RANDOM BY TESTING...
 
     ctx.textBaseline = 'bottom';
 
     // Draw title
     ctx.font = `${20 * SCALING_FACTOR}px Times New Roman`;
     ctx.textAlign = 'center';
-    ctx.fillText(title, pageCenter, 40 * SCALING_FACTOR); 
+    const lineNum = wrapText(
+      ctx,
+      title,
+      pageCenter,
+      40 * SCALING_FACTOR,
+      maxWidth,
+      lineHeight
+    );
+    let yPos = lineHeight * lineNum + 50 * SCALING_FACTOR;
     ctx.textAlign = 'left';
 
     const questions = this.titleForm.value.questions;
 
-    let yPos = 80 * SCALING_FACTOR;
     let answersText = 'Atsakymai:   ';
 
     ctx.font = `${15 * SCALING_FACTOR}px Times New Roman`;
@@ -343,9 +361,16 @@ export class HomeComponent {
     questions?.forEach((q: any, index: any) => {
       if (!ctx) return;
 
-      wrapText(ctx, `${index + 1}. ${q.text}`, 40, yPos, maxWidth, lineHeight);
-      // yPos += lineHeight;
-      yPos += 20 * SCALING_FACTOR;
+      const lineNum = wrapText(
+        ctx,
+        `${index + 1}. ${q.text}`,
+        40 * SCALING_FACTOR,
+        yPos,
+        maxWidth,
+        lineHeight
+      );
+      yPos += lineHeight * lineNum;
+      yPos += 5 * SCALING_FACTOR;
 
       let optionsText = q.options
         .map(
@@ -362,12 +387,20 @@ export class HomeComponent {
             65 + optionIndex
           )}) ${option}`;
           if (!ctx) return;
-          ctx.fillText(optionLabel, 40 * SCALING_FACTOR, yPos);
-          yPos += 15 * SCALING_FACTOR; // Increment y position for each option
+          const lineNum = wrapText(
+            ctx,
+            optionLabel,
+            60 * SCALING_FACTOR,
+            yPos,
+            maxWidth - 20 * SCALING_FACTOR,
+            lineHeight
+          );
+          yPos += lineHeight * lineNum;
+          yPos += 5 * SCALING_FACTOR; // Increment y position for each option
         });
       } else {
         // Options fit in one line
-        ctx.fillText(optionsText, 40 * SCALING_FACTOR, yPos);
+        ctx.fillText(optionsText, 60 * SCALING_FACTOR, yPos);
         yPos += 20 * SCALING_FACTOR;
       }
 
@@ -504,41 +537,6 @@ export class HomeComponent {
 
   fillExampleForm() {
     const exampleFormJson = {
-      title: 'Kombinatorika. Skaitmenys',
-      questions: [
-        {
-          text: 'Kiek yra trizenkliu naturaliuju skaiciu, kuriu bent vienas skaitmuo 0?',
-          options: ['162', '171', '180', '189'],
-          selectedOption: 1,
-        },
-        {
-          text: 'Kiek yra dvizenkliu naturaliuju skaiciu, kuriu bent vienas skaitmuo yra 7?',
-          options: ['18', '19', '20', '21'],
-          selectedOption: 1,
-        },
-        {
-          text: 'Kiek yra keturzenkliu skaiciu, kuriu pirmasis skaitmuo yra 3 ir jie neturi skaitmens 0?',
-          options: ['729', '999', '1000', '900'],
-          selectedOption: 3,
-        },
-        {
-          text: 'Kiek yra trizenkliu skaiciu, kuriu skaitmenys yra nuo 1 iki 3 ir visi skaitmenys yra skirtingi?',
-          options: ['6', '9', '24', '27'],
-          selectedOption: 1,
-        },
-        {
-          text: 'Jei skaitmenys 1, 2, 3, 4 gali buti naudojami tik viena karta, kiek trizenkliu skaiciu galima is ju sudaryti?',
-          options: ['12', '24', '36', '48'],
-          selectedOption: 1,
-        },
-        {
-          text: 'Kiek yra dvizenkliu skaiciu, kuriu abu skaitmenys yra lyginiai?',
-          options: ['20', '25', '30', '16'],
-          selectedOption: 0,
-        },
-      ],
-    };
-    const exampleFormJson1 = {
       title: 'Kombinatorika. Skaitmenys',
       questions: [
         {

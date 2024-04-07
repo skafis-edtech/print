@@ -16,8 +16,7 @@
     Šis tinklapis generuoja HTML ir PDF failus su klausimais, kur tik vienas
     atsakymo variantas yra teisingas. HTML failo naudotojas gali atsakyti į
     klausimus ir pasitikrinti atsakymus (kiekvienos užduoties atskirai). PDF
-    failo skaitytojas gali pasitikrinti atsakymus puslapio apačioje. PDF
-    generavimas turi trūkumų (informacija mėlyname pranešime).
+    failo skaitytojas gali pasitikrinti atsakymus puslapio apačioje.
   </p>
   <p>
     Ši Skafis versija labiausiai tinka greitam turinio kartojimui bei mokinių
@@ -44,14 +43,9 @@
   </mat-card>
   <mat-card class="alert-card info-alert">
     <mat-card-content>
-      <strong>PDF generavimo apribojimai: </strong><br />1. Daugiausia 60
-      simbolių pavadinimui. <br />2. Daugiausia 80 simbolių klausimo formuluotei
-      ar pasirinkimui. <br />3. Bendram vieno klausimo pasirinkimų tekstų
-      simbolių skaičių sumai esant daugiau nei 60, visi to klausimo pasirinkimai
-      išdėstomi atskirose eilutėse (vadiname DIDELIU klausimu), kitu atveju
-      vienoje eilutėje (vadiname MAŽU klausimu).<br />
-      4. Ne daugiau 14 MAŽŲ klausimų. DIDELIS klausimas vertas 2 MAŽŲ klausimų
-      (kalbant apie kiekio limitą).
+      <strong>PDF generavimo apribojimai: </strong><br />
+      Lape telpa daugiausia 14 trumpų klausimų (ilgesni klausimai, aišku,
+      pamažina limitą)
     </mat-card-content>
   </mat-card>
   <mat-card class="alert-card warn-alert">
@@ -170,7 +164,7 @@
       [disabled]="titleForm.invalid"
       (click)="generateTextPDF()"
     >
-      Atsisiųsti tekstinį geros kokybės PDF (be lietuviškų raidžių)
+      Atsisiųsti geresnės kokybės tekstinį PDF (be lietuviškų raidžių)
     </button>
     <button type="button" mat-raised-button color="warn" (click)="clearForm()">
       Išvalyti viską
