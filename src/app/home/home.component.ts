@@ -49,7 +49,7 @@ export class HomeComponent {
       document.getElementById('head')?.appendChild(script2);
     }
     this.titleForm = this.fb.nonNullable.group<Questionaire>({
-      title: this.fb.nonNullable.control<string>('', Validators.required),
+      title: this.fb.nonNullable.control<string>(''),
       questions: this.fb.nonNullable.array<Question>([]),
     });
     this.addQuestion();
@@ -179,7 +179,7 @@ export class HomeComponent {
     document.getElementById('body')?.classList.add('block-scroll');
   }
 
-  generatePDF(): void {
+  generateTextPDF(): void {
     const pdf = new jsPDF({
       orientation: 'landscape',
       unit: 'mm',
@@ -190,14 +190,14 @@ export class HomeComponent {
     const pageCenter = pageWidth / 2;
     const title = this.titleForm.value.title || 'NO TITLE';
 
-    // Adding a title at the top of the PDF
-    pdf.setFontSize(14);
     pdf.setFont('times', 'normal');
+
+    //TITLE
+    pdf.setFontSize(14);
     pdf.text(title, pageWidth / 4, 10, { align: 'center' }); // Center title in the first half
     pdf.text(title, (pageWidth / 4) * 3, 10, { align: 'center' }); // Center title in the second half
 
     const questions = this.titleForm.value.questions;
-
     const drawQuestions = (
       doc: any,
       questions: any,
@@ -205,14 +205,14 @@ export class HomeComponent {
       startY: any
     ) => {
       let yPos = startY;
-      let answersText = 'Atsakymai: ';
+      let answersText = 'Atsakymai:   ';
 
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal');
 
       questions.forEach((q: any, index: any) => {
         doc.text(`${index + 1}. ${q.text}`, startX, yPos);
-        yPos += 7;
+        yPos += 5;
 
         let optionsText = q.options
           .map(
@@ -220,6 +220,7 @@ export class HomeComponent {
               `${String.fromCharCode(65 + optionIndex)}) ${option}`
           )
           .join('   ');
+
         let lineWidth =
           (doc.getStringUnitWidth(optionsText) * doc.getFontSize()) /
           doc.internal.scaleFactor;
@@ -230,18 +231,18 @@ export class HomeComponent {
               65 + optionIndex
             )}) ${option}`;
             doc.text(optionLabel, startX, yPos);
-            yPos += 5; // Increment y position for each option
+            yPos += 4; // Increment y position for each option
           });
         } else {
           // Options fit in one line
           doc.text(optionsText, startX, yPos);
-          yPos += 7;
+          yPos += 5;
         }
 
-        yPos += 5; // Additional space after each question
+        yPos += 3; // Additional space after each question
 
         //ans
-        answersText += `${
+        answersText += `${index + 1}. ${
           q.selectedOption === 0
             ? 'A'
             : q.selectedOption === 1
@@ -251,7 +252,7 @@ export class HomeComponent {
             : q.selectedOption === 3
             ? 'D'
             : '???'
-        } `;
+        }   `;
       });
       pdf.setFontSize(5);
       pdf.text(answersText, startX, pdf.internal.pageSize.getHeight() - 5);
@@ -275,6 +276,137 @@ export class HomeComponent {
     pdf.line(pageCenter, 0, pageCenter, pdf.internal.pageSize.getHeight());
 
     // Save the PDF
-    pdf.save('questions.pdf');
+    pdf.save(`${this.titleForm.value.title}.pdf`);
+  }
+
+  generateImagePDF(): void {
+    const SCALING_FACTOR = 3;
+
+    var canvas = document.createElement('canvas');
+    canvas.width = 595 * SCALING_FACTOR;
+    canvas.height = 842 * SCALING_FACTOR;
+    var ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const pageWidth = canvas.width;
+    const pageCenter = pageWidth / 2;
+    const title = this.titleForm.value.title || 'NO TITLE';
+
+    ctx.textBaseline = 'bottom';
+
+    // Draw title
+    ctx.font = `${20 * SCALING_FACTOR}px Times New Roman`;
+    ctx.textAlign = 'center';
+    ctx.fillText(title, pageCenter, 40 * SCALING_FACTOR);
+    ctx.textAlign = 'left';
+
+    const questions = this.titleForm.value.questions;
+
+    let yPos = 80 * SCALING_FACTOR;
+    let answersText = 'Atsakymai:   ';
+
+    ctx.font = `${15 * SCALING_FACTOR}px Times New Roman`;
+
+    questions?.forEach((q: any, index: any) => {
+      if (!ctx) return;
+
+      ctx.fillText(`${index + 1}. ${q.text}`, 40 * SCALING_FACTOR, yPos);
+      yPos += 20 * SCALING_FACTOR;
+
+      let optionsText = q.options
+        .map(
+          (option: any, optionIndex: any) =>
+            `${String.fromCharCode(65 + optionIndex)}) ${option}`
+        )
+        .join('   ');
+
+      let lineWidth = ctx.measureText(optionsText).width;
+      if (lineWidth > pageWidth / 2 - 20 * SCALING_FACTOR) {
+        // If options exceed half the page width, start a new line for each
+        q.options.forEach((option: any, optionIndex: any) => {
+          let optionLabel = `${String.fromCharCode(
+            65 + optionIndex
+          )}) ${option}`;
+          if (!ctx) return;
+          ctx.fillText(optionLabel, 40 * SCALING_FACTOR, yPos);
+          yPos += 15 * SCALING_FACTOR; // Increment y position for each option
+        });
+      } else {
+        // Options fit in one line
+        ctx.fillText(optionsText, 40 * SCALING_FACTOR, yPos);
+        yPos += 20 * SCALING_FACTOR;
+      }
+
+      yPos += 10 * SCALING_FACTOR; // Additional space after each question
+
+      //ans
+      answersText += `${index + 1}. ${
+        q.selectedOption === 0
+          ? 'A'
+          : q.selectedOption === 1
+          ? 'B'
+          : q.selectedOption === 2
+          ? 'C'
+          : q.selectedOption === 3
+          ? 'D'
+          : '???'
+      }   `;
+    });
+
+    ctx.font = `${8 * SCALING_FACTOR}px Times New Roman`;
+    ctx.fillText(
+      answersText,
+      40 * SCALING_FACTOR,
+      canvas.height - 20 * SCALING_FACTOR
+    );
+
+    ctx.textAlign = 'right';
+    const footer = 'Šį failą sugeneravo Skafis. www.skafis.lt';
+    ctx.fillText(
+      footer,
+      canvas.width - 40 * SCALING_FACTOR,
+      canvas.height - 20 * SCALING_FACTOR
+    );
+
+    var imgData = canvas.toDataURL('image/png');
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4',
+    });
+
+    // Calculate the scale to fit the A5 content in A4 page width
+    const scale =
+      doc.internal.pageSize.getWidth() / 2 / (canvas.width / SCALING_FACTOR);
+    const a5Height = (canvas.height / SCALING_FACTOR) * scale;
+
+    // Add the canvas image twice, once on each side of the A4 landscape page
+    doc.addImage(
+      imgData,
+      'PNG',
+      0,
+      0,
+      doc.internal.pageSize.getWidth() / 2,
+      a5Height
+    );
+    doc.addImage(
+      imgData,
+      'PNG',
+      doc.internal.pageSize.getWidth() / 2,
+      0,
+      doc.internal.pageSize.getWidth() / 2,
+      a5Height
+    );
+
+    // Draw a vertical line down the middle of the page to separate both sides
+    doc.setDrawColor(0);
+    doc.setLineWidth(0.1);
+    doc.line(
+      doc.internal.pageSize.getWidth() / 2,
+      0,
+      doc.internal.pageSize.getWidth() / 2,
+      doc.internal.pageSize.getHeight()
+    );
+    doc.save(`${this.titleForm.value.title}.pdf`);
   }
 }

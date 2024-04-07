@@ -13,13 +13,11 @@
     <h2><em>Kurk testus lengvai!</em></h2>
   </header>
   <p>
-    Šis tinklapis generuoja HTML failus su klausimais, kur tik vienas atsakymo
-    variantas yra teisingas. HTML failo naudotojas tuomet gali atsakyti į
-    klausimus ir pasitikrinti atsakymus (kiekvienos užduoties atskirai).
-  </p>
-  <p>
-    Taip pat yra generuojama PDF failai su atsakymais apačioje, tačiau jie dar
-    turi trūkumų (informacija mėlyname pranešime).
+    Šis tinklapis generuoja HTML ir PDF failus su klausimais, kur tik vienas
+    atsakymo variantas yra teisingas. HTML failo naudotojas gali atsakyti į
+    klausimus ir pasitikrinti atsakymus (kiekvienos užduoties atskirai). PDF
+    failo skaitytojas gali pasitikrinti atsakymus puslapio apačioje. PDF
+    generavimas turi trūkumų (informacija mėlyname pranešime).
   </p>
   <p>
     Ši Skafis versija labiausiai tinka greitam turinio kartojimui bei mokinių
@@ -46,15 +44,14 @@
   </mat-card>
   <mat-card class="alert-card info-alert">
     <mat-card-content>
-      PDF generavimo apribojimai: <br />1. Daugiausia 60 simbolių pavadinimui.
-      <br />2. Daugiausia 80 simbolių klausimo formuluotei ar pasirinkimui.
-      <br />3. Bendram vieno klausimo pasirinkimų tekstų simbolių skaičių sumai
-      esant daugiau nei 60, visi to klausimo pasirinkimai išdėstomi atskirose
-      eilutėse (vadiname DIDELIU klausimu), kitu atveju vienoje eilutėje
-      (vadiname MAŽU klausimu).<br />
-      4. Ne daugiau 10 MAŽŲ klausimų. DIDELIS klausimas vertas 2 MAŽŲ klausimų
-      (kalbant apie kiekio limitą). <br />
-      5. Negalimos lietuviškos raidės.
+      <strong>PDF generavimo apribojimai: </strong><br />1. Daugiausia 60
+      simbolių pavadinimui. <br />2. Daugiausia 80 simbolių klausimo formuluotei
+      ar pasirinkimui. <br />3. Bendram vieno klausimo pasirinkimų tekstų
+      simbolių skaičių sumai esant daugiau nei 60, visi to klausimo pasirinkimai
+      išdėstomi atskirose eilutėse (vadiname DIDELIU klausimu), kitu atveju
+      vienoje eilutėje (vadiname MAŽU klausimu).<br />
+      4. Ne daugiau 14 MAŽŲ klausimų. DIDELIS klausimas vertas 2 MAŽŲ klausimų
+      (kalbant apie kiekio limitą).
     </mat-card-content>
   </mat-card>
   <mat-card class="alert-card warn-alert">
@@ -145,7 +142,10 @@
     >
       Pašalinti paskutinį klausimą
     </button>
-
+    <br />
+    <br />
+    <br />
+    <br />
     <button
       mat-raised-button
       color="primary"
@@ -153,15 +153,23 @@
       [disabled]="titleForm.invalid"
       (click)="generateHTML()"
     >
-      Atsisiųsti užduočių HTML
+      Atsisiųsti HTML
     </button>
     <button
       mat-raised-button
       color="accent"
       [disabled]="titleForm.invalid"
-      (click)="generatePDF()"
+      (click)="generateImagePDF()"
     >
-      Atsisiųsti užduočių PDF
+      Atsisiųsti PDF
+    </button>
+    <button
+      mat-outlined-button
+      color="secondary"
+      [disabled]="titleForm.invalid"
+      (click)="generateTextPDF()"
+    >
+      Atsisiųsti tekstinį geros kokybės PDF (be lietuviškų raidžių)
     </button>
   </form>
 </main>
@@ -195,8 +203,8 @@
       >github.com/naglissul/skafis</a
     >
   </p>
-  <p>v1.1.0</p>
-  <p>Paskutinį kartą atnaujinta: 2024-04-06</p>
+  <p>v1.1.0+</p>
+  <p>Paskutinį kartą atnaujinta: 2024-04-07</p>
   <p>
     Mano blog'as bei daugiau įdomių dalykų čia:
     <a href="https://www.npw.lt" target="_blank" rel="noreferrer">npw.lt</a>
