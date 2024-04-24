@@ -1,63 +1,5 @@
 <main>
-  <header>
-    <button
-      type="button"
-      mat-mini-fab
-      color="secondary"
-      (click)="changeLanguage()"
-    >
-      EN
-    </button>
-
-    <h1>skafis</h1>
-    <h2><em>Kurk testus lengvai!</em></h2>
-  </header>
-  <p>
-    Šis tinklapis generuoja HTML ir PDF failus su klausimais, kur tik vienas
-    atsakymo variantas yra teisingas. HTML failo naudotojas gali atsakyti į
-    klausimus ir pasitikrinti atsakymus (kiekvienos užduoties atskirai). PDF
-    failo skaitytojas gali pasitikrinti atsakymus puslapio apačioje.
-  </p>
-  <p>
-    Ši Skafis versija labiausiai tinka greitam turinio kartojimui bei mokinių
-    įsivertinimui.
-  </p>
-  <p>
-    Galite pasimėginti užpildant pavyzdinėmis užduotimis (mygtukas pačioje
-    apačioje)
-  </p>
-
-  <mat-card appearance="outlined">
-    <mat-card-content>
-      <h4>
-        <strong>Hmm, matai? Nėra reklamų! Tegu taip ir išlieka ;)</strong>
-      </h4>
-      <p>Būčiau labai dėkingas už piniginę paramą, už įdėtą darbą.</p>
-      <p>
-        <li>
-          Pavedimu (Pervedimo paskirtis: Skafis tinklapio parama + Jūsų žinutė):
-          <br />
-          Naglis Šuliokas LT943250092929077836
-          <button type="button" color="secondary" (click)="copyBankDetails()">
-            {{ copied ? "Nukopijuota" : "Kopijuoti" }}
-          </button>
-        </li>
-      </p>
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="alert-card info-alert">
-    <mat-card-content>
-      <strong>PDF generavimo apribojimai: </strong><br />
-      Lape telpa daugiausia 14 trumpų klausimų (ilgesni klausimai, aišku,
-      pamažina limitą)
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="alert-card warn-alert">
-    <mat-card-content
-      >Progresas išsisaugo jūsų įrenginyje automatiškai</mat-card-content
-    ></mat-card
-  >
-
+  <app-title-description />
   <form [formGroup]="titleForm">
     <mat-form-field appearance="outline" [style.width.%]="70">
       <mat-label>Pavadinimas</mat-label>
@@ -131,7 +73,7 @@
       color="secondary"
       (click)="addQuestion()"
     >
-      Pridėti klausimą
+      Pridėti ABCD klausimą
     </button>
 
     <button

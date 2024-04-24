@@ -9,40 +9,6 @@ main {
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
-  header {
-    padding: 1em 5em 3em;
-    text-align: right;
-
-    h1 {
-      color: #333;
-      font-size: 70px;
-      text-align: center;
-    }
-
-    h2 {
-      text-align: center;
-    }
-  }
-
-  @media (max-width: 768px) {
-    header {
-      padding-right: 0;
-      h1 {
-        padding-right: 1em;
-      }
-
-      h2 {
-        padding-right: 3.5em;
-      }
-    }
-  }
-
-  p {
-    font-size: 1rem;
-    color: #666;
-    text-align: center;
-  }
-
   form {
     padding-top: 2rem;
 
@@ -158,27 +124,4 @@ footer {
   padding-left: 10px;
   max-width: 600px;
   margin: auto;
-}
-
-.alert-card {
-  margin: 1rem 0;
-  font-weight: 500;
-  font-size: 16px;
-
-  &.warn-alert {
-    background-color: #ffcc00; // Red color for warnings, but you can choose any color
-  }
-
-  // Add more styles for other types of alerts (info, success, error)
-  &.info-alert {
-    background-color: #2196f3; // Blue color for info
-  }
-
-  &.success-alert {
-    background-color: #4caf50; // Green color for success
-  }
-
-  &.error-alert {
-    background-color: #f44336; // Red color, similar to warn but can be used differently based on context
-  }
 }
