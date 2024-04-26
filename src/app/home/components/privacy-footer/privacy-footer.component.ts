@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './privacy-footer.component.html',
-  styleUrl: './privacy-footer.component.scss'
+  styleUrl: './privacy-footer.component.scss',
 })
-export class PrivacyFooterComponent {
-
-}
+export class PrivacyFooterComponent {}

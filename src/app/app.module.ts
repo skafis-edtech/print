@@ -21,6 +21,7 @@ import {
   MatDialogContent,
 } from '@angular/material/dialog';
 import { TitleDescriptionComponent } from './home/components/title-description/title-description.component';
+import { PrivacyFooterComponent } from './home/components/privacy-footer/privacy-footer.component';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, HomeEnComponent],
@@ -43,6 +44,7 @@ import { TitleDescriptionComponent } from './home/components/title-description/t
     MatDialogTitle,
     MatDialogContent,
     TitleDescriptionComponent,
+    PrivacyFooterComponent,
   ],
   bootstrap: [AppComponent],
 })

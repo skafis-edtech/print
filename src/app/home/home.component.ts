@@ -8,6 +8,7 @@ import { generateImagePDF, generateTextPDF } from './generate-pdf';
 import { exampleABCD } from './form-example-jsons';
 import { generateHTML } from './generate-html';
 import { TitleDescriptionComponent } from './components/title-description/title-description.component';
+import { PrivacyFooterComponent } from './components/privacy-footer/privacy-footer.component';
 
 export interface Questionaire {
   title: FormControl<string>;
@@ -16,8 +17,10 @@ export interface Questionaire {
 
 interface Question {
   text?: FormControl<string>;
+  type: FormControl<'ABCD' | 'OPEN'>;
   options?: FormArray<FormControl<string>>;
   selectedOption?: FormControl<number>;
+  answerText?: FormControl<string>;
 }
 
 @Component({
@@ -33,25 +36,13 @@ export class HomeComponent {
     if (!consentGiven) {
       this.openDialog('0ms', '0ms');
     } else {
-      let script = document.createElement('script');
-      script.async = true;
-      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-9D2B9RSBPT';
-      let script2 = document.createElement('script');
-      script2.textContent = `window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "G-9D2B9RSBPT");`;
-      document.getElementById('head')?.appendChild(script);
-      document.getElementById('head')?.appendChild(script2);
+      this.trackAnalytics();
     }
     this.titleForm = this.fb.nonNullable.group<Questionaire>({
       title: this.fb.nonNullable.control<string>(''),
       questions: this.fb.nonNullable.array<Question>([]),
     });
-    this.addQuestion();
+    this.loadForm();
   }
 
   get questions(): FormArray {
@@ -62,9 +53,10 @@ export class HomeComponent {
     return this.questions.at(questionIndex).get('options') as FormArray;
   }
 
-  addQuestion(): void {
+  addABCDQuestion(): void {
     const questionGroup = this.fb.group<Question>({
       text: this.fb.nonNullable.control<string>(''),
+      type: this.fb.nonNullable.control<'ABCD' | 'OPEN'>('ABCD'),
       options: this.fb.nonNullable.array<FormControl<string>>([
         this.fb.nonNullable.control<string>(''),
         this.fb.nonNullable.control<string>(''),
@@ -75,6 +67,16 @@ export class HomeComponent {
         0,
         Validators.required
       ),
+    });
+
+    this.questions.push(questionGroup);
+  }
+
+  addOpenQuestion(): void {
+    const questionGroup = this.fb.group<Question>({
+      text: this.fb.nonNullable.control<string>(''),
+      type: this.fb.nonNullable.control<'ABCD' | 'OPEN'>('OPEN'),
+      answerText: this.fb.nonNullable.control<string>(''),
     });
 
     this.questions.push(questionGroup);
@@ -145,10 +147,12 @@ export class HomeComponent {
     questions.forEach((question: any) => {
       const questionGroup = this.fb.group<Question>({
         text: this.fb.nonNullable.control(question.text),
+        type: this.fb.nonNullable.control(question.type),
         options: this.fb.nonNullable.array(
-          question.options.map((option: any) => this.fb.control(option))
+          question.options?.map((option: any) => this.fb.control(option)) || []
         ),
         selectedOption: this.fb.control(question.selectedOption),
+        answerText: this.fb.control(question.answerText),
       });
       formArray.push(questionGroup);
     });
@@ -158,7 +162,6 @@ export class HomeComponent {
     const formArray = this.titleForm.get('questions') as FormArray;
     formArray.clear();
     this.titleForm.reset();
-    this.addQuestion();
   }
 
   fillExampleForm() {
@@ -172,5 +175,21 @@ export class HomeComponent {
 
   generateTextPDF(): void {
     generateTextPDF(this.titleForm);
+  }
+
+  trackAnalytics() {
+    let script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-9D2B9RSBPT';
+    let script2 = document.createElement('script');
+    script2.textContent = `window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-9D2B9RSBPT");`;
+    document.getElementById('head')?.appendChild(script);
+    document.getElementById('head')?.appendChild(script2);
   }
 }
