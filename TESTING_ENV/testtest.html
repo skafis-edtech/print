@@ -1,0 +1,453 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Upload JSON and Grade Responses</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+      }
+      .container {
+        width: 80%;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      }
+      h3 {
+        color: #5a5a5a;
+      }
+      .response-container {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #e8e8e8;
+        border-radius: 8px;
+      }
+      .answers-list {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        margin-top: 20px;
+      }
+      .answer-section {
+        width: 45%;
+      }
+      #combinedList {
+        display: flex;
+        justify-content: space-around;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      .answer-item {
+        background-color: #f0f0f0;
+        margin: 5px 0;
+        padding: 10px;
+        border-radius: 5px;
+        position: relative;
+        width: 300px;
+      }
+      .answer-input {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 5px;
+      }
+      input[type="text"] {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 5px;
+        width: 50px;
+        margin-left: 5px;
+      }
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 10px 2px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      button.navigation {
+        background-color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div>
+        <h3>DATA JSON (with responses)</h3>
+        <input
+          type="file"
+          id="jsonFileInput"
+          accept=".json"
+          onchange="loadResponses(event)"
+        />
+      </div>
+
+      <div>
+        <h3>ANSWER JSON</h3>
+        <input
+          type="file"
+          id="answerKeyInput"
+          accept=".json"
+          onchange="loadAnswerKey(event)"
+        />
+      </div>
+      <div id="responseContainer" class="response-container">
+        <div id="which-person-out-of">Person 1 out of 44</div>
+        <div id="responseID">ID: kdA11var2</div>
+        <div class="answers-list">
+          <div id="combinedList">
+            <div class="answer-item">
+              <div class="answer-input"><strong>1.2.a.: </strong>2*4^2=4^2</div>
+              <div class="answer-input">
+                <strong>Correct: </strong>3*sqrt(2)
+              </div>
+              <div class="answer-input">
+                <strong>Points: </strong>4
+                <button onclick="updateGivenPoints(0, 0)">0</button
+                ><button onclick="updateGivenPoints(0, 1)">1</button
+                ><button onclick="updateGivenPoints(0, 2)">2</button
+                ><button onclick="updateGivenPoints(0, 3)">3</button
+                ><button onclick="updateGivenPoints(0, 4)">4</button>
+              </div>
+            </div>
+            <div class="answer-item">
+              <div class="answer-input"><strong>1.2.b.: </strong>4^2=√3*4</div>
+              <div class="answer-input"><strong>Correct: </strong>sqrt(2)</div>
+              <div class="answer-input">
+                <strong>Points: </strong>3
+                <button onclick="updateGivenPoints(1, 0)">0</button
+                ><button onclick="updateGivenPoints(1, 1)">1</button
+                ><button onclick="updateGivenPoints(1, 2)">2</button
+                ><button onclick="updateGivenPoints(1, 3)">3</button>
+              </div>
+            </div>
+            <div class="answer-item">
+              <div class="answer-input"><strong>1.2.c.: </strong></div>
+              <div class="answer-input"><strong>Correct: </strong>sqrt(2)</div>
+              <div class="answer-input">
+                <strong>Points: </strong>1
+                <button onclick="updateGivenPoints(2, 0)">0</button
+                ><button onclick="updateGivenPoints(2, 1)">1</button>
+              </div>
+            </div>
+            <div class="answer-item">
+              <div class="answer-input"><strong>2.1.: </strong>16,97cm</div>
+              <div class="answer-input"><strong>Correct: </strong>sqrt(2)</div>
+              <div class="answer-input">
+                <strong>Points: </strong>2
+                <button onclick="updateGivenPoints(3, 0)">0</button
+                ><button onclick="updateGivenPoints(3, 1)">1</button
+                ><button onclick="updateGivenPoints(3, 2)">2</button>
+              </div>
+            </div>
+            <div class="answer-item">
+              <div class="answer-input"><strong>2.2.: </strong>9cm</div>
+              <div class="answer-input"><strong>Correct: </strong>sqrt(2)</div>
+              <div class="answer-input">
+                <strong>Points: </strong>2
+                <button onclick="updateGivenPoints(4, 0)">0</button
+                ><button onclick="updateGivenPoints(4, 1)">1</button
+                ><button onclick="updateGivenPoints(4, 2)">2</button>
+              </div>
+            </div>
+            <div class="answer-item">
+              <div class="answer-input"><strong>2.3.: </strong>17,49cm</div>
+              <div class="answer-input"><strong>Correct: </strong>sqrt(2)</div>
+              <div class="answer-input">
+                <strong>Points: </strong>2
+                <button onclick="updateGivenPoints(5, 0)">0</button
+                ><button onclick="updateGivenPoints(5, 1)">1</button
+                ><button onclick="updateGivenPoints(5, 2)">2</button>
+              </div>
+            </div>
+            <div class="answer-item">
+              <div class="answer-input"><strong>2.4.: </strong>509,1cm^3</div>
+              <div class="answer-input"><strong>Correct: </strong>sqrt(2)</div>
+              <div class="answer-input">
+                <strong>Points: </strong>2
+                <button onclick="updateGivenPoints(6, 0)">0</button
+                ><button onclick="updateGivenPoints(6, 1)">1</button
+                ><button onclick="updateGivenPoints(6, 2)">2</button>
+              </div>
+            </div>
+            <div class="answer-item">
+              <div class="answer-input"><strong>3.1.+: </strong></div>
+              <div class="answer-input"><strong>Correct: </strong>sqrt(2)</div>
+              <div class="answer-input">
+                <strong>Points: </strong>2
+                <button onclick="updateGivenPoints(7, 0)">0</button
+                ><button onclick="updateGivenPoints(7, 1)">1</button
+                ><button onclick="updateGivenPoints(7, 2)">2</button>
+              </div>
+            </div>
+            <div class="answer-item">
+              <div class="answer-input"><strong>3.2.+: </strong></div>
+              <div class="answer-input"><strong>Correct: </strong>sqrt(2)</div>
+              <div class="answer-input">
+                <strong>Points: </strong>2
+                <button onclick="updateGivenPoints(8, 0)">0</button
+                ><button onclick="updateGivenPoints(8, 1)">1</button
+                ><button onclick="updateGivenPoints(8, 2)">2</button>
+              </div>
+            </div>
+            <div class="answer-item">
+              <div class="answer-input"><strong>3.3.+: </strong></div>
+              <div class="answer-input"><strong>Correct: </strong>sqrt(2)</div>
+              <div class="answer-input">
+                <strong>Points: </strong>2
+                <button onclick="updateGivenPoints(9, 0)">0</button
+                ><button onclick="updateGivenPoints(9, 1)">1</button
+                ><button onclick="updateGivenPoints(9, 2)">2</button>
+              </div>
+            </div>
+            <div class="answer-item">
+              <div class="answer-input"><strong>3.4.+: </strong></div>
+              <div class="answer-input"><strong>Correct: </strong>sqrt(2)</div>
+              <div class="answer-input">
+                <strong>Points: </strong>2
+                <button onclick="updateGivenPoints(10, 0)">0</button
+                ><button onclick="updateGivenPoints(10, 1)">1</button
+                ><button onclick="updateGivenPoints(10, 2)">2</button>
+              </div>
+            </div>
+            <div class="answer-item">
+              <div class="answer-input"><strong>4.a.+: </strong></div>
+              <div class="answer-input"><strong>Correct: </strong>sqrt(2)</div>
+              <div class="answer-input">
+                <strong>Points: </strong>2
+                <button onclick="updateGivenPoints(11, 0)">0</button
+                ><button onclick="updateGivenPoints(11, 1)">1</button
+                ><button onclick="updateGivenPoints(11, 2)">2</button>
+              </div>
+            </div>
+            <div class="answer-item">
+              <div class="answer-input"><strong>4.b.+: </strong></div>
+              <div class="answer-input"><strong>Correct: </strong>sqrt(2)</div>
+              <div class="answer-input">
+                <strong>Points: </strong>2
+                <button onclick="updateGivenPoints(12, 0)">0</button
+                ><button onclick="updateGivenPoints(12, 1)">1</button
+                ><button onclick="updateGivenPoints(12, 2)">2</button>
+              </div>
+            </div>
+            <div class="answer-item">
+              <div class="answer-input"><strong>5.: </strong>5cm^2</div>
+              <div class="answer-input"><strong>Correct: </strong>sqrt(2)</div>
+              <div class="answer-input">
+                <strong>Points: </strong>2
+                <button onclick="updateGivenPoints(13, 0)">0</button
+                ><button onclick="updateGivenPoints(13, 1)">1</button
+                ><button onclick="updateGivenPoints(13, 2)">2</button>
+              </div>
+            </div>
+            <div class="answer-item">
+              <div class="answer-input"><strong>6*.: </strong>350</div>
+              <div class="answer-input"><strong>Correct: </strong>sqrt(2)</div>
+              <div class="answer-input">
+                <strong>Points: </strong>2
+                <button onclick="updateGivenPoints(14, 0)">0</button
+                ><button onclick="updateGivenPoints(14, 1)">1</button
+                ><button onclick="updateGivenPoints(14, 2)">2</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="responseTimestamp">Timestamp: 4/29/2024, 9:24:09 AM</div>
+        <div id="totalPoints">Total points:</div>
+        <button onclick="saveGrading()">Save Grading</button>
+      </div>
+      <br />
+      <button
+        class="navigation"
+        onclick="navigate(-1)"
+        style="visibility: visible"
+      >
+        ❮ Previous
+      </button>
+      <button
+        class="navigation"
+        onclick="navigate(1)"
+        style="visibility: visible"
+      >
+        Next ❯
+      </button>
+      <button onclick="downloadGradingJSON()">Download Grading JSON</button>
+    </div>
+
+    <script>
+      let currentIndex = 0;
+      let responses = [];
+      let answerKey = [];
+      let gradingResults = [];
+      let selectedPoints = [];
+
+      function loadResponses(event) {
+        const fileReader = new FileReader();
+        fileReader.onload = function () {
+          const data = JSON.parse(fileReader.result);
+          responses = Object.values(data.responses);
+          currentIndex = 0;
+          displayResponse(currentIndex);
+        };
+        fileReader.readAsText(event.target.files[0]);
+      }
+
+      function loadAnswerKey(event) {
+        const fileReader = new FileReader();
+        fileReader.onload = function () {
+          answerKey = JSON.parse(fileReader.result);
+          displayResponse(currentIndex);
+        };
+        fileReader.readAsText(event.target.files[0]);
+      }
+
+      function displayResponse(index) {
+        if (responses.length === 0 || answerKey.length === 0) return;
+
+        const { id, answers, timestamp } = responses[index];
+        document.getElementById("responseID").textContent = `ID: ${id}`;
+        document.getElementById("which-person-out-of").textContent = `Person ${
+          index + 1
+        } out of ${responses.length}`;
+
+        const combinedList = document.getElementById("combinedList");
+        combinedList.innerHTML = "";
+
+        // Initialize the gradingResults entry for the current index if it does not exist
+        if (!gradingResults[currentIndex]) {
+          gradingResults[currentIndex] = {
+            id: id,
+            totalPoints: 0,
+            maxPoints: answerKey.reduce(
+              (acc, curr) =>
+                acc + (curr && !curr.number.includes("*") ? curr.points : 0),
+              0
+            ),
+            grade: 0,
+            taskPoints: [],
+          };
+        }
+
+        answers.forEach((answer, idx) => {
+          const listItem = document.createElement("div");
+          listItem.className = "answer-item";
+          let choosePoints = ``;
+          for (
+            let i = 0;
+            i <= (answerKey[idx] ? answerKey[idx].points : 0);
+            i++
+          ) {
+            choosePoints += `<button onclick="updateGivenPoints(${idx}, ${i})">${i}</button>`;
+          }
+
+          listItem.innerHTML = `
+            <div class="answer-input"><strong>${
+              answerKey[idx] ? answerKey[idx].number : `Q${idx + 1}`
+            }: </strong>${answer}</div>
+            <div class="answer-input"><strong>Correct: </strong>${
+              answerKey[idx] ? answerKey[idx].answer : "N/A"
+            }</div>
+            <div class="answer-input"><strong>Points: </strong>${
+              answerKey[idx] ? answerKey[idx].points : "N/A"
+            } ${choosePoints}</div>
+        `;
+          combinedList.appendChild(listItem);
+        });
+
+        document.getElementById(
+          "responseTimestamp"
+        ).textContent = `Timestamp: ${new Date(timestamp).toLocaleString()}`;
+        updateNavigationVisibility();
+      }
+
+      function updateGivenPoints(idx, points) {
+        selectedPoints[idx] = points; // Update the selected points for the question
+
+        gradingResults[currentIndex].taskPoints[idx] = {
+          task: `Q${idx + 1}`,
+          points,
+        };
+        document
+          .querySelectorAll(`#combinedList li:nth-child(${idx + 1}) button`)
+          .forEach((button) => {
+            button.style.backgroundColor =
+              button.textContent == points ? "blue" : "";
+          });
+      }
+
+      function saveGrading() {
+        const grading = {
+          id: responses[currentIndex].id,
+          totalPoints: 0,
+          maxPoints: answerKey.reduce(
+            (acc, curr) =>
+              acc + (curr && !curr.number.includes("*") ? curr.points : 0),
+            0
+          ),
+          grade: 0,
+          taskPoints: [],
+        };
+
+        responses[currentIndex].answers.forEach((_, idx) => {
+          const points = parseFloat(selectedPoints[idx]) || 0; // Retrieve points from the updated mechanism
+          grading.totalPoints += points;
+          grading.taskPoints.push({
+            task: answerKey[idx] ? answerKey[idx].number : `Q${idx + 1}`,
+            points,
+          });
+        });
+
+        document.getElementById(
+          "totalPoints"
+        ).textContent = `Total points: ${grading.totalPoints}`;
+
+        grading.grade = (8 * grading.totalPoints) / grading.maxPoints + 2;
+        gradingResults[currentIndex] = grading;
+      }
+
+      function navigate(direction) {
+        if (direction === -1 && currentIndex > 0) {
+          currentIndex--;
+        } else if (direction === 1 && currentIndex < responses.length - 1) {
+          currentIndex++;
+        }
+        displayResponse(currentIndex);
+      }
+
+      function updateNavigationVisibility() {
+        document.querySelectorAll(".navigation").forEach((el) => {
+          el.style.visibility = "visible";
+        });
+        if (currentIndex === 0) {
+          document.querySelector(".navigation:nth-child(3)").style.visibility =
+            "hidden";
+        }
+        if (currentIndex === responses.length - 1) {
+          document.querySelector(".navigation:nth-child(4)").style.visibility =
+            "hidden";
+        }
+      }
+
+      function downloadGradingJSON() {
+        const dataStr =
+          "data:text/json;charset=utf-8," +
+          encodeURIComponent(JSON.stringify(gradingResults));
+        const downloadAnchorNode = document.createElement("a");
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", "grading_results.json");
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+      }
+    </script>
+  </body>
+</html>

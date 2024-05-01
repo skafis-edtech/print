@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Stereometrijos kontrolinis</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif; /* Sets a readable, sans-serif font */
+        background-color: #f4f4f4; /* Light grey background for slight contrast */
+        padding: 20px; /* Adds spacing around the content */
+      }
+
+      form {
+        background: white;
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow around form */
+        border-radius: 8px; /* Rounded corners for the form */
+      }
+
+      h1 {
+        text-align: center;
+        color: #333; /* Dark grey color for text */
+      }
+
+      p {
+        text-align: center;
+        color: #666; /* Medium grey for the paragraph */
+      }
+
+      input[type="text"] {
+        width: calc(100% - 22px); /* Full width input field */
+        padding: 10px;
+        margin-top: 8px;
+        margin-bottom: 16px;
+        border: 1px solid #ddd; /* Light grey border */
+        border-radius: 4px; /* Rounded borders for the input field */
+        display: block;
+        box-sizing: border-box; /* Includes padding and border in the width */
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #5cb85c; /* Green background for the button */
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        text-transform: uppercase; /* Makes the button text uppercase */
+      }
+
+      button:hover {
+        background-color: #4cae4c; /* Slightly darker green on hover */
+      }
+      .redirectButton {
+        background-color: #2459c2; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+        width: fit-content;
+      }
+      .redirectButton:hover {
+        background-color: #2459c2;
+      }
+    </style>
+    <script>
+      function redirectToPage(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+        var number = document.getElementById("numberInput").value; // Get the number from the input field
+        window.location.href = `test.html?id=${number}`;
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Įveskite savo ID</h1>
+    <p>(kokį sako mokytojas)</p>
+    <form onsubmit="redirectToPage(event);">
+      <input
+        type="text"
+        id="numberInput"
+        name="number"
+        placeholder="Įveskite savo ID"
+      />
+      <button type="submit">Pradėti kontrolinį</button>
+    </form>
+    <button class="redirectButton" onclick="window.location.href='admin.html';">
+      Mokytojo prisijungimas
+    </button>
+    <button
+      class="redirectButton"
+      onclick="window.location.href='admin_grade.html';"
+    >
+      Vertinimo puslapis
+    </button>
+    <h3>
+      Pagrindinis puslapis, testų generatorius:
+      <a href="https://www.skafis.lt">skafis.lt</a>
+    </h3>
+  </body>
+</html>

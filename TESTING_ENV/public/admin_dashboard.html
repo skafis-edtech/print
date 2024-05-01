@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Stereometrijos kontrolinis</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        padding: 20px;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      h1 {
+        color: #333;
+        font-size: 24px;
+      }
+
+      table {
+        width: 90%;
+        max-width: 800px;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      table,
+      th,
+      td {
+        border: 1px solid #ccc;
+      }
+
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+        font-size: 16px;
+      }
+
+      th {
+        background-color: #f8f8f8;
+      }
+
+      caption {
+        font-size: 18px;
+        font-weight: bold;
+        padding: 10px;
+        caption-side: top;
+        text-align: left;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: white;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 20px;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+    <script type="module">
+      // Import necessary Firebase modules
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+      import {
+        getDatabase,
+        ref,
+        onValue,
+        get,
+      } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyDE6Yx4cXghxsn6FKOVEXYN8aavEzOipWA",
+        authDomain: "kontrass.firebaseapp.com",
+        databaseURL:
+          "https://kontrass-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "kontrass",
+        storageBucket: "kontrass.appspot.com",
+        messagingSenderId: "691360022307",
+        appId: "1:691360022307:web:b8d0cae3fd88b38e275696",
+      };
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const database = getDatabase(app);
+      const auth = getAuth(app);
+
+      // Function to load and display data from Firebase in real time
+      function loadData() {
+        const dbRef = ref(database, "responses"); // Adjust 'responses' to your specific data path in Firebase
+        const fullscreenRef = ref(database, "fullscreenLogs");
+        const feedbackRef = ref(database, "feedback");
+
+        onValue(fullscreenRef, (snapshot) => {
+          const data = snapshot.val();
+          const table = document.getElementById("fullscreenTable");
+          // Clear previous contents
+          table.innerHTML = "";
+
+          // Create table headers
+          const header = table.createTHead();
+          const headerRow = header.insertRow(0);
+          headerRow.insertCell(0).textContent = "ID";
+          headerRow.insertCell(1).textContent = "Timestamp";
+
+          // Insert data into the table
+          if (!data) return; // Exit if there is no data (null or undefined
+          Object.keys(data).forEach((key, index) => {
+            const row = table.insertRow(-1);
+            row.insertCell(0).textContent = data[key].id;
+            row.insertCell(1).textContent = new Date(
+              data[key].timestamp
+            ).toLocaleString("lt-LT");
+          });
+        });
+        onValue(dbRef, (snapshot) => {
+          const data = snapshot.val();
+          const table = document.getElementById("dataTable");
+          // Clear previous contents
+          table.innerHTML = "";
+
+          // Create table headers
+          const header = table.createTHead();
+          const headerRow = header.insertRow(0);
+          headerRow.insertCell(0).textContent = "ID";
+          headerRow.insertCell(1).textContent = "Answers";
+          headerRow.insertCell(2).textContent = "Timestamp";
+          if (!data) return; // Exit if there is no data (null or undefined
+
+          // Insert data into the table
+          Object.keys(data).forEach((key, index) => {
+            const row = table.insertRow(-1);
+            row.insertCell(0).textContent = data[key].id;
+            row.insertCell(1).textContent = data[key].answers?.join(", ");
+            row.insertCell(2).textContent = new Date(
+              data[key].timestamp
+            ).toLocaleString("lt-LT");
+          });
+        });
+        onValue(feedbackRef, (snapshot) => {
+          const data = snapshot.val();
+          const table = document.getElementById("feedbackTable");
+          // Clear previous contents
+          table.innerHTML = "";
+
+          // Create table headers
+          const header = table.createTHead();
+          const headerRow = header.insertRow(0);
+          headerRow.insertCell(0).textContent = "ID";
+          headerRow.insertCell(1).textContent = "Feedback";
+          headerRow.insertCell(2).textContent = "Timestamp";
+
+          if (!data) return; // Exit if there is no data (null or undefined
+
+          // Insert data into the table
+          Object.keys(data).forEach((key, index) => {
+            const row = table.insertRow(-1);
+            row.insertCell(0).textContent = data[key].id;
+            row.insertCell(1).textContent = data[key].feedback;
+            row.insertCell(2).textContent = new Date(
+              data[key].timestamp
+            ).toLocaleString("lt-LT");
+          });
+        });
+      }
+      document.addEventListener("DOMContentLoaded", () => {
+        const downloadButton = document.getElementById("downloadBtn");
+        downloadButton.addEventListener("click", async () => {
+          const dbRef = ref(database);
+          try {
+            const snapshot = await get(dbRef);
+            if (snapshot.exists()) {
+              const data = snapshot.val();
+              downloadJSON(data, "firebase-data.json");
+            } else {
+              console.log("No data available");
+            }
+          } catch (error) {
+            console.error("Failed to fetch data:", error);
+          }
+        });
+
+        // Function to download data as JSON file
+        function downloadJSON(data, filename) {
+          const blob = new Blob([JSON.stringify(data, null, 2)], {
+            type: "application/json",
+          });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.setAttribute("href", url);
+          a.setAttribute("download", filename);
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
+      });
+
+      window.addEventListener("DOMContentLoaded", loadData); // Load data when the document is ready
+    </script>
+  </head>
+  <body>
+    <h1>Nelegalūs išėjimai iš viso ekrano rėžimo</h1>
+    <table id="fullscreenTable">
+      <caption>
+        Išėjimų iš viso ekrano rėžimo duomenys:
+      </caption>
+    </table>
+    <h1>Pateikti atsakymai</h1>
+    <table id="dataTable">
+      <caption>
+        Atsakymų duomenys:
+      </caption>
+    </table>
+
+    <h1>Grįžtamasis ryšys</h1>
+    <table id="feedbackTable">
+      <caption>
+        Grįžtamojo ryšio duomenys:
+      </caption>
+    </table>
+    <button id="downloadBtn">Atsisiųsti visą informaciją JSON formatu</button>
+  </body>
+</html>
