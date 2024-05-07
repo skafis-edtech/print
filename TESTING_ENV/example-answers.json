@@ -17,7 +17,7 @@
     },
     {
       "number": "2.1.",
-      "answer": "6*sqrt(3)",
+      "answer": "12*sqrt(3)",
       "points": 1
     },
     {
@@ -32,7 +32,7 @@
     },
     {
       "number": "2.4.",
-      "answer": "315*sqrt(3)",
+      "answer": "1260*sqrt(3)",
       "points": 2
     },
     {
@@ -72,7 +72,7 @@
     },
     {
       "number": "6*.",
-      "answer": "130 Lt, 180 Lt, 210 Lt",
+      "answer": "162 Lt, 118 Lt, 104 Lt",
       "points": 3
     }
   ],
@@ -149,7 +149,8 @@
     },
     {
       "number": "6*.",
-      "answer": "162 Lt, 118 Lt, 104 Lt",
+      "answer": "130 Lt, 180 Lt, 210 Lt",
+
       "points": 3
     }
   ]

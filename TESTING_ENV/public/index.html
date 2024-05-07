@@ -1,110 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Stereometrijos kontrolinis</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif; /* Sets a readable, sans-serif font */
-        background-color: #f4f4f4; /* Light grey background for slight contrast */
-        padding: 20px; /* Adds spacing around the content */
-      }
-
-      form {
-        background: white;
-        max-width: 400px;
-        margin: 50px auto;
-        padding: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow around form */
-        border-radius: 8px; /* Rounded corners for the form */
-      }
-
-      h1 {
-        text-align: center;
-        color: #333; /* Dark grey color for text */
-      }
-
-      p {
-        text-align: center;
-        color: #666; /* Medium grey for the paragraph */
-      }
-
-      input[type="text"] {
-        width: calc(100% - 22px); /* Full width input field */
-        padding: 10px;
-        margin-top: 8px;
-        margin-bottom: 16px;
-        border: 1px solid #ddd; /* Light grey border */
-        border-radius: 4px; /* Rounded borders for the input field */
-        display: block;
-        box-sizing: border-box; /* Includes padding and border in the width */
-      }
-
-      button {
-        width: 100%;
-        padding: 10px;
-        background-color: #5cb85c; /* Green background for the button */
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-        text-transform: uppercase; /* Makes the button text uppercase */
-      }
-
-      button:hover {
-        background-color: #4cae4c; /* Slightly darker green on hover */
-      }
-      .redirectButton {
-        background-color: #2459c2; /* Green */
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-        border-radius: 8px;
-        transition: background-color 0.3s ease;
-        width: fit-content;
-      }
-      .redirectButton:hover {
-        background-color: #2459c2;
-      }
-    </style>
-    <script>
-      function redirectToPage(event) {
-        event.preventDefault(); // Prevent the default form submission behavior
-        var number = document.getElementById("numberInput").value; // Get the number from the input field
-        window.location.href = `test.html?id=${number}`;
-      }
-    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
   </head>
   <body>
-    <h1>Įveskite savo ID</h1>
-    <p>(kokį sako mokytojas)</p>
-    <form onsubmit="redirectToPage(event);">
-      <input
-        type="text"
-        id="numberInput"
-        name="number"
-        placeholder="Įveskite savo ID"
-      />
-      <button type="submit">Pradėti kontrolinį</button>
-    </form>
-    <button class="redirectButton" onclick="window.location.href='admin.html';">
-      Mokytojo prisijungimas
-    </button>
-    <button
-      class="redirectButton"
-      onclick="window.location.href='admin_grade.html';"
-    >
-      Vertinimo puslapis
-    </button>
+    <h1>PUPP ruošimosi testukai:</h1>
     <h3>
+      Testas1 - Skaičiavimai, skaičiai (su skaičių teorija), reiškiniai, lygtys, nelygybės
+    </h3>
+    <p>Teorija bei praktikavimosi testukas prieinama nuo 2024-05-03.</p>
+    <p>
+      <p><a href="./test1-theory.html">TEORIJA PRIEINAMA ČIA</a> (siūlau susigalvoti pavyzdžių)</p>
+    </p>
+    <p>
+      <a
+        href="https://www.vbesort.lt/list?list=20211-10+20211-11+20212-10+20212-01+20212-23+20221-20+20221-35+20222-12+20211-04+20212-24+20221-31+20231-26+20212-18+2015gw05+20211-14+20213-06+20232-18+2015gw12"
+        >PRAKTIKAVIMOSI TESTUKAS PRIEINAMAS ČIA</a
+      > Daugiau užduočių galite rasti <a href="https://www.vbesort.lt/math-pupp">čia (surūšiuota į temas)</a>
+    </p>
+    <p>Į(si)vertinimo testukas prieinamas nuo 2024-05-06</p>
+    <p><a href="./auto-test.html">TESTUKAS PRIEINAMAS ČIA</a></p>
+    <br/><br/>
+
+    <h3>Testas2 - Tiesės, parabolės, funkcijos bendrai, koordinačių plokštuma</h3>
+    <p>Teorija bei praktikavimosi testukas prieinama nuo 2024-05-06</p>
+    <p><a href="test2-theory.html">TEORIJA PRIEINAMA ČIA</a></p>
+    <p><a href="https://www.vbesort.lt/list?list=20211-07+20232-29+20221-14+20211-05+20231-27+20231-31+20211-02+20211-20+20231-13+20222-27+20231-33+20232-29+20212-06+20213-37+20232-32+20213-30">PRAKTIKAVIMOSI TESTUKAS PRIEINAMAS ČIA</a></p>
+    <p><a href="https://mif.vu.lt/~nasu8213">IR ČIA</a></p>
+    <p>Į(si)vertinimo testukas prieinamas nuo 2024-05-07</p>
+    <p><a href="./auto-test2.html">TESTUKAS PRIEINAMAS ČIA</a></p>
+    <br/><br/>
+
+    <h3>Testas3 - Statistika, procentai ir skaičiaus dalys, lygčių sistemos, darbo uždaviniai, greičio uždaviniai.</h3>
+    <p>Teorija bei praktikavimosi testukas prieinama nuo 2024-05-07</p>
+    <p><a href="test3-theory.html">TEORIJA PRIEINAMA ČIA</a></p>
+    <p><a href="https://www.vbesort.lt/list?list=20211-08+20221-17+20231-10+20212-35+20211-23+20212-14+20212-36+20221-26+20232-10+20212-19+20211-28+20212-33+20221-27+20232-14+20221-28">PRAKTIKAVIMOSI TESTUKAS PRIEINAMAS ČIA</a></p>
+    <p>Į(si)vertinimo testukas prieinamas nuo 2024-05-10</p>
+    <p><a href="">TESTUKAS BUS PRIEINAMAS ČIA</a></p>
+<br/><br/>
+    <h3>Lieka patiems pasikartoti planimetriją, stereometriją ir tikimybes (neakcentuoju, nes tai yra paskutiniosios, neseniai nagrinėtos 10 klasės temos)</h3>
+    <h4>
       Pagrindinis puslapis, testų generatorius:
       <a href="https://www.skafis.lt">skafis.lt</a>
-    </h3>
+    </h4>
   </body>
 </html>
