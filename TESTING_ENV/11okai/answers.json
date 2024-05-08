@@ -1,0 +1,118 @@
+{
+  "var2": [
+    {
+      "number": "1.",
+      "answer": "x > 3",
+      "points": 1
+    },
+    {
+      "number": "2.",
+      "answer": "x >= -1",
+      "points": 1
+    },
+
+    {
+      "number": "7.",
+      "answer": "-3 < x < 1",
+      "points": 1
+    },
+    {
+      "number": "8.",
+      "answer": "x ∈ (-∞; -3]∪[3; +∞)",
+      "points": 1
+    },
+    {
+      "number": "9.",
+      "answer": "x ∈ R",
+      "points": 1
+    },
+    {
+      "number": "10.",
+      "answer": "x ∈ ∅",
+      "points": 1
+    },
+    {
+      "number": "3.",
+      "answer": "0 < x < 3",
+      "points": 2
+    },
+    {
+      "number": "4.",
+      "answer": "0 < x <= 10",
+      "points": 2
+    },
+    {
+      "number": "5.",
+      "answer": "-3 < x < 2",
+      "points": 2
+    },
+    {
+      "number": "6.",
+      "answer": "x ∈ (-2; 0]∪[1; +∞)",
+      "points": 3
+    },
+    {
+      "number": "11.",
+      "answer": "A",
+      "points": 1
+    }
+  ],
+  "var1": [
+    {
+      "number": "1.",
+      "answer": "x > 3",
+      "points": 1
+    },
+    {
+      "number": "2.",
+      "answer": "x >= -1",
+      "points": 1
+    },
+
+    {
+      "number": "7.",
+      "answer": "-3 < x < 1",
+      "points": 1
+    },
+    {
+      "number": "8.",
+      "answer": "x ∈ (-∞; -3]∪[3; +∞)",
+      "points": 1
+    },
+    {
+      "number": "9.",
+      "answer": "x ∈ R",
+      "points": 1
+    },
+    {
+      "number": "10.",
+      "answer": "x ∈ ∅",
+      "points": 1
+    },
+    {
+      "number": "3.",
+      "answer": "0 < x < 3",
+      "points": 2
+    },
+    {
+      "number": "4.",
+      "answer": "0 < x <= 10",
+      "points": 2
+    },
+    {
+      "number": "5.",
+      "answer": "-3 < x < 2",
+      "points": 2
+    },
+    {
+      "number": "6.",
+      "answer": "x ∈ (-2; 0]∪[1; +∞)",
+      "points": 3
+    },
+    {
+      "number": "11.",
+      "answer": "A",
+      "points": 1
+    }
+  ]
+}

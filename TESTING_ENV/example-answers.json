@@ -1,0 +1,157 @@
+{
+  "var1": [
+    {
+      "number": "1.2.a.",
+      "answer": "3*sqrt(2)",
+      "points": 1
+    },
+    {
+      "number": "1.2.b.",
+      "answer": "3*sqrt(3)",
+      "points": 1
+    },
+    {
+      "number": "1.2.c.",
+      "answer": "35 laips.",
+      "points": 1
+    },
+    {
+      "number": "2.1.",
+      "answer": "12*sqrt(3)",
+      "points": 1
+    },
+    {
+      "number": "2.2.",
+      "answer": "12 cm",
+      "points": 1
+    },
+    {
+      "number": "2.3.",
+      "answer": "37",
+      "points": 1
+    },
+    {
+      "number": "2.4.",
+      "answer": "1260*sqrt(3)",
+      "points": 2
+    },
+    {
+      "number": "3.1.+",
+      "answer": "7",
+      "points": 1
+    },
+    {
+      "number": "3.2.+",
+      "answer": "7*sqrt(2)",
+      "points": 1
+    },
+    {
+      "number": "3.3.+",
+      "answer": "7*sqrt(3)",
+      "points": 1
+    },
+    {
+      "number": "3.4.+",
+      "answer": "343",
+      "points": 1
+    },
+    {
+      "number": "4.a.+",
+      "answer": "45 laips.",
+      "points": 2
+    },
+    {
+      "number": "4.b.+",
+      "answer": "kmp. SKO, 55 laips.",
+      "points": 2
+    },
+    {
+      "number": "5.",
+      "answer": "72*sqrt(3)",
+      "points": 3
+    },
+    {
+      "number": "6*.",
+      "answer": "162 Lt, 118 Lt, 104 Lt",
+      "points": 3
+    }
+  ],
+  "var2": [
+    {
+      "number": "1.2.a.",
+      "answer": "4*sqrt(2)",
+      "points": 1
+    },
+    {
+      "number": "1.2.b.",
+      "answer": "4*sqrt(3)",
+      "points": 1
+    },
+    {
+      "number": "1.2.c.",
+      "answer": "35 laips.",
+      "points": 1
+    },
+    {
+      "number": "2.1.",
+      "answer": "8*sqrt(3)",
+      "points": 1
+    },
+    {
+      "number": "2.2.",
+      "answer": "8 cm",
+      "points": 1
+    },
+    {
+      "number": "2.3.",
+      "answer": "17 cm",
+      "points": 1
+    },
+    {
+      "number": "2.4.",
+      "answer": "240*sqrt(3)",
+      "points": 2
+    },
+    {
+      "number": "3.1.+",
+      "answer": "6 cm",
+      "points": 1
+    },
+    {
+      "number": "3.2.+",
+      "answer": "6*sqrt(2)",
+      "points": 1
+    },
+    {
+      "number": "3.3.+",
+      "answer": "6*sqrt(3)",
+      "points": 1
+    },
+    {
+      "number": "3.4.+",
+      "answer": "216 cm^3",
+      "points": 1
+    },
+    {
+      "number": "4.a.+",
+      "answer": "45 laips.",
+      "points": 2
+    },
+    {
+      "number": "4.b.+",
+      "answer": "kmp. SKO, 55 laips.",
+      "points": 2
+    },
+    {
+      "number": "5.",
+      "answer": "14*sqrt(147) arba 98*sqrt(3)",
+      "points": 3
+    },
+    {
+      "number": "6*.",
+      "answer": "130 Lt, 180 Lt, 210 Lt",
+
+      "points": 3
+    }
+  ]
+}
