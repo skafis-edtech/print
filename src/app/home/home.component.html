@@ -129,7 +129,15 @@
         [disabled]="titleForm.invalid"
         (click)="generateImagePDF()"
       >
-        Atsisiųsti PDF
+        Atsisiųsti PDF su atsakymais
+      </button>
+      <button
+        mat-raised-button
+        color="accent"
+        [disabled]="titleForm.invalid"
+        (click)="generateImagePDFNoAns()"
+      >
+        Atsisiųsti PDF be atsakymų
       </button>
       <!-- <button
         mat-outlined-button

@@ -4,7 +4,11 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ConsentModalComponent } from '../consent-modal/consent-modal.component';
 
-import { generateImagePDF, generateTextPDF } from './generate-pdf';
+import {
+  generateImagePDF,
+  generateImagePDFNoAns,
+  generateTextPDF,
+} from './generate-pdf';
 import { exampleABCD } from './form-example-jsons';
 import { generateHTML } from './generate-html';
 import { TitleDescriptionComponent } from './components/title-description/title-description.component';
@@ -171,6 +175,10 @@ export class HomeComponent {
 
   generateImagePDF(): void {
     generateImagePDF(this.titleForm);
+  }
+
+  generateImagePDFNoAns(): void {
+    generateImagePDFNoAns(this.titleForm);
   }
 
   generateTextPDF(): void {
