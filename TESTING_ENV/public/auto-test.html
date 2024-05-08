@@ -69,8 +69,26 @@
         transition: background-color 0.3s ease;
         width: fit-content;
       }
+      .redirectButton2 {
+        background-color: #6f00c5; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+        width: fit-content;
+      }
       .redirectButton:hover {
         background-color: #2459c2;
+      }
+      .redirectButton2:hover {
+        background-color: #d8ef0f;
       }
     </style>
     <script>
@@ -138,13 +156,21 @@
       />
       <button type="submit">Pradėti testą</button>
     </form>
+    <p>
+      <button
+        class="redirectButton2"
+        onclick="window.location.href='auto-test-test.html';"
+      >
+        Eiti tiesiai prie užduočių
+      </button>
+    </p>
 
     <p>
       <button
-        class="redirectButton"
+        class="redirectButton2"
         onclick="window.location.href='auto-test-check-grade.html';"
       >
-        Mokinio įvertinimo pasitikrinimas
+        Atsakymai (įvertinimo pasitikrinias)
       </button>
     </p>
     <p>
@@ -162,6 +188,14 @@
         onclick="window.location.href='admin_grade.html';"
       >
         Vertinimo puslapis
+      </button>
+    </p>
+    <p>
+      <button
+        class="redirectButton2"
+        onclick="window.location.href='auto-test-test-11.html';"
+      >
+        Eiti tiesiai prie 11 kl. B lygio nelygybių užduočių
       </button>
     </p>
     <h3>
