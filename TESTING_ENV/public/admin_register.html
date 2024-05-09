@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Testavimo aplinka Skafis</title>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        sendEmailVerification,
+      } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDE6Yx4cXghxsn6FKOVEXYN8aavEzOipWA",
+        authDomain: "kontrass.firebaseapp.com",
+        databaseURL:
+          "https://kontrass-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "kontrass",
+        storageBucket: "kontrass.appspot.com",
+        messagingSenderId: "691360022307",
+        appId: "1:691360022307:web:b8d0cae3fd88b38e275696",
+      };
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth();
+
+      window.registerUser = async (
+        email,
+        password,
+        passwordConfirm,
+        isTerms
+      ) => {
+        if (password !== passwordConfirm) {
+          alert("Slaptažodžiai nesutampa!");
+          return;
+        }
+        if (isTerms === false) {
+          alert("Privaloma sutikti su taisyklėmis!");
+          return;
+        }
+        try {
+          const userCredential = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+          alert("Sėkmingai užregistruota!");
+
+          sendEmailVerification(userCredential.user)
+            .then(() => {
+              alert(
+                "Išsiuntėme registracijos patvirtinimo laišką. Patikrinkite savo el. paštą ir patvirtinkite registraciją"
+              );
+              window.location.href = `admin_login.html`;
+            })
+            .catch((error) => {
+              console.error("Klaida, siunčiant patvirtinimo laišką: ", error);
+            });
+        } catch (error) {
+          console.error("Error registering user: ", error);
+          alert("Klaida: " + error.message);
+        }
+      };
+    </script>
+  </head>
+  <body>
+    <h1>Mokytojo registracija</h1>
+    <input type="email" id="email" placeholder="Įveskite el. paštą" /><br />
+    <input
+      type="password"
+      id="password"
+      placeholder="Įveskite slaptažodį"
+    /><br />
+    <input
+      type="password"
+      id="passwordConfirm"
+      placeholder="Pakartokite slaptažodį"
+    /><br />
+    <input type="checkbox" id="terms" />
+    <label for="terms"
+      >Sutinku su <a href="terms.html" target="_blank">taisyklėmis</a></label
+    ><br />
+    <button
+      onclick="registerUser(email.value, password.value, passwordConfirm.value, terms.checked)"
+    >
+      Registruotis
+    </button>
+  </body>
+</html>

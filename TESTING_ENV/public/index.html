@@ -1,49 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Testavimo aplinka Skafis</title>
+    <meta charset="utf-8" />
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="testai.skafis.lt" />
+    <link rel="icon" type="image/x-icon" href="logo/favicon.ico" />
+    <link rel="apple-touch-icon" href="logo/favicon-apple.png" />
+    <meta name="description" content="Testavimo įrankis" />
+    <meta
+      name="keywords"
+      content="skafis testavimo aplinka, nemokama testavimo priemonė, interaktyviosios mokymo priemonės, mokytojų ištekliai, skafis testing environment, online quiz maker, interactive learning tools"
+    />
+    <link rel="manifest" href="logo/site.webmanifest" />
+    <style></style>
+    <script>
+      function gotoTest(event) {
+        event.preventDefault();
+        var id = document.getElementById("idInput").value;
+        var testCode = document.getElementById("testCodeInput").value;
+
+        window.location.href = `test.html?id=${id}&testCode=${testCode}`;
+      }
+    </script>
   </head>
   <body>
-    <h1>PUPP ruošimosi testukai:</h1>
-    <h3>
-      Testas1 - Skaičiavimai, skaičiai (su skaičių teorija), reiškiniai, lygtys, nelygybės
-    </h3>
-    <p>Teorija bei praktikavimosi testukas prieinama nuo 2024-05-03.</p>
+    <h1>Testavimo aplinka Skafis</h1>
+    <h2>testai.skafis.lt</h2>
+    <h1>Įveskite informaciją</h1>
+    <p>Jūsų ID ir testo kodas skelbiami mokytojo</p>
+    <form onsubmit="gotoTest(event);">
+      <input
+        type="text"
+        id="idInput"
+        name="number"
+        placeholder="Įveskite savo ID"
+      />
+      <input
+        type="text"
+        id="testCodeInput"
+        name="testCode"
+        placeholder="Įveskite testo kodą"
+      />
+      <button type="submit">Pradėti testą</button>
+    </form>
+
     <p>
-      <p><a href="./test1-theory.html">TEORIJA PRIEINAMA ČIA</a> (siūlau susigalvoti pavyzdžių)</p>
+      <button
+        class="redirectButton2"
+        onclick="window.location.href='auto-test-check-grade.html';"
+      >
+        Įvertinimo pasitikrinimas
+      </button>
     </p>
     <p>
-      <a
-        href="https://www.vbesort.lt/list?list=20211-10+20211-11+20212-10+20212-01+20212-23+20221-20+20221-35+20222-12+20211-04+20212-24+20221-31+20231-26+20212-18+2015gw05+20211-14+20213-06+20232-18+2015gw12"
-        >PRAKTIKAVIMOSI TESTUKAS PRIEINAMAS ČIA</a
-      > Daugiau užduočių galite rasti <a href="https://www.vbesort.lt/math-pupp">čia (surūšiuota į temas)</a>
+      <button
+        class="redirectButton"
+        onclick="window.location.href='admin.html';"
+      >
+        Mokytojo aplinka
+      </button>
     </p>
-    <p>Į(si)vertinimo testukas prieinamas nuo 2024-05-06</p>
-    <p><a href="./auto-test.html">TESTUKAS PRIEINAMAS ČIA - VISIEMS. Kartu ir 11 kl. B lygio nelygybių testas</a></p>
-    <br/><br/>
 
-    <h3>Testas2 - Tiesės, parabolės, funkcijos bendrai, koordinačių plokštuma</h3>
-    <p>Teorija bei praktikavimosi testukas prieinama nuo 2024-05-06</p>
-    <p><a href="test2-theory.html">TEORIJA PRIEINAMA ČIA</a></p>
-    <p><a href="https://www.vbesort.lt/list?list=20211-07+20232-29+20221-14+20211-05+20231-27+20231-31+20211-02+20211-20+20231-13+20222-27+20231-33+20232-29+20212-06+20213-37+20232-32+20213-30">PRAKTIKAVIMOSI TESTUKAS PRIEINAMAS ČIA</a></p>
-    <p><a href="https://mif.vu.lt/~nasu8213">IR ČIA</a></p>
-    <p>Į(si)vertinimo testukas prieinamas nuo 2024-05-07</p>
-    <p><a href="./auto-test2.html">TESTUKAS PRIEINAMAS ČIA</a></p>
-    <br/><br/>
-
-    <h3>Testas3 - Statistika, procentai ir skaičiaus dalys, lygčių sistemos, darbo uždaviniai, greičio uždaviniai.</h3>
-    <p>Teorija bei praktikavimosi testukas prieinama nuo 2024-05-07</p>
-    <p><a href="test3-theory.html">TEORIJA PRIEINAMA ČIA</a></p>
-    <p><a href="https://www.vbesort.lt/list?list=20211-08+20221-17+20231-10+20212-35+20211-23+20212-14+20212-36+20221-26+20232-10+20212-19+20211-28+20212-33+20221-27+20232-14+20221-28">PRAKTIKAVIMOSI TESTUKAS PRIEINAMAS ČIA</a></p>
-    <p>Į(si)vertinimo testukas prieinamas nuo 2024-05-10</p>
-    <p><a href="">TESTUKAS BUS PRIEINAMAS ČIA</a></p>
-<br/><br/>
-    <h3>Lieka patiems pasikartoti planimetriją, stereometriją ir tikimybes (neakcentuoju, nes tai yra paskutiniosios, neseniai nagrinėtos 10 klasės temos)</h3>
-    <h4>
-      Pagrindinis puslapis, testų generatorius:
-      <a href="https://www.skafis.lt">skafis.lt</a>
-    </h4>
+    <h3><a href="./old/index.html">Senas puslapis, PUPP pasiruošimas</a></h3>
   </body>
 </html>

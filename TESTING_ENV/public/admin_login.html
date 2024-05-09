@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Testavimo aplinka Skafis</title>
+    <style></style>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+      import {
+        getAuth,
+        signInWithEmailAndPassword,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+      // Firebase configuration setup
+      const firebaseConfig = {
+        apiKey: "AIzaSyDE6Yx4cXghxsn6FKOVEXYN8aavEzOipWA",
+        authDomain: "kontrass.firebaseapp.com",
+        databaseURL:
+          "https://kontrass-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "kontrass",
+        storageBucket: "kontrass.appspot.com",
+        messagingSenderId: "691360022307",
+        appId: "1:691360022307:web:b8d0cae3fd88b38e275696",
+      };
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          console.log("User is already logged in", user);
+          window.location.href = `admin.html`;
+        }
+      });
+
+      function loginUser(event, email, password) {
+        event.preventDefault(); // Prevent form from submitting normally
+
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            console.log("Login successful", userCredential.user);
+            window.location.href = `admin_dashboard.html`;
+          })
+          .catch((error) => {
+            console.error("Error in login", error);
+            alert(error.message);
+          });
+      }
+
+      window.loginUser = loginUser; // Correctly expose the loginUser function to the global scope
+    </script>
+  </head>
+  <body>
+    <h2>Mokytojo prisijungimas</h2>
+    <br />
+    <form onsubmit="loginUser(event, email.value, password.value)">
+      <input type="email" id="email" placeholder="Įveskite el. paštą" /><br />
+      <input
+        type="password"
+        id="password"
+        placeholder="Įveskite slaptažodį"
+      /><br />
+      <button type="submit">Prisijungti</button>
+    </form>
+    <button onclick="window.location.href = 'admin_register.html'">
+      Registruotis
+  </body>
+</html>
