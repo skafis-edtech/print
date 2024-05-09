@@ -4,6 +4,68 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Testavimo aplinka Skafis</title>
+    <link rel="icon" type="image/x-icon" href="./logo/favicon.ico" />
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        push,
+        set,
+      } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDE6Yx4cXghxsn6FKOVEXYN8aavEzOipWA",
+        authDomain: "kontrass.firebaseapp.com",
+        databaseURL:
+          "https://kontrass-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "kontrass",
+        storageBucket: "kontrass.appspot.com",
+        messagingSenderId: "691360022307",
+        appId: "1:691360022307:web:b8d0cae3fd88b38e275696",
+      };
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+      const auth = getAuth(app);
+
+      let userEmail = "";
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          userEmail = user.email;
+        } else {
+          window.location.href = "admin_login.html";
+        }
+      });
+
+      const createBtn = document.getElementById("createBtn");
+      createBtn.addEventListener("click", () => {
+        const testCode = document.getElementById("testCode").value;
+        const testName = document.getElementById("testName").value;
+        const testDescription =
+          document.getElementById("testDescription").value;
+
+        const newTestRef = ref(db, "/tests/" + testCode);
+
+        set(newTestRef, {
+          user: userEmail,
+          name: testName,
+          description: testDescription,
+        })
+          .then(() => {
+            alert("Testas sukurtas sėkmingai!");
+            window.location.href = "admin.html";
+          })
+          .catch((error) => {
+            console.error("Error creating test: ", error);
+            alert("Klaida: " + error.message);
+          });
+      });
+    </script>
   </head>
   <body>
     <h1>Naujas testas</h1>
@@ -14,6 +76,6 @@
     <label for="testDescription">Testo aprašymas</label>
     <input type="text" id="testDescription" /><br />
     <label for="testQuestions">Klausimai</label><br />
-    <button>Sukurti</button>
+    <button id="createBtn">Sukurti</button>
   </body>
 </html>

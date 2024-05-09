@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <title>Testavimo aplinka Skafis</title>
+    <link rel="icon" type="image/x-icon" href="./logo/favicon.ico" />
+
     <style></style>
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
@@ -12,7 +14,6 @@
         onAuthStateChanged,
       } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-      // Firebase configuration setup
       const firebaseConfig = {
         apiKey: "AIzaSyDE6Yx4cXghxsn6FKOVEXYN8aavEzOipWA",
         authDomain: "kontrass.firebaseapp.com",
@@ -28,26 +29,24 @@
 
       onAuthStateChanged(auth, (user) => {
         if (user) {
-          console.log("User is already logged in", user);
           window.location.href = `admin.html`;
         }
       });
 
       function loginUser(event, email, password) {
-        event.preventDefault(); // Prevent form from submitting normally
+        event.preventDefault;
 
         signInWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
-            console.log("Login successful", userCredential.user);
             window.location.href = `admin.html`;
           })
           .catch((error) => {
             console.error("Error in login", error);
-            alert(error.message);
+            alert("Klaida: " + error.message);
           });
       }
 
-      window.loginUser = loginUser; // Correctly expose the loginUser function to the global scope
+      window.loginUser = loginUser;
     </script>
   </head>
   <body>
