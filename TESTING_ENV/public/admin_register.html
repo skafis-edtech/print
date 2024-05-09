@@ -45,17 +45,6 @@
             password
           );
           alert("Sėkmingai užregistruota!");
-
-          sendEmailVerification(userCredential.user)
-            .then(() => {
-              alert(
-                "Išsiuntėme registracijos patvirtinimo laišką. Patikrinkite savo el. paštą ir patvirtinkite registraciją"
-              );
-              window.location.href = `admin_login.html`;
-            })
-            .catch((error) => {
-              console.error("Klaida, siunčiant patvirtinimo laišką: ", error);
-            });
         } catch (error) {
           console.error("Error registering user: ", error);
           alert("Klaida: " + error.message);

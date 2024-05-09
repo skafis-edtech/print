@@ -3,7 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Testavimo aplinka Skafis</title>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+      // Firebase configuration setup
+      const firebaseConfig = {
+        apiKey: "AIzaSyDE6Yx4cXghxsn6FKOVEXYN8aavEzOipWA",
+        authDomain: "kontrass.firebaseapp.com",
+        databaseURL:
+          "https://kontrass-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "kontrass",
+        storageBucket: "kontrass.appspot.com",
+        messagingSenderId: "691360022307",
+        appId: "1:691360022307:web:b8d0cae3fd88b38e275696",
+      };
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          const signOutButton = document.getElementById("signOutButton");
+          signOutButton.style.display = "block";
+          const isLoggedInDiv = document.getElementById("isLoggedIn");
+          isLoggedInDiv.innerHTML = `Esate prisijungę kaip ${user.email}`;
+        } else {
+          window.location.href = "admin_login.html";
+        }
+      });
+
+      const signOutButton = document.getElementById("signOutButton");
+      signOutButton.addEventListener("click", () =>
+        signOut(auth)
+          .then(() => {
+            window.location.href = "admin_login.html";
+          })
+          .catch((error) => {
+            alert("Klaida atsijungiant: " + error.message);
+            console.error("Signout error: " + error.message);
+          })
+      );
+
+      const testList = document.getElementById("testList");
+      const createTestBtn = document.getElementById("createTestBtn");
+      createTestBtn.addEventListener("click", () => {
+        window.location.href = "test_create.html";
+      });
+    </script>
   </head>
-  <body></body>
+  <body>
+    <h1>Mokytojo aplinka</h1>
+    <div id="isLoggedIn">Esate ...</div>
+    <button id="signOutButton" style="display: none">Atsijungti</button>
+    <h2>Jūsų testai</h2>
+    <div id="testList"></div>
+    <button id="createTestBtn">Kurti naują testą</button>
+  </body>
 </html>

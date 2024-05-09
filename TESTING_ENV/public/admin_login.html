@@ -39,7 +39,7 @@
         signInWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
             console.log("Login successful", userCredential.user);
-            window.location.href = `admin_dashboard.html`;
+            window.location.href = `admin.html`;
           })
           .catch((error) => {
             console.error("Error in login", error);
@@ -62,7 +62,7 @@
       /><br />
       <button type="submit">Prisijungti</button>
     </form>
-    <button onclick="window.location.href = 'admin_register.html'">
-      Registruotis
+    <p>Neturite paskyros? <a href="admin_register.html">Registruotis</a></p>
+    <p>Pamiršote slaptažodį? <a href="password_recover.html">Atkurti</a></p>
   </body>
 </html>
