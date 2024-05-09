@@ -4,21 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Testavimo aplinka Skafis</title>
-    <link rel="icon" type="image/x-icon" href="./logo/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="../logo/favicon.ico" />
 
     <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
       import {
         getDatabase,
         ref,
         push,
         set,
-      } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+        onValue,
+      } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
       import {
         getAuth,
         onAuthStateChanged,
         signOut,
-      } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+      } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyDE6Yx4cXghxsn6FKOVEXYN8aavEzOipWA",
@@ -69,9 +70,11 @@
 
           for (const key in tests) {
             if (tests[key].user === userEmail) {
-              const testItem = document.createElement("div");
-              testItem.textContent = tests[key].name;
+              const testItem = document.createElement("a");
+              testItem.textContent = key + " | " + tests[key].name;
+              testItem.href = `test_dashboard.html?testCode=${key}`;
               testList.appendChild(testItem);
+              testList.appendChild(document.createElement("br"));
             }
           }
         });

@@ -20,7 +20,30 @@
         var id = document.getElementById("idInput").value;
         var testCode = document.getElementById("testCodeInput").value;
 
+        if (id === "" || testCode === "") {
+          alert("Prašome įvesti ID ir testo kodą");
+          return;
+        }
+
         window.location.href = `test.html?id=${id}&testCode=${testCode}`;
+      }
+      function gotoResults(event) {
+        event.preventDefault();
+        var id = document.getElementById("idInput").value;
+        var testCode = document.getElementById("testCodeInput").value;
+
+        if (id === "" || testCode === "") {
+          alert("Prašome įvesti ID ir testo kodą");
+          return;
+        }
+
+        window.location.href = `results.html?id=${id}&testCode=${testCode}`;
+      }
+
+      function codeInput(event) {
+        let value = event.target.value;
+        value = value.replace(/[^a-zA-Z]+/g, "");
+        event.target.value = value.toUpperCase();
       }
     </script>
   </head>
@@ -35,32 +58,24 @@
         id="idInput"
         name="number"
         placeholder="Įveskite savo ID"
-      />
+      /><br />
       <input
         type="text"
         id="testCodeInput"
         name="testCode"
+        pattern="[A-Z]*"
+        oninput="codeInput(event)"
         placeholder="Įveskite testo kodą"
-      />
+      /><br />
       <button type="submit">Pradėti testą</button>
     </form>
 
     <p>
-      <button
-        class="redirectButton2"
-        onclick="window.location.href='auto-test-check-grade.html';"
-      >
-        Įvertinimo pasitikrinimas
+      <button class="redirectButton2" onclick="gotoResults(event);">
+        Pasitikrinti įvertinimą
       </button>
     </p>
-    <p>
-      <button
-        class="redirectButton"
-        onclick="window.location.href='admin.html';"
-      >
-        Mokytojo aplinka
-      </button>
-    </p>
+    <h4><a href="./admin/admin.html">Mokytojo aplinka</a></h4>
 
     <h3><a href="./old/index.html">Senas puslapis, PUPP pasiruošimas</a></h3>
   </body>

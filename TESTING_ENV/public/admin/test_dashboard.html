@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testavimo aplinka Skafis</title>
+    <link rel="icon" type="image/x-icon" href="../logo/favicon.ico" />
+  </head>
+  <body>
+    <h1 id="title">Testas: ...</h1>
+    <a href="admin.html">Eiti į pradžią</a>
+    <script>
+      const testCode = new URLSearchParams(window.location.search).get(
+        "testCode"
+      );
+      document.getElementById("title").innerText = `Testas: ${testCode}`;
+    </script>
+  </body>
+</html>
