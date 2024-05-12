@@ -12,6 +12,7 @@
         ref,
         push,
         set,
+        onValue,
       } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
       import {
         getAuth,
@@ -45,20 +46,29 @@
       const createBtn = document.getElementById("createBtn");
       createBtn.addEventListener("click", () => {
         const testCode = document.getElementById("testCode").value;
-        const testName = document.getElementById("testName").value;
+        const testTitle = document.getElementById("testTitle").value;
         const testDescription =
-          document.getElementById("testDescription").value;
-        const symbolsCopy = document.getElementById("symbolsCopy").value;
+          document.getElementById("testDescription")?.value;
+        const testSpecialSymbols =
+          document.getElementById("testSpecialSymbols")?.value;
 
-        const newTestRef = ref(db, "/tests/" + testCode);
+        const newTestRef = ref(
+          db,
+          "/users/" + userEmail.replace(/\./g, "?") + "/tests/" + testCode
+        );
 
         set(newTestRef, {
-          user: userEmail,
-          name: testName,
-          description: testDescription,
-          symbols: symbolsCopy,
+          lastModified: new Date().toISOString(),
+          test: {
+            title: testTitle,
+            description: testDescription,
+            specialSymbls: testSpecialSymbols,
+            questions: getQuestions(),
+          },
+          isAccessible: false,
         })
           .then(() => {
+            //TODO: create accessibleTest
             alert("Testas sukurtas sėkmingai!");
             window.location.href = "admin.html";
           })
@@ -67,24 +77,107 @@
             alert("Klaida: " + error.message);
           });
       });
+
+      document
+        .getElementById("addQuestionBtn")
+        .addEventListener("click", addQuestion);
+      function addQuestion(event) {
+        event.preventDefault();
+        const container = document.getElementById("questionsContainer");
+
+        const newQuestionDiv = document.createElement("div");
+        newQuestionDiv.innerHTML = `
+        <div>
+          <label>Klausimo numeris:</label><br />
+          <input type="text" name="number" required />
+        </div>
+        <div>
+          <label>Klausimas:</label><br />
+          <input type="text" name="question" required />
+        </div>
+        <div>
+          <label>Teisingas atsakymas / sprendimas:</label><br />
+          <input type="text" name="correctAnswer" required />
+        </div>
+        <div>
+          <label>Taškai:</label><br />
+          <input type="number" name="points" required />
+        </div>
+        <div>
+          <label>Užduotis yra papildoma:</label><br />
+          <input type="checkbox" name="isAdditional" />
+        </div>
+        `;
+
+        container.appendChild(newQuestionDiv);
+      }
+
+      function getQuestions() {
+        let allQuestionDivs = document.querySelectorAll(
+          "#questionsContainer > div"
+        );
+        let questions = [];
+
+        allQuestionDivs.forEach((div) => {
+          const question = {
+            number: div.querySelector('[name="number"]').value,
+            question: div.querySelector('[name="question"]').value,
+            correctAnswer: div.querySelector('[name="correctAnswer"]').value,
+            points: parseInt(div.querySelector('[name="points"]').value, 10),
+            isAdditional: div.querySelector('[name="isAdditional"]').checked,
+          };
+          questions.push(question);
+        });
+
+        return questions;
+      }
     </script>
   </head>
   <body>
     <h1>Naujas testas</h1>
-    <label for="testCode">Testo kodas</label>
+    <label for="testCode">Testo kodas</label><br />
     <input
       type="text"
       id="testCode"
       pattern="[A-Z]*"
       oninput="this.value = this.value.toUpperCase()"
     /><br />
-    <label for="testName">Testo pavadinimas</label>
-    <input type="text" id="testName" /> <br />
-    <label for="testDescription">Testo aprašymas</label>
-    <input type="text" id="testDescription" /><br />
-    <label for="symbolsCopy">Simbolių sąrašas kopijavimui</label>
-    <input type="text" id="symbolsCopy" /><br />
-    <label for="testQuestions">Klausimai</label><br />
-    <button id="createBtn">Sukurti</button>
+    <label for="testTitle">Testo pavadinimas (rodomas mokiniams)</label><br />
+    <input type="text" id="testTitle" required /> <br />
+    <label for="testDescription">Testo aprašymas (rodomas mokiniams)</label
+    ><br />
+    <textarea type="text" id="testDescription"></textarea><br />
+    <label for="testSpecialSymbols"
+      >Simbolių sąrašas kopijavimui (pateikiamas mokiniams stambiu formatu
+      kopijavimui)</label
+    ><br />
+    <input type="text" id="testSpecialSymbols" /><br />
+    <label for="questionsContainer">Klausimai</label><br />
+    <div id="questionsContainer">
+      <div>
+        <div>
+          <label>Klausimo numeris:</label><br />
+          <input type="text" name="number" required />
+        </div>
+        <div>
+          <label>Klausimas:</label><br />
+          <input type="text" name="question" required />
+        </div>
+        <div>
+          <label>Teisingas atsakymas / sprendimas:</label><br />
+          <input type="text" name="correctAnswer" required />
+        </div>
+        <div>
+          <label>Taškai:</label><br />
+          <input type="number" name="points" required />
+        </div>
+        <div>
+          <label>Užduotis yra papildoma:</label><br />
+          <input type="checkbox" name="isAdditional" />
+        </div>
+      </div>
+    </div>
+    <button type="button" id="addQuestionBtn">Priėti klausimą</button>
+    <button id="createBtn">Sukurti testą (dar neviešinama)</button>
   </body>
 </html>

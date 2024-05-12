@@ -36,6 +36,7 @@
       const auth = getAuth(app);
 
       let userEmail = "";
+      let testListRef;
       onAuthStateChanged(auth, (user) => {
         if (user) {
           const signOutButton = document.getElementById("signOutButton");
@@ -44,6 +45,70 @@
           isLoggedInDiv.innerHTML = `Esate prisijungę kaip ${user.email}`;
 
           userEmail = user.email;
+          const userRef = ref(
+            db,
+            "users/" + userEmail.replace(/\./g, "?") + "/tests"
+          );
+          onValue(userRef, (snapshot) => {
+            const tests = snapshot.val();
+            const testList = document.getElementById("testList");
+            testList.innerHTML = "";
+
+            for (const key in tests) {
+              if (tests.hasOwnProperty(key)) {
+                const testItem = document.createElement("div");
+                const viewTestLink = document.createElement("a");
+                viewTestLink.textContent = `"${tests[key].test.title}" (kodas: ${key})`;
+                viewTestLink.href = `test_dashboard.html?testCode=${key}`;
+                testItem.appendChild(viewTestLink);
+
+                if (tests[key].isAccessible) {
+                  const strongElement = document.createElement("strong");
+                  strongElement.innerHTML = " - Viešas.";
+                  testItem.appendChild(strongElement);
+
+                  const unpublishTestBtn = document.createElement("button");
+                  unpublishTestBtn.textContent = "Užprivatinti";
+                  unpublishTestBtn.addEventListener("click", () => {
+                    alert("One day this will unpublish stuff");
+                  });
+                  testItem.appendChild(unpublishTestBtn);
+                } else {
+                  const strongElement = document.createElement("strong");
+                  strongElement.innerHTML = " - Privatus.";
+                  testItem.appendChild(strongElement);
+
+                  const publishTestBtn = document.createElement("button");
+                  publishTestBtn.textContent = "Viešinti";
+                  publishTestBtn.addEventListener("click", () => {
+                    alert("One day this will publish stuff");
+                    // const testObject = tests[key].test;
+                    // const accessibleTest = {
+                    //   name: testObject.title,
+                    //   description: testObject.description,
+                    //   specialSymbols: testObject.specialSymbols,
+                    //   questions: testObject.questions.map((q) => ({
+                    //     number: q.number,
+                    //     question: q.question,
+                    //     points: q.points,
+                    //     isAdditional: q.isAdditional,
+                    //   })),
+                    // };
+
+                    // const accessibleTestRef = ref(db, "accessibleTests/" + key);
+                    // set(accessibleTestRef, accessibleTest);
+                    // alert(
+                    //   `Testas "${testObject.title}" (kodas: ${key}) sėkmingai paviešintas!`
+                    // );
+                  });
+                  testItem.appendChild(publishTestBtn);
+                }
+
+                testList.appendChild(testItem);
+                testList.appendChild(document.createElement("br"));
+              }
+            }
+          });
         } else {
           window.location.href = "admin_login.html";
         }
@@ -60,27 +125,6 @@
             console.error("Signout error: " + error.message);
           })
       );
-
-      const displayTests = () => {
-        const testsRef = ref(db, "tests");
-        onValue(testsRef, (snapshot) => {
-          const tests = snapshot.val();
-          const testList = document.getElementById("testList");
-          testList.innerHTML = "";
-
-          for (const key in tests) {
-            if (tests[key].user === userEmail) {
-              const testItem = document.createElement("a");
-              testItem.textContent = key + " | " + tests[key].name;
-              testItem.href = `test_dashboard.html?testCode=${key}`;
-              testList.appendChild(testItem);
-              testList.appendChild(document.createElement("br"));
-            }
-          }
-        });
-      };
-
-      displayTests();
 
       const testList = document.getElementById("testList");
       const createTestBtn = document.getElementById("createTestBtn");
