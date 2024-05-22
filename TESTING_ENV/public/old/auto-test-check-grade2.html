@@ -1288,7 +1288,7 @@
             {
               question: "3.",
               answer: "(-begalybė;-2),(-1;1)",
-              correct: false,
+              correct: true,
               correctAnswer: "(-begalybe; -2),(-1;1) or (-begalybė; -2),(-1;1)",
             },
             {
@@ -1338,9 +1338,9 @@
               correctAnswer: "2;-5 or -5;2",
             },
           ],
-          points: 13,
+          points: 14,
           outOf: 14,
-          grade: 9.428571428571429,
+          grade: 10,
         },
         {
           id: "ABKE-10a21",
@@ -1429,7 +1429,7 @@
             {
               question: "3.",
               answer: "(-begalybė;-2) (-1;1)",
-              correct: false,
+              correct: true,
               correctAnswer: "(-begalybe; -2),(-1;1) or (-begalybė; -2),(-1;1)",
             },
             {
@@ -1441,7 +1441,7 @@
             {
               question: "5.",
               answer: "(-2;0) (2,0)",
-              correct: false,
+              correct: true,
               correctAnswer: "(-2;0),(2;0) or (2;0),(-2;0)",
             },
             { question: "6.", answer: "3", correct: true, correctAnswer: "3" },
@@ -1484,9 +1484,9 @@
               correctAnswer: "2;-5 or -5;2",
             },
           ],
-          points: 8,
+          points: 10,
           outOf: 14,
-          grade: 6.571428571428571,
+          grade: 7.714,
         },
         {
           id: "ABKE-10a18",
@@ -3995,14 +3995,11 @@
         grading.appendChild(h4);
         result.responses.forEach((response) => {
           const p = document.createElement("p");
-          // p.textContent = `${response.question} Jūsų atsakymas: ${
-          //   response.answer
-          // }. Teisingas atsakymas: ${response.correctAnswer}. ${
-          //   response.correct ? "TEISINGAI" : "NETEISINGAI"
-          // }`;
           p.textContent = `${response.question} Jūsų atsakymas: ${
             response.answer
-          }. ${response.correct ? "TEISINGAI" : "NETEISINGAI"}`;
+          }. Teisingas atsakymas: ${response.correctAnswer}. ${
+            response.correct ? "TEISINGAI" : "NETEISINGAI"
+          }`;
           grading.appendChild(p);
         });
       }
