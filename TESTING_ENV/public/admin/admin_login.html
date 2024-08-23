@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Testavimo aplinka Skafis</title>
+    <link rel="icon" type="image/x-icon" href="../logo/favicon.ico" />
+
+    <style></style>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+      import {
+        getAuth,
+        signInWithEmailAndPassword,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDE6Yx4cXghxsn6FKOVEXYN8aavEzOipWA",
+        authDomain: "kontrass.firebaseapp.com",
+        databaseURL:
+          "https://kontrass-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "kontrass",
+        storageBucket: "kontrass.appspot.com",
+        messagingSenderId: "691360022307",
+        appId: "1:691360022307:web:b8d0cae3fd88b38e275696",
+      };
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          window.location.href = `admin.html`;
+        }
+      });
+
+      function loginUser(event, email, password) {
+        event.preventDefault();
+
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            window.location.href = `admin.html`;
+          })
+          .catch((error) => {
+            console.error("Error in login", error);
+            alert("Klaida: " + error.message);
+          });
+      }
+
+      window.loginUser = loginUser;
+    </script>
+  </head>
+  <body>
+    <h1>Mokytojo prisijungimas</h1>
+    <a href="../index.html">Grįžti į pagrindinį puslapį</a>
+    <br />
+    <br />
+    <form onsubmit="loginUser(event, email.value, password.value)">
+      <input type="email" id="email" placeholder="Įveskite el. paštą" /><br />
+      <input
+        type="password"
+        id="password"
+        placeholder="Įveskite slaptažodį"
+      /><br />
+      <button type="submit">Prisijungti</button>
+    </form>
+    <p>Neturite paskyros? <a href="admin_register.html">Registruotis</a></p>
+    <p>Pamiršote slaptažodį? <a href="password_recover.html">Atkurti</a></p>
+  </body>
+</html>

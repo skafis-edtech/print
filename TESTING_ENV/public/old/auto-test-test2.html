@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Stereometrijos kontrolinis</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif; /* Clean and readable font */
+        background-color: #f4f4f4; /* Neutral background color */
+        padding: 20px; /* Padding for some breathing room around content */
+        text-align: center; /* Centering text for a better visual alignment */
+      }
+
+      #oopsies {
+        color: black; /* Make error messages stand out */
+        font-size: 10em; /* Larger text for visibility */
+        display: none; /* Hidden by default */
+      }
+
+      button {
+        background-color: #4caf50; /* A nice green background */
+        color: white; /* White text that contrasts well with the button color */
+        padding: 15px 20px; /* Padding to make buttons easier to click */
+        margin: 10px 0; /* Margin for spacing around buttons */
+        border: none; /* No border for a cleaner look */
+        border-radius: 5px; /* Rounded corners for the button */
+        cursor: pointer; /* Cursor indicates button can be clicked */
+        font-size: 1em; /* Sufficient size for readability */
+      }
+
+      button:hover {
+        background-color: #45a049; /* Slightly darker green on hover for feedback */
+      }
+
+      #theForm {
+        background: white;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for 3D effect */
+        width: 90%;
+        max-width: 700px; /* Maximum width of the form */
+        /* display: none; Hidden by default, shown in fullscreen */
+      }
+
+      label {
+        font-weight: bold; /* Makes labels bold */
+        margin-right: 10px; /* Spacing to the right of labels */
+      }
+
+      input[type="text"] {
+        width: 80%; /* Width of input fields */
+        padding: 8px; /* Padding inside input fields */
+        margin: 8px 0; /* Margin around input fields */
+        border-radius: 4px; /* Rounded corners of input fields */
+        border: 1px solid #ccc; /* Border color for inputs */
+      }
+    </style>
+    <script type="module">
+      // Import necessary Firebase modules
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        push,
+        set,
+      } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-database.js";
+
+      // Firebase configuration setup
+      const firebaseConfig = {
+        apiKey: "AIzaSyDE6Yx4cXghxsn6FKOVEXYN8aavEzOipWA",
+        authDomain: "kontrass.firebaseapp.com",
+        databaseURL:
+          "https://kontrass-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "kontrass",
+        storageBucket: "kontrass.appspot.com",
+        messagingSenderId: "691360022307",
+        appId: "1:691360022307:web:b8d0cae3fd88b38e275696",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const database = getDatabase(app);
+
+      // Get references to the form and fullscreen button
+      function toggleFullscreen() {
+        document.documentElement.requestFullscreen().catch((err) => {
+          alert(
+            `Error attempting to enable full-screen mode: ${err.message} (${err.name})`
+          );
+        });
+      }
+
+      window.submitData = function (event) {
+        event.preventDefault(); // Prevent the form from traditional submission
+
+        const id = new URLSearchParams(window.location.search).get("id");
+        const answers = Array.from(
+          document.querySelectorAll('input[type="text"]')
+        ).map((input) => input.value);
+
+        const data = {
+          id: id,
+          timestamp: new Date().toISOString(),
+          answers: answers,
+        };
+
+        // Log data to the console for debugging
+
+        // Reference to the database path where data will be stored
+        const dataRef = ref(database, "responses");
+
+        // Push a new child to the current reference and set the data
+        const newDataRef = push(dataRef);
+        set(newDataRef, data)
+          .then(() => {
+            alert("Duomenys sėkmingai išsiųsti!");
+            window.location.href = "feedback.html?id=" + id;
+          })
+          .catch((error) => alert("Failed to submit data: " + error.message));
+        document.removeEventListener("fullscreenchange", onFullscreenChange);
+      };
+
+      // Event handler for fullscreen changes
+      function onFullscreenChange() {
+        if (document.fullscreenElement) {
+          fullscreenButton.style.display = "none"; // Hide the fullscreen button
+          theForm.style.display = "block"; // Show the number input
+        } else {
+          fullscreenButton.style.display = "block"; // Show the fullscreen button
+          theForm.style.display = "none"; // Hide the number input
+
+          const id = new URLSearchParams(window.location.search).get("id");
+          const timestamp = new Date().toISOString();
+
+          console.log(`Exited fullscreen with ID: ${id} at ${timestamp}`);
+
+          // Send data to Firebase
+          const logRef = ref(database, "fullscreenLogs");
+          push(logRef, { id, timestamp })
+            .then(() => {
+              // document
+              //   .getElementById("body")
+              //   .setAttribute("style", "background-color: red;");
+              document.getElementById("oopsies").style.display = "block";
+            })
+            .catch((error) =>
+              console.error("Error logging to Firebase:", error)
+            );
+        }
+      }
+
+      // Attach event handlers
+      fullscreenButton.addEventListener("click", toggleFullscreen);
+      document.addEventListener("fullscreenchange", onFullscreenChange);
+    </script>
+  </head>
+  <body id="body">
+    <!-- <h1 id="oopsies" style="display: none">Oopsies, kažkas cheatin'a...</h1> -->
+    <button id="fullscreenButton" style="display: none"></button>
+
+    <div id="theForm">
+      <h2>Įrašykite tik atsakymus, RAŠYKITE TIKSLIAI!</h2>
+      <p>
+        Atsakymai vertinami automatiškai, todėl tiksliai suveskite atsakymus.
+      </p>
+      <label for="answer1">1. </label>
+      <img src="./assets/test-2/1.png" width="100%" alt="1" /><br />
+      <input type="text" id="answer1" name="answer1" /><br /><br /><br />
+      <label for="answer2">2. </label>
+      <img src="./assets/test-2/2.png" width="100%" alt="2" /><br />
+      <input type="text" id="answer2" name="answer2" /><br /><br /><br />
+      <label for="answer3">3. </label>
+      <img src="./assets/test-2/3.png" width="100%" alt="3" /><br />
+      <input type="text" id="answer3" name="answer3" /><br /><br /><br />
+      <label for="answer4">4. </label>
+      <img src="./assets/test-2/4.png" width="100%" alt="4" /><br />
+      <input type="text" id="answer4" name="answer4" /><br /><br /><br />
+      <label for="answer5">5. </label>
+      <img src="./assets/test-2/5.png" width="100%" alt="5" /><br />
+      <input type="text" id="answer5" name="answer5" /><br /><br /><br />
+      <label for="answer6">6. </label>
+      <img src="./assets/test-2/6.png" width="100%" alt="6" /><br />
+      <input type="text" id="answer6" name="answer6" /><br /><br /><br />
+      <label for="answer7">7. </label>
+      <img src="./assets/test-2/7.png" width="100%" alt="7" /><br />
+      <input type="text" id="answer7" name="answer7" /><br /><br /><br />
+      <label for="answer8">8. </label>
+      <img src="./assets/test-2/8.png" width="100%" alt="8" /><br />
+      <input type="text" id="answer8" name="answer8" /><br /><br /><br />
+      <label for="answer9">9. </label>
+      <img src="./assets/test-2/9.png" width="100%" alt="9" /><br />
+      <input type="text" id="answer9" name="answer9" /><br /><br /><br />
+      <label for="answer10">10. </label>
+      <img src="./assets/test-2/10.png" width="100%" alt="10" /><br />
+      <input type="text" id="answer10" name="answer10" /><br /><br /><br />
+      <label for="answer11">11. </label>
+      <img src="./assets/test-2/11.png" width="100%" alt="11" /><br />
+      <input type="text" id="answer11" name="answer11" /><br /><br /><br />
+      <label for="answer12">12. </label>
+      <img src="./assets/test-2/12.png" width="100%" alt="12" /><br />
+      <input type="text" id="answer12" name="answer12" /><br /><br /><br />
+      <label for="answer13">13. </label>
+      <img src="./assets/test-2/13.png" width="100%" alt="13" /><br />
+      <input type="text" id="answer13" name="answer13" /><br /><br /><br />
+      <label for="answer14">14. </label>
+      <img src="./assets/test-2/14.png" width="100%" alt="14" /><br />
+      <input type="text" id="answer14" name="answer14" /><br /><br /><br />
+
+      <button onclick="submitData(event);">
+        Pateikti atsakymus vertinimui
+      </button>
+    </div>
+  </body>
+</html>

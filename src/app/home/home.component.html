@@ -1,237 +1,172 @@
 <main>
-  <header>
-    <button
-      type="button"
-      mat-mini-fab
-      color="secondary"
-      (click)="changeLanguage()"
-    >
-      EN
-    </button>
+  <aside></aside>
+  <section>
+    <app-title-description />
+    <form [formGroup]="titleForm">
+      <mat-form-field appearance="outline" class="form-title">
+        <mat-label>Pavadinimas</mat-label>
+        <textarea
+          matInput
+          placeholder="Įveskite pavadinimą"
+          formControlName="title"
+          rows="1"
+        ></textarea>
+        <mat-error *ngIf="titleForm.get('title')?.errors?.['required']">
+          Pavadinimas yra privalomas
+        </mat-error>
+      </mat-form-field>
 
-    <h1>skafis</h1>
-    <h2>Uncomplicated EdTech Solutions</h2>
-  </header>
-  <h2>
-    Testavimo aplinkos beta versija:
-    <a href="https://testai.skafis.lt">testai.skafis.lt</a>
-  </h2>
-  <h2>
-    Užduočių bankas:
-    <a href="https://bankas.skafis.lt">bankas.skafis.lt</a>
-  </h2>
-  <p>
-    Šis tinklapis generuoja HTML ir PDF failus su klausimais, kur tik vienas
-    atsakymo variantas yra teisingas. HTML failo naudotojas gali atsakyti į
-    klausimus ir pasitikrinti atsakymus (kiekvienos užduoties atskirai). PDF
-    failo skaitytojas gali pasitikrinti atsakymus puslapio apačioje.
-  </p>
-  <p>
-    Ši Skafis versija labiausiai tinka greitam turinio kartojimui bei mokinių
-    įsivertinimui.
-  </p>
-  <p>
-    Galite pasimėginti užpildant pavyzdinėmis užduotimis (mygtukas pačioje
-    apačioje)
-  </p>
+      <div formArrayName="questions">
+        <div
+          *ngFor="let question of questions.controls; let i = index"
+          [formGroupName]="i"
+        >
+          <div class="question-number">{{ i + 1 }}.</div>
+          <div class="question-block">
+            <mat-form-field appearance="outline" class="question-text-field">
+              <mat-label>Klausimas</mat-label>
+              <textarea
+                [required]="false"
+                matInput
+                placeholder="Įveskite klausimo formuluotę"
+                formControlName="text"
+                rows="1"
+              ></textarea>
+            </mat-form-field>
 
-  <mat-card appearance="outlined">
-    <mat-card-content>
-      <h4>
-        <strong>Hmm, matai? Nėra reklamų! Tegu taip ir išlieka ;)</strong>
-      </h4>
-      <p>Būčiau labai dėkingas už piniginę paramą, už įdėtą darbą.</p>
-      <p>
-        <li>
-          Pavedimu (Pervedimo paskirtis: Skafis tinklapio parama + Jūsų žinutė):
-          <br />
-          Naglis Šuliokas LT943250092929077836
-          <button type="button" color="secondary" (click)="copyBankDetails()">
-            {{ copied ? "Nukopijuota" : "Kopijuoti" }}
-          </button>
-        </li>
-      </p>
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="alert-card info-alert">
-    <mat-card-content>
-      <strong>PDF generavimo apribojimai: </strong><br />
-      Lape telpa daugiausia 14 trumpų klausimų (ilgesni klausimai, aišku,
-      pamažina limitą)
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="alert-card warn-alert">
-    <mat-card-content
-      >Progresas išsisaugo jūsų įrenginyje automatiškai</mat-card-content
-    ></mat-card
-  >
-
-  <form [formGroup]="titleForm">
-    <mat-form-field appearance="outline" [style.width.%]="70">
-      <mat-label>Pavadinimas</mat-label>
-      <textarea
-        matInput
-        placeholder="Įveskite pavadinimą"
-        formControlName="title"
-        rows="1"
-      ></textarea>
-      <mat-error *ngIf="titleForm.get('title')?.errors?.['required']">
-        Pavadinimas yra privalomas
-      </mat-error>
-    </mat-form-field>
-
-    <div formArrayName="questions">
-      <div
-        *ngFor="let question of questions.controls; let i = index"
-        [formGroupName]="i"
-      >
-        <div class="question-number">{{ i + 1 }}.</div>
-        <div>
-          <mat-form-field appearance="outline" [style.width.%]="100">
-            <mat-label>Klausimas</mat-label>
-            <textarea
-              [required]="false"
-              matInput
-              placeholder="Įveskite klausimo formuluotę"
-              formControlName="text"
-              rows="1"
-            ></textarea>
-          </mat-form-field>
-
-          <mat-radio-group
-            aria-label="Select an option"
-            formControlName="selectedOption"
-          >
-            <div formArrayName="options">
-              <div *ngFor="let ctrl of getOptions(i).controls; let j = index">
-                <div class="option-letter">
-                  {{ j === 0 ? "A" : j === 1 ? "B" : j === 2 ? "C" : "D" }}
-                </div>
-                <mat-form-field appearance="outline">
-                  <mat-label>Pasirinkimas</mat-label>
-                  <textarea
-                    matInput
-                    [placeholder]="'Įveskite pasirinkimo formuluotę'"
-                    [formControlName]="j"
-                    [required]="false"
-                    rows="1"
-                  ></textarea>
-                </mat-form-field>
-                <mat-radio-button [value]="j"></mat-radio-button>
-                <div>
-                  {{
-                    titleForm.get(["questions", i, "selectedOption"])?.value ===
-                    j
-                      ? "Teisingas atsakymas"
-                      : "Neteisingas atsakymas"
-                  }}
+            <mat-radio-group
+              aria-label="Select an option"
+              formControlName="selectedOption"
+              *ngIf="titleForm.get(['questions', i, 'type'])?.value === 'ABCD'"
+              [style.width.%]="100"
+            >
+              <div formArrayName="options">
+                <div *ngFor="let ctrl of getOptions(i).controls; let j = index">
+                  <div class="option-letter">
+                    {{ j === 0 ? "A" : j === 1 ? "B" : j === 2 ? "C" : "D" }}
+                  </div>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Pasirinkimas</mat-label>
+                    <textarea
+                      matInput
+                      [placeholder]="'Įveskite pasirinkimo formuluotę'"
+                      [formControlName]="j"
+                      [required]="false"
+                      rows="1"
+                    ></textarea>
+                  </mat-form-field>
+                  <mat-radio-button [value]="j"></mat-radio-button>
+                  <div class="isCorrectMsg">
+                    {{
+                      titleForm.get(["questions", i, "selectedOption"])
+                        ?.value === j
+                        ? "Teisingas atsakymas"
+                        : "Neteisingas atsakymas"
+                    }}
+                  </div>
                 </div>
               </div>
-            </div>
-          </mat-radio-group>
+            </mat-radio-group>
+            <mat-form-field
+              *ngIf="titleForm.get(['questions', i, 'type'])?.value === 'OPEN'"
+              appearance="outline"
+              [style.width.%]="50"
+            >
+              <textarea
+                [required]="false"
+                matInput
+                placeholder="Įveskite atsakymą"
+                formControlName="answerText"
+                rows="1"
+              ></textarea>
+            </mat-form-field>
+          </div>
         </div>
       </div>
-    </div>
 
-    <button
-      type="button"
-      mat-raised-button
-      color="secondary"
-      (click)="addQuestion()"
-    >
-      Pridėti klausimą
-    </button>
+      <button
+        type="button"
+        mat-raised-button
+        color="secondary"
+        (click)="addABCDQuestion()"
+      >
+        Pridėti ABCD klausimą
+      </button>
+      <!-- <button
+        type="button"
+        mat-raised-button
+        color="secondary"
+        (click)="addOpenQuestion()"
+      >
+        Pridėti atvirą klausimą
+      </button> -->
+      <button
+        *ngIf="questions.length > 1"
+        type="button"
+        mat-raised-button
+        color="warn"
+        (click)="removeLastQuestion()"
+      >
+        Pašalinti paskutinį klausimą
+      </button>
 
-    <button
-      *ngIf="questions.length > 1"
-      type="button"
-      mat-raised-button
-      color="warn"
-      (click)="removeLastQuestion()"
-    >
-      Pašalinti paskutinį klausimą
-    </button>
-
-    <br />
-    <br />
-    <br />
-    <br />
-    <button
-      mat-raised-button
-      color="primary"
-      type="submit"
-      [disabled]="titleForm.invalid"
-      (click)="generateHTML()"
-    >
-      Atsisiųsti HTML
-    </button>
-    <button
-      mat-raised-button
-      color="accent"
-      [disabled]="titleForm.invalid"
-      (click)="generateImagePDF()"
-    >
-      Atsisiųsti PDF
-    </button>
-    <!-- <button
-      mat-outlined-button
-      color="secondary"
-      [disabled]="titleForm.invalid"
-      (click)="generateTextPDF()"
-    >
-      Atsisiųsti geresnės kokybės tekstinį PDF (be lietuviškų raidžių)
-    </button> -->
-    <br />
-    <br />
-    <button type="button" mat-raised-button color="warn" (click)="clearForm()">
-      Išvalyti viską
-    </button>
-    <button
-      type="button"
-      mat-raised-button
-      color="primary"
-      (click)="fillExampleForm()"
-    >
-      Užpildyti pavyzdinėmis užduotimis
-    </button>
-  </form>
+      <br />
+      <br />
+      <br />
+      <br />
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="titleForm.invalid"
+        (click)="generateHTML()"
+      >
+        Atsisiųsti HTML
+      </button>
+      <button
+        mat-raised-button
+        color="accent"
+        [disabled]="titleForm.invalid"
+        (click)="generateImagePDF()"
+      >
+        Atsisiųsti PDF su atsakymais
+      </button>
+      <button
+        mat-raised-button
+        color="accent"
+        [disabled]="titleForm.invalid"
+        (click)="generateImagePDFNoAns()"
+      >
+        Atsisiųsti PDF be atsakymų
+      </button>
+      <!-- <button
+        mat-outlined-button
+        color="secondary"
+        [disabled]="titleForm.invalid"
+        (click)="generateTextPDF()"
+      >
+        Atsisiųsti geresnės kokybės tekstinį PDF (be lietuviškų raidžių)
+      </button> -->
+      <br />
+      <br />
+      <button
+        type="button"
+        mat-raised-button
+        color="warn"
+        (click)="clearForm()"
+      >
+        Išvalyti viską
+      </button>
+      <button
+        type="button"
+        mat-raised-button
+        color="primary"
+        (click)="fillExampleForm()"
+      >
+        Užpildyti pavyzdinėmis užduotimis
+      </button>
+    </form>
+  </section>
+  <aside></aside>
 </main>
-
-<footer>
-  <h2>Privatumo politika:</h2>
-  <p>
-    <strong>Google Analytics.</strong> Tinklapis naudoja Google Analytics ir
-    seka tik bendrą analitinę informaciją – tinklapio apsilankymų skaičių su
-    prisijungimo vietomis miesto tikslumu. Duomenų rinkimo tikslas – turėti
-    reklaminio sėkmingumo grįžtamąjį ryšį ir pagal tai keisti tinklapio
-    tobulinimo veiklą. Kaip Google naudoja renkamą informaciją, skaitykite apie
-    <a href="https://policies.google.com/" target="_blank" rel="noreferrer"
-      >Google privatumą ir sąlygas</a
-    >.
-  </p>
-  <p>
-    <strong>LocalStorage.</strong> Taip pat tinklapis naudoja jūsų naršyklės
-    vietinę talpą, kad patalpintų informaciją apie sutikimą su šio tinklapio
-    privatumo politika, bei klausimų pildymo progresą. Tikslas – tinklapio
-    naudotojo patogumas, neiššokantis tas pats pranešimas kiekvieną kartą
-    atsidarius tinklapį, bei netikėtai neišsitrinantis klausimų kūrimo
-    progresas.
-  </p>
-  <br />
-  <br />
-  <p>
-    Tinklapio kodas:
-    <a
-      href="https://github.com/naglissul/skafis"
-      target="_blank"
-      rel="noreferrer"
-      >github.com/naglissul/skafis</a
-    >
-  </p>
-  <p>v1.1.0+</p>
-  <p>Paskutinį kartą atnaujinta: 2024-04-07</p>
-  <p>
-    Mano blog'as bei daugiau įdomių dalykų čia:
-    <a href="https://www.npw.lt" target="_blank" rel="noreferrer">npw.lt</a>
-  </p>
-</footer>
+<app-privacy-footer />

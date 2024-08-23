@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { HomeComponent } from './home/home.component';
 import { AppComponent } from './app.component';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { AppRoutingModule } from './app.routes';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -20,6 +20,8 @@ import {
   MatDialogTitle,
   MatDialogContent,
 } from '@angular/material/dialog';
+import { TitleDescriptionComponent } from './home/components/title-description/title-description.component';
+import { PrivacyFooterComponent } from './home/components/privacy-footer/privacy-footer.component';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, HomeEnComponent],
@@ -41,6 +43,8 @@ import {
     MatDialogClose,
     MatDialogTitle,
     MatDialogContent,
+    TitleDescriptionComponent,
+    PrivacyFooterComponent,
   ],
   bootstrap: [AppComponent],
 })
