@@ -36,12 +36,14 @@ export class HomeComponent {
   test: string = 'test';
 
   constructor(private fb: FormBuilder, public dialog: MatDialog) {
-    const consentGiven = localStorage.getItem('CONSENT_GIVEN');
-    if (!consentGiven) {
-      this.openDialog('0ms', '0ms');
-    } else {
-      this.trackAnalytics();
-    }
+    // const consentGiven = localStorage.getItem('CONSENT_GIVEN');
+    // if (!consentGiven) {
+    //   this.openDialog('0ms', '0ms');
+    // } else {
+    //   this.trackAnalytics();
+    // }
+    this.trackAnalytics();
+
     this.titleForm = this.fb.nonNullable.group<Questionaire>({
       title: this.fb.nonNullable.control<string>(''),
       questions: this.fb.nonNullable.array<Question>([]),
@@ -151,7 +153,7 @@ export class HomeComponent {
     questions.forEach((question: any) => {
       const questionGroup = this.fb.group<Question>({
         text: this.fb.nonNullable.control(question.text),
-        type: this.fb.nonNullable.control(question.type),
+        type: this.fb.nonNullable.control('ABCD'),
         options: this.fb.nonNullable.array(
           question.options?.map((option: any) => this.fb.control(option)) || []
         ),

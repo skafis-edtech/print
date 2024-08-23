@@ -436,7 +436,7 @@ export function generateTextPDF(form: FormGroup<Questionaire>): void {
       }   `;
     });
     pdf.setFontSize(5);
-    pdf.text(answersText, startX, pdf.internal.pageSize.getHeight() - 5);
+    //pdf.text(answersText, startX, pdf.internal.pageSize.getHeight() - 5);
 
     const footer = 'Ši faila sugeneravo Skafis. www.skafis.lt';
     pdf.text(
