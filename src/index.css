@@ -1,68 +1,57 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+header {
+  height: 60px;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+footer {
+  height: 68px;
+  padding: 10px;
+  text-align: center;
 }
 
-body {
-  margin: 0;
+main {
+  min-height: calc(100vh - 60px - 68px);
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+section {
+  flex: 10 10 0;
+  background-color: #e9e9e9;
+  padding: 10px;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+aside {
+  flex: 3 3 0;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@media screen and (max-width: 1024px) {
+  aside {
+    display: none;
   }
-  a:hover {
-    color: #747bff;
+  header {
+    height: fit-content;
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+.dragging {
+  opacity: 0.5;
+}
+
+@media print {
+  @page {
+    margin: 0;
+  }
+
+  header,
+  footer,
+  aside,
+  .no-print,
+  .no-print * {
+    display: none;
   }
 }
