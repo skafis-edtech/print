@@ -306,7 +306,7 @@ function MainPage() {
       </main>
       <footer>
         <p>(c) MB Skafis 2024</p>
-        <p>v2.0.0 - Paskutinį kartą atnaujinta 2024-10-06</p>
+        <p>v2.0.0 - Paskutinį kartą atnaujinta 2024-10-07</p>
       </footer>
     </>
   );
