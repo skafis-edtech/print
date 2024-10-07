@@ -2,7 +2,7 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import ProblemEditor from "../components/ProblemEditor";
 import ProblemDisplay from "../components/ProblemDisplay";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 function MainPage() {
   const [problems, setProblems] = useState<string[]>(() => {
@@ -13,16 +13,22 @@ function MainPage() {
   });
 
   const [newProblem, setNewProblem] = useState<string>("");
-
-  useEffect(() => {
-    localStorage.setItem("problems", JSON.stringify(problems));
-  }, [problems]);
-
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState<string>("");
   const [skfValue, setSkfValue] = useState<string>("SKF-");
   const [skfStatusColor, setSkfStatusColor] = useState<string>("white");
   const [skfListInput, setSkfListInput] = useState<string>("");
+
+  useEffect(() => {
+    localStorage.setItem("problems", JSON.stringify(problems));
+  }, [problems]);
+
+  useEffect(() => {
+    const parsedSkfList = parseQueryParams();
+    if (parsedSkfList) {
+      setSkfListInput(parsedSkfList);
+    }
+  }, []);
 
   const handleEdit = (index: number) => {
     setEditIndex(index);
@@ -91,28 +97,145 @@ function MainPage() {
     );
     const data = await response.json();
     let toAdd = "";
+
     if (data.problemVisibility === "VISIBLE") {
       toAdd = data.problemText;
     } else if (data.problemVisibility === "HIDDEN") {
-      toAdd = `Užduotis ${skfCode} yra paslėpta. Norėdami matyti užduotį, turite prisijungti arba pakeisti paskyrą.`;
+      toAdd = `❗Užduotis "${skfCode}" yra paslėpta. Norėdami matyti užduotį, turite prisijungti arba pakeisti paskyrą.❗`;
     } else {
-      toAdd = `Užduotis ${skfCode} neegzistuoja arba įvyko kita klaida.`;
+      toAdd = `❗Užduotis "${skfCode}" neegzistuoja arba įvyko kita klaida.❗`;
     }
-    setProblems([...problems, toAdd]);
+
+    setProblems((prevProblems) => [...prevProblems, toAdd]);
   };
 
   const handleProcessSkfCodes = async () => {
     const skfCodes = skfListInput.split(" ");
     const skfRegex = /^SKF-\d+$/;
 
-    skfCodes.forEach(async (skfCode) => {
+    for (const skfCode of skfCodes) {
       if (skfRegex.test(skfCode)) {
         await fetchSkfAndAdd(skfCode);
       } else {
-        console.error(`Invalid SKF code: ${skfCode}`);
+        setProblems((prevProblems) => [
+          ...prevProblems,
+          `❗SKF kodas "${skfCode}" neatitinka formato SKF-<sveikas-skaičius>.❗`,
+        ]);
       }
-    });
+    }
   };
+
+  const parseQueryParams = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const skfList = searchParams.get("skflist");
+    if (skfList) {
+      return skfList
+        .split(" ")
+        .map((num) => `SKF-${num}`)
+        .join(" ");
+    }
+    return "";
+  };
+
+  const renderedProblems = useMemo(() => {
+    return (
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <Droppable droppableId="problems">
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {problems.map((problem, index) => (
+                <Draggable
+                  key={index}
+                  draggableId={`problem-${index}`}
+                  index={index}
+                >
+                  {(provided) => (
+                    <Box
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      sx={{
+                        border: "1px solid black",
+                        p: 2,
+                        mb: 2,
+                        display: "flex",
+                        flexDirection: "column",
+                        backgroundColor: "white",
+                      }}
+                    >
+                      <Box key={index} sx={{ mb: 2 }}>
+                        <Typography variant="h6">{index + 1}.</Typography>
+                        {editIndex === index ? (
+                          <>
+                            <ProblemEditor
+                              value={editValue}
+                              onChange={(e) => setEditValue(e.target.value)}
+                            />
+                            <div className="no-print">
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "flex-end",
+                                  mt: 1,
+                                }}
+                              >
+                                <Button color="error" onClick={handleCancel}>
+                                  Atšaukti
+                                </Button>
+                                <Button
+                                  color="info"
+                                  variant="contained"
+                                  onClick={handleSave}
+                                  sx={{ ml: 1 }}
+                                >
+                                  Išsaugoti
+                                </Button>
+                              </Box>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <ProblemDisplay value={problem} />
+                            <div className="no-print">
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "flex-end",
+                                  mt: 1,
+                                }}
+                              >
+                                <Button
+                                  color="error"
+                                  variant="contained"
+                                  onClick={() => handleDelete(index)}
+                                >
+                                  Ištrinti
+                                </Button>
+                                <Button
+                                  color="warning"
+                                  variant="contained"
+                                  onClick={() => handleEdit(index)}
+                                  sx={{ ml: 1 }}
+                                >
+                                  Redaguoti
+                                </Button>
+                              </Box>
+                            </div>
+                          </>
+                        )}
+                      </Box>
+                    </Box>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    );
+  }, [problems, editIndex, editValue]);
+
   return (
     <>
       <header>
@@ -139,7 +262,9 @@ function MainPage() {
             </p>
             <h2>Testų PDF kūrimas</h2>
             <p>Progresas automatiškai išsaugomas Jūsų naršyklėje</p>
-
+            <div style={{ textAlign: "center" }}>
+              <a href="#bottom">⬇️ Eiti į apačią ⬇️</a>
+            </div>
             <Box
               sx={{
                 display: "flex",
@@ -200,108 +325,11 @@ function MainPage() {
             </Box>
           </div>
 
-          <DragDropContext onDragEnd={handleOnDragEnd}>
-            <Droppable droppableId="problems">
-              {(provided) => (
-                <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {problems.map((problem, index) => (
-                    <Draggable
-                      key={index}
-                      draggableId={`problem-${index}`}
-                      index={index}
-                    >
-                      {(provided) => (
-                        <Box
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          sx={{
-                            border: "1px solid black",
-                            p: 2,
-                            mb: 2,
-                            display: "flex",
-                            flexDirection: "column",
-                            backgroundColor: "white",
-                          }}
-                        >
-                          <Box key={index} sx={{ mb: 2 }}>
-                            <Typography variant="h6">{index + 1}.</Typography>
-                            {editIndex === index ? (
-                              <>
-                                <ProblemEditor
-                                  value={editValue}
-                                  onChange={(e) => setEditValue(e.target.value)}
-                                />
-                                <div className="no-print">
-                                  <Box
-                                    sx={{
-                                      display: "flex",
-                                      justifyContent: "flex-end",
-                                      mt: 1,
-                                    }}
-                                  >
-                                    <Button
-                                      color="error"
-                                      onClick={handleCancel}
-                                    >
-                                      Atšaukti
-                                    </Button>
-                                    <Button
-                                      color="info"
-                                      variant="contained"
-                                      onClick={handleSave}
-                                      sx={{ ml: 1 }}
-                                    >
-                                      Išsaugoti
-                                    </Button>
-                                  </Box>
-                                </div>
-                              </>
-                            ) : (
-                              <>
-                                <ProblemDisplay value={problem} />
-                                <div className="no-print">
-                                  <Box
-                                    sx={{
-                                      display: "flex",
-                                      justifyContent: "flex-end",
-                                      mt: 1,
-                                    }}
-                                  >
-                                    <Button
-                                      color="error"
-                                      variant="contained"
-                                      onClick={() => handleDelete(index)}
-                                    >
-                                      Ištrinti
-                                    </Button>
-                                    <Button
-                                      color="warning"
-                                      variant="contained"
-                                      onClick={() => handleEdit(index)}
-                                      sx={{ ml: 1 }}
-                                    >
-                                      Redaguoti
-                                    </Button>
-                                  </Box>
-                                </div>
-                              </>
-                            )}
-                          </Box>
-                        </Box>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
+          {renderedProblems}
 
-          <div className="no-print">
-            <Box sx={{ p: 3, border: "1px solid black" }}>
-              <Box sx={{ mt: 4 }}>
-                <Typography variant="h6">Naujos užduoties turinys</Typography>
+          <div className="no-print" id="bottom">
+            <Box sx={{ p: 2, border: "1px solid black" }}>
+              <Box>
                 <Box
                   sx={{
                     display: "flex",
@@ -362,25 +390,32 @@ function MainPage() {
                 </Box>
               </Box>
             </Box>
-            {/* <Box sx={{ p: 3, mt: 4, border: "1px solid black" }}>
-              {" "}
+            <div id="skflist"></div>
+            <Box sx={{ p: 2, mt: 2, border: "1px solid black" }}>
               <TextField
-                label="Enter SKF Codes"
+                label="SKF kodų sąrašas"
                 variant="outlined"
                 fullWidth
                 value={skfListInput}
                 onChange={(e) => setSkfListInput(e.target.value)}
-                helperText="Enter SKF codes separated by spaces, e.g., 'SKF-1 SKF-234 SKF-1223'"
+                helperText="Įveskite SKF kodus atskirtus tarpais, pvz., 'SKF-1 SKF-125 SKF-121'. Sąrašą susikurkite užduočių banko puslapyje."
               />
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={handleProcessSkfCodes}
-                sx={{ mt: 2 }}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
               >
-                Process SKF Codes
-              </Button>
-            </Box> */}
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={handleProcessSkfCodes}
+                  sx={{ mt: 2 }}
+                >
+                  Pridėti visus į sąrašą
+                </Button>
+              </Box>
+            </Box>
             <Box
               sx={{
                 display: "flex",
@@ -403,6 +438,10 @@ function MainPage() {
                 Išvalyti viską
               </Button>
             </Box>
+            <div style={{ textAlign: "center" }}>
+              <a href="#">⬆️ Grįžti į viršų ⬆️</a>
+            </div>
+
             <p>SKF užduoties rėmelio spalvos:</p>
             <p>Balta - nepanaudota</p>
             <p>Žalia - sėkmingai įkelta</p>

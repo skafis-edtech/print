@@ -8,7 +8,13 @@ const ProblemEditor = ({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
-    <TextField value={value} onChange={onChange} variant="outlined" fullWidth />
+    <TextField
+      label="Užduoties tekstas"
+      value={value}
+      onChange={onChange}
+      variant="outlined"
+      fullWidth
+    />
   );
 };
 export default ProblemEditor;
