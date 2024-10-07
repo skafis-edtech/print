@@ -126,7 +126,7 @@ function MainPage() {
           <Box
             sx={{
               border: "1px solid black",
-              m: 4,
+              m: { xs: 0, sm: 0, md: 3, lg: 4, xl: 4 },
               p: 2,
               backgroundColor: "#fff9e8",
             }}
