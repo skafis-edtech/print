@@ -1,10 +1,6 @@
 function AboutPage() {
   return (
-    <div>
-      <header>
-        <img alt="Skafis logo" src="/favicon-32x32.png" />
-        <span>Skafis</span>
-      </header>
+    <>
       <main>
         <aside></aside>
         <section>
@@ -69,7 +65,7 @@ function AboutPage() {
         <p>(c) MB Skafis 2024</p>
         <p>v2.0.0 - Paskutinį kartą atnaujinta 2024-10-07</p>
       </footer>
-    </div>
+    </>
   );
 }
 

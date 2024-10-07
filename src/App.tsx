@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./routes/MainPage";
 import { Snackbar, Alert, Button } from "@mui/material";
 import AboutPage from "./routes/AboutPage";
+import DesktopHeader from "./components/DesktopHeader";
+import MobileHeader from "./components/MobileHeader";
 
 function App() {
   const [cookieConsent, setCookieConsent] = useState<boolean>(() => {
@@ -17,6 +19,10 @@ function App() {
 
   return (
     <BrowserRouter>
+      <header>
+        <MobileHeader />
+        <DesktopHeader />
+      </header>
       <Routes>
         <Route index element={<MainPage />} />
         <Route path="/about" element={<AboutPage />} />

@@ -49,8 +49,27 @@ const UploadDownloadEditableFile: React.FC<UploadDownloadEditableFileProps> = ({
             fileReader.readAsText(e.target.files[0], "UTF-8");
             fileReader.onload = (e) => {
               if (e.target && typeof e.target.result === "string") {
-                const uploadedProblems = JSON.parse(e.target.result);
-                setProblems(uploadedProblems);
+                try {
+                  const uploadedProblems = JSON.parse(e.target.result);
+                  if (
+                    typeof uploadedProblems === "object" &&
+                    uploadedProblems !== null &&
+                    typeof uploadedProblems.title === "string" &&
+                    Array.isArray(uploadedProblems.problems) &&
+                    uploadedProblems.problems.every(
+                      (problem: any) => typeof problem === "string"
+                    )
+                  ) {
+                    setProblems(uploadedProblems);
+                  } else {
+                    alert(
+                      "Failo struktūra yra klaidinga. Formatas gali būti pasenęs - susisiekite su administratoriumi"
+                    );
+                  }
+                } catch (error) {
+                  console.error("Error parsing uploaded file:", error);
+                  // Handle parsing error (e.g., show an error message)
+                }
               }
             };
           }

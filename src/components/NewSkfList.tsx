@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 
 interface NewSkfListProps {
   fetchSkfAndAdd: (skfCode: string) => Promise<void>;
-  setProblems: React.Dispatch<React.SetStateAction<string[]>>;
+  setProblems: (value: string[]) => void;
+  problems: string[];
 }
 
 const NewSkfList: React.FC<NewSkfListProps> = ({
   fetchSkfAndAdd,
   setProblems,
+  problems,
 }) => {
   const [skfListInput, setSkfListInput] = useState<string>("");
 
@@ -26,8 +28,8 @@ const NewSkfList: React.FC<NewSkfListProps> = ({
       if (skfRegex.test(skfCode)) {
         await fetchSkfAndAdd(skfCode);
       } else {
-        setProblems((prevProblems) => [
-          ...prevProblems,
+        setProblems([
+          ...problems,
           `❗SKF kodas "${skfCode}" neatitinka formato SKF-<sveikas-skaičius>.❗`,
         ]);
       }

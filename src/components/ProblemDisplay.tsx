@@ -1,16 +1,92 @@
-const ProblemDisplay: React.FC = () => {
+import { Box, Button, Typography } from "@mui/material";
+import ContentEditor from "./ContentEditor";
+import ContentDisplay from "./ContentDisplay";
+
+interface ProblemDisplayProps {
+  index: number;
+  isEditable: boolean;
+  problem: string;
+  editValue: string;
+  setEditValue: (value: string) => void;
+  handleCancel: () => void;
+  handleSave: () => void;
+  handleDelete: (index: number) => void;
+  handleEdit: (index: number) => void;
+}
+
+const ProblemDisplay: React.FC<ProblemDisplayProps> = ({
+  index,
+  isEditable,
+  problem,
+  editValue,
+  setEditValue,
+  handleCancel,
+  handleSave,
+  handleDelete,
+  handleEdit,
+}) => {
   return (
-    <div>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        height="24"
-        viewBox="0 0 24 24"
-        width="24"
-      >
-        <path d="M0 0h24v24H0V0z" fill="none" />
-        <path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-      </svg>
-    </div>
+    <Box sx={{ mb: 2 }}>
+      <Typography variant="h6">{index + 1}.</Typography>
+      {isEditable ? (
+        <>
+          <ContentEditor
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+          />
+          <div className="no-print">
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                mt: 1,
+              }}
+            >
+              <Button color="error" onClick={handleCancel}>
+                Atšaukti
+              </Button>
+              <Button
+                color="info"
+                variant="contained"
+                onClick={handleSave}
+                sx={{ ml: 1 }}
+              >
+                Išsaugoti
+              </Button>
+            </Box>
+          </div>
+        </>
+      ) : (
+        <>
+          <ContentDisplay value={problem} />
+          <div className="no-print">
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                mt: 1,
+              }}
+            >
+              <Button
+                color="error"
+                variant="contained"
+                onClick={() => handleDelete(index)}
+              >
+                Ištrinti
+              </Button>
+              <Button
+                color="warning"
+                variant="contained"
+                onClick={() => handleEdit(index)}
+                sx={{ ml: 1 }}
+              >
+                Redaguoti
+              </Button>
+            </Box>
+          </div>
+        </>
+      )}
+    </Box>
   );
 };
 export default ProblemDisplay;

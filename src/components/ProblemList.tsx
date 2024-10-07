@@ -1,8 +1,8 @@
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
-import { Box, Button, Typography } from "@mui/material";
-import ContentEditor from "./ContentEditor";
-import ContentDisplay from "./ContentDisplay";
+import { Box } from "@mui/material";
 import { useState } from "react";
+import ProblemDisplay from "./ProblemDisplay";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 
 interface ProblemListProps {
   problems: string[];
@@ -64,69 +64,23 @@ const ProblemList: React.FC<ProblemListProps> = ({
                       display: "flex",
                       flexDirection: "column",
                       backgroundColor: "white",
+                      position: "relative",
                     }}
                   >
-                    <Box key={index} sx={{ mb: 2 }}>
-                      <Typography variant="h6">{index + 1}.</Typography>
-                      {editIndex === index ? (
-                        <>
-                          <ContentEditor
-                            value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
-                          />
-                          <div className="no-print">
-                            <Box
-                              sx={{
-                                display: "flex",
-                                justifyContent: "flex-end",
-                                mt: 1,
-                              }}
-                            >
-                              <Button color="error" onClick={handleCancel}>
-                                Atšaukti
-                              </Button>
-                              <Button
-                                color="info"
-                                variant="contained"
-                                onClick={handleSave}
-                                sx={{ ml: 1 }}
-                              >
-                                Išsaugoti
-                              </Button>
-                            </Box>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <ContentDisplay value={problem} />
-                          <div className="no-print">
-                            <Box
-                              sx={{
-                                display: "flex",
-                                justifyContent: "flex-end",
-                                mt: 1,
-                              }}
-                            >
-                              <Button
-                                color="error"
-                                variant="contained"
-                                onClick={() => handleDelete(index)}
-                              >
-                                Ištrinti
-                              </Button>
-                              <Button
-                                color="warning"
-                                variant="contained"
-                                onClick={() => handleEdit(index)}
-                                sx={{ ml: 1 }}
-                              >
-                                Redaguoti
-                              </Button>
-                            </Box>
-                          </div>
-                        </>
-                      )}
-                    </Box>
+                    <div style={{ position: "absolute", right: 8, top: 10 }}>
+                      <DragIndicatorIcon />
+                    </div>
+                    <ProblemDisplay
+                      index={index}
+                      isEditable={editIndex === index}
+                      problem={problem}
+                      editValue={editValue}
+                      setEditValue={setEditValue}
+                      handleCancel={handleCancel}
+                      handleSave={handleSave}
+                      handleDelete={handleDelete}
+                      handleEdit={handleEdit}
+                    />
                   </Box>
                 )}
               </Draggable>

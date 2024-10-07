@@ -29,12 +29,30 @@ aside {
   flex: 3 3 0;
 }
 
+#mobile-header {
+  display: none;
+}
+
+#desktop-header {
+  display: block;
+}
+
+.print-only {
+  display: none;
+}
+
 @media screen and (max-width: 1024px) {
   aside {
     display: none;
   }
   header {
     height: fit-content;
+  }
+  #desktop-header {
+    display: none;
+  }
+  #mobile-header {
+    display: block;
   }
 }
 
@@ -53,5 +71,9 @@ aside {
   .no-print,
   .no-print * {
     display: none;
+  }
+
+  .print-only {
+    display: block;
   }
 }

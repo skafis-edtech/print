@@ -1,16 +1,39 @@
-import { Alert, Box, Button, Typography } from "@mui/material";
+import { Alert, Box, Button, TextField, Typography } from "@mui/material";
 
 import { useEffect, useMemo, useState } from "react";
-import Header from "../components/Header";
 import NewProblem from "../components/NewProblem";
 import NewSkfList from "../components/NewSkfList";
 import UploadDownloadEditableFile from "../components/UploadDownloadEditableFile";
 import ProblemList from "../components/ProblemList";
 
 function MainPage() {
-  const [problems, setProblems] = useState<string[]>(() => {
+  const [problems, setProblems] = useState<{
+    title: string;
+    problems: string[];
+  }>(() => {
     const savedProblems = localStorage.getItem("problems");
-    return savedProblems ? JSON.parse(savedProblems) : ["Pavyzdinė užduotis"];
+    if (savedProblems) {
+      try {
+        const parsedProblems = JSON.parse(savedProblems);
+        if (
+          typeof parsedProblems === "object" &&
+          parsedProblems !== null &&
+          typeof parsedProblems.title === "string" &&
+          Array.isArray(parsedProblems.problems) &&
+          parsedProblems.problems.every(
+            (problem: any) => typeof problem === "string"
+          )
+        ) {
+          return parsedProblems;
+        }
+      } catch (e) {
+        console.error("Error parsing saved problems:", e);
+      }
+    }
+    return {
+      title: "Pavyzdinis pavadinimas",
+      problems: ["Pavyzdinė užduotis"],
+    };
   });
 
   const [newProblem, setNewProblem] = useState<string>("");
@@ -21,23 +44,26 @@ function MainPage() {
 
   const handleAddProblem = () => {
     if (newProblem.trim()) {
-      setProblems([...problems, newProblem]);
+      setProblems({
+        ...problems,
+        problems: [...problems.problems, newProblem],
+      });
       setNewProblem("");
     }
   };
 
   const handleRemoveAllProblems = () => {
-    setProblems([]);
+    setProblems({ ...problems, problems: [] });
   };
 
   const handleOnDragEnd = (result: any) => {
     if (!result.destination) return;
 
-    const items = Array.from(problems);
+    const items = Array.from(problems.problems);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
-    setProblems(items);
+    setProblems({ ...problems, problems: items });
   };
 
   const fetchSkfAndAdd = async (skfCode: string) => {
@@ -55,26 +81,24 @@ function MainPage() {
       toAdd = `❗Užduotis "${skfCode}" neegzistuoja arba įvyko kita klaida.❗`;
     }
 
-    setProblems((prevProblems) => [...prevProblems, toAdd]);
+    setProblems((prev) => ({
+      ...prev,
+      problems: [...prev.problems, toAdd],
+    }));
   };
 
   const renderedProblems = useMemo(() => {
     return (
       <ProblemList
-        {...{
-          problems,
-          setProblems,
-          handleOnDragEnd,
-        }}
+        problems={problems.problems}
+        setProblems={(value) => setProblems({ ...problems, problems: value })}
+        handleOnDragEnd={handleOnDragEnd}
       />
     );
   }, [problems]);
 
   return (
     <>
-      <header>
-        <Header />
-      </header>
       <main>
         <aside></aside>
         <section>
@@ -95,53 +119,90 @@ function MainPage() {
               Šiame tinklapyje galite kurti užduočių sąrašą atsispausdinimui
               (PDF). Rašykite savo arba įkelkite iš užduočių banko.
             </Typography>
-            <Alert variant="outlined" severity="info">
+            <Alert variant="outlined" severity="info" sx={{ mb: 4 }}>
               Progresas automatiškai išsaugomas Jūsų naršyklėje
             </Alert>
-
-            <UploadDownloadEditableFile {...{ problems, setProblems }} />
           </div>
+          <Box
+            sx={{
+              border: "1px solid black",
+              m: 4,
+              p: 2,
+              backgroundColor: "#fff9e8",
+            }}
+          >
+            <div className="no-print">
+              <UploadDownloadEditableFile {...{ problems, setProblems }} />
+              <TextField
+                label="Sąrašo pavadinimas"
+                variant="outlined"
+                fullWidth
+                sx={{ mb: 4 }}
+                value={problems.title}
+                onChange={(e) =>
+                  setProblems({ ...problems, title: e.target.value })
+                }
+              />
+            </div>
 
-          {renderedProblems}
+            <div className="print-only">
+              <h2 style={{ textAlign: "center" }}>{problems.title}</h2>
+            </div>
 
-          <div className="no-print" id="bottom">
-            <NewProblem
-              {...{
-                newProblem,
-                setNewProblem,
-                handleAddProblem,
-              }}
-            />
-            <div id="skflist"></div>
-            <NewSkfList
-              {...{
-                fetchSkfAndAdd,
-                setProblems,
-              }}
-            />
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-around",
-                mt: 1,
+            {renderedProblems}
+
+            <div
+              className="print-only"
+              style={{
+                position: "absolute",
+                right: 2,
+                bottom: 0,
+                fontSize: 12,
               }}
             >
-              <Button variant="contained" onClick={() => window.print()}>
-                Atsisiųsti / spausdinti (.pdf)
-              </Button>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                mt: 1,
-              }}
-            >
-              <Button color="error" onClick={handleRemoveAllProblems}>
-                Išvalyti viską
-              </Button>
-            </Box>
-
+              <em>Šį failą sugeneravo skafis.lt</em>
+            </div>
+            <div className="no-print" id="bottom">
+              <NewProblem
+                {...{
+                  newProblem,
+                  setNewProblem,
+                  handleAddProblem,
+                }}
+              />
+              <div id="skflist"></div>
+              <NewSkfList
+                fetchSkfAndAdd={fetchSkfAndAdd}
+                problems={problems.problems}
+                setProblems={(value) =>
+                  setProblems({ ...problems, problems: value })
+                }
+              />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  mt: 1,
+                }}
+              >
+                <Button variant="contained" onClick={() => window.print()}>
+                  Atsisiųsti / spausdinti (.pdf)
+                </Button>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  mt: 1,
+                }}
+              >
+                <Button color="error" onClick={handleRemoveAllProblems}>
+                  Išvalyti viską
+                </Button>
+              </Box>
+            </div>
+          </Box>
+          <div className="no-print">
             <p>SKF užduoties rėmelio spalvos:</p>
             <p>Balta - nepanaudota</p>
             <p>Žalia - sėkmingai įkelta</p>
