@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 
-const ProblemEditor = ({
+const ContentEditor = ({
   value,
   onChange,
 }: {
@@ -17,4 +17,4 @@ const ProblemEditor = ({
     />
   );
 };
-export default ProblemEditor;
+export default ContentEditor;
