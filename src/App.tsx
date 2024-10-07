@@ -22,32 +22,33 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="*" element={<h1>404 - Page not found</h1>} />
       </Routes>
-
-      {!cookieConsent && (
-        <Snackbar
-          open={!cookieConsent}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-          sx={{ width: "100%", height: "auto" }}
-        >
-          <Alert
-            severity="info"
-            action={
-              <Button
-                color="inherit"
-                size="small"
-                onClick={handleAcceptCookies}
-              >
-                Supratau
-              </Button>
-            }
+      <div className="no-print">
+        {!cookieConsent && (
+          <Snackbar
+            open={!cookieConsent}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            sx={{ width: "100%", height: "auto" }}
           >
-            Šis tinklapis naudoja Google Analytics slapukus bei Jūsų kompiuterio
-            atmintį. Tęsdami lankymąsi puslapyje Jūs sutinkate su slapukų bei
-            kompiuterio atminties naudojimu. Plačiau puslapyje{" "}
-            <a href="/about#terms">"Apie" skiltyje "Privatumo politika"</a>.
-          </Alert>
-        </Snackbar>
-      )}
+            <Alert
+              severity="info"
+              action={
+                <Button
+                  color="inherit"
+                  size="small"
+                  onClick={handleAcceptCookies}
+                >
+                  Supratau
+                </Button>
+              }
+            >
+              Šis tinklapis naudoja Google Analytics slapukus bei Jūsų
+              kompiuterio atmintį. Tęsdami lankymąsi puslapyje Jūs sutinkate su
+              slapukų bei kompiuterio atminties naudojimu. Plačiau puslapyje{" "}
+              <a href="/about#terms">"Apie" skiltyje "Privatumo politika"</a>.
+            </Alert>
+          </Snackbar>
+        )}
+      </div>
     </BrowserRouter>
   );
 }

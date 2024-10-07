@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import ProblemEditor from "../components/ProblemEditor";
 import ProblemDisplay from "../components/ProblemDisplay";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
@@ -20,6 +20,9 @@ function MainPage() {
 
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState<string>("");
+  const [skfValue, setSkfValue] = useState<string>("SKF-");
+  const [skfStatusColor, setSkfStatusColor] = useState<string>("white");
+  const [skfListInput, setSkfListInput] = useState<string>("");
 
   const handleEdit = (index: number) => {
     setEditIndex(index);
@@ -67,6 +70,49 @@ function MainPage() {
     setProblems(items);
   };
 
+  const fetchSkfProblem = async () => {
+    const response = await fetch(
+      `https://api2.skafis.com/view/problem/${skfValue}`
+    );
+    const data = await response.json();
+    setNewProblem(data.problemText);
+    setSkfStatusColor(
+      data.problemVisibility === "VISIBLE"
+        ? "green"
+        : data.problemVisibility === "HIDDEN"
+        ? "yellow"
+        : "red"
+    );
+  };
+
+  const fetchSkfAndAdd = async (skfCode: string) => {
+    const response = await fetch(
+      `https://api2.skafis.com/view/problem/${skfCode}`
+    );
+    const data = await response.json();
+    let toAdd = "";
+    if (data.problemVisibility === "VISIBLE") {
+      toAdd = data.problemText;
+    } else if (data.problemVisibility === "HIDDEN") {
+      toAdd = `Užduotis ${skfCode} yra paslėpta. Norėdami matyti užduotį, turite prisijungti arba pakeisti paskyrą.`;
+    } else {
+      toAdd = `Užduotis ${skfCode} neegzistuoja arba įvyko kita klaida.`;
+    }
+    setProblems([...problems, toAdd]);
+  };
+
+  const handleProcessSkfCodes = async () => {
+    const skfCodes = skfListInput.split(" ");
+    const skfRegex = /^SKF-\d+$/;
+
+    skfCodes.forEach(async (skfCode) => {
+      if (skfRegex.test(skfCode)) {
+        await fetchSkfAndAdd(skfCode);
+      } else {
+        console.error(`Invalid SKF code: ${skfCode}`);
+      }
+    });
+  };
   return (
     <>
       <header>
@@ -89,7 +135,7 @@ function MainPage() {
             </p>
             <p>
               Testavimo platforma:{" "}
-              <a href="https://bankas.skafis.lt">https://testai.skafis.lt</a>
+              <a href="https://testai.skafis.lt">https://testai.skafis.lt</a>
             </p>
             <h2>Testų PDF kūrimas</h2>
             <p>Progresas automatiškai išsaugomas Jūsų naršyklėje</p>
@@ -253,9 +299,47 @@ function MainPage() {
           </DragDropContext>
 
           <div className="no-print">
-            <Box sx={{ p: 3 }}>
+            <Box sx={{ p: 3, border: "1px solid black" }}>
               <Box sx={{ mt: 4 }}>
                 <Typography variant="h6">Naujos užduoties turinys</Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    alignContent: "center",
+                    mb: 1,
+                  }}
+                >
+                  <div
+                    style={{
+                      border: `2px solid ${skfStatusColor}`,
+                      display: "flex",
+                      gap: 10,
+                      padding: 10,
+                    }}
+                  >
+                    <div>
+                      <p>
+                        <a href="https://bankas.skafis.lt">Užduočių banko</a>{" "}
+                        užduotis:
+                      </p>
+                    </div>
+                    <TextField
+                      label="SKF kodas"
+                      value={skfValue}
+                      onChange={(e) => setSkfValue(e.target.value)}
+                      sx={{ width: "100px" }}
+                    />
+                    <Button
+                      color="info"
+                      variant="contained"
+                      onClick={fetchSkfProblem}
+                      sx={{ mt: 2 }}
+                    >
+                      Įkelti
+                    </Button>
+                  </div>
+                </Box>
                 <ProblemEditor
                   value={newProblem}
                   onChange={(e) => setNewProblem(e.target.value)}
@@ -278,6 +362,25 @@ function MainPage() {
                 </Box>
               </Box>
             </Box>
+            {/* <Box sx={{ p: 3, mt: 4, border: "1px solid black" }}>
+              {" "}
+              <TextField
+                label="Enter SKF Codes"
+                variant="outlined"
+                fullWidth
+                value={skfListInput}
+                onChange={(e) => setSkfListInput(e.target.value)}
+                helperText="Enter SKF codes separated by spaces, e.g., 'SKF-1 SKF-234 SKF-1223'"
+              />
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={handleProcessSkfCodes}
+                sx={{ mt: 2 }}
+              >
+                Process SKF Codes
+              </Button>
+            </Box> */}
             <Box
               sx={{
                 display: "flex",
@@ -286,7 +389,7 @@ function MainPage() {
               }}
             >
               <Button variant="contained" onClick={() => window.print()}>
-                Atsisiųsti (spausdinti) PDF
+                Atsisiųsti / spausdinti (.pdf)
               </Button>
             </Box>
             <Box
@@ -300,6 +403,14 @@ function MainPage() {
                 Išvalyti viską
               </Button>
             </Box>
+            <p>SKF užduoties rėmelio spalvos:</p>
+            <p>Balta - nepanaudota</p>
+            <p>Žalia - sėkmingai įkelta</p>
+            <p>
+              Geltona - egzistuoja, bet yra neprieinama (reikia prisijungti arba
+              naudoti kitą paskyrą)
+            </p>
+            <p>Raudona - užduotis neegzistuoja arba įvyko kita klaida</p>
           </div>
         </section>
         <aside></aside>
