@@ -1,13 +1,13 @@
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { Box } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProblemDisplay from "./ProblemDisplay";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 
 interface ProblemListProps {
-  problems: string[];
+  problems: { skfCode: string; content: string }[];
   handleOnDragEnd: (result: any) => void;
-  setProblems: (value: string[]) => void;
+  setProblems: (value: { skfCode: string; content: string }[]) => void;
 }
 
 const ProblemList: React.FC<ProblemListProps> = ({
@@ -16,16 +16,27 @@ const ProblemList: React.FC<ProblemListProps> = ({
   setProblems,
 }) => {
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [editValue, setEditValue] = useState<string>("");
+  const [editValue, setEditValue] = useState<string>("-");
+  const [wasEpmtied, setWasEpmtied] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (editValue === "") {
+      setWasEpmtied(true);
+    }
+  }, [editValue]);
+
   const handleEdit = (index: number) => {
     setEditIndex(index);
-    setEditValue(problems[index]);
+    setEditValue(problems[index].content);
   };
 
   const handleSave = () => {
     if (editIndex !== null) {
       const updatedProblems = [...problems];
-      updatedProblems[editIndex] = editValue;
+      updatedProblems[editIndex].content = editValue;
+      updatedProblems[editIndex].skfCode = wasEpmtied
+        ? ""
+        : problems[editIndex].skfCode;
       setProblems(updatedProblems);
       setEditIndex(null);
       setEditValue("");
@@ -71,9 +82,10 @@ const ProblemList: React.FC<ProblemListProps> = ({
                       <DragIndicatorIcon />
                     </div>
                     <ProblemDisplay
+                      skfCode={problem.skfCode}
                       index={index}
                       isEditable={editIndex === index}
-                      problem={problem}
+                      problem={problem.content}
                       editValue={editValue}
                       setEditValue={setEditValue}
                       handleCancel={handleCancel}

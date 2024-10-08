@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 
 interface NewSkfListProps {
   fetchSkfAndAdd: (skfCode: string) => Promise<void>;
-  setProblems: (value: string[]) => void;
-  problems: string[];
+  setProblems: (value: { skfCode: string; content: string }[]) => void;
+  problems: { skfCode: string; content: string }[];
 }
 
 const NewSkfList: React.FC<NewSkfListProps> = ({
@@ -30,7 +30,10 @@ const NewSkfList: React.FC<NewSkfListProps> = ({
       } else {
         setProblems([
           ...problems,
-          `❗SKF kodas "${skfCode}" neatitinka formato SKF-<sveikas-skaičius>.❗`,
+          {
+            skfCode: "",
+            content: `❗SKF kodas "${skfCode}" neatitinka formato SKF-<sveikas-skaičius>.❗`,
+          },
         ]);
       }
     }

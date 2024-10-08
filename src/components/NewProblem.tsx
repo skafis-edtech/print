@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import ContentEditor from "./ContentEditor";
 
 interface NewProblemProps {
-  newProblem: string;
-  setNewProblem: (value: string) => void;
+  newProblem: { skfCode: string; content: string };
+  setNewProblem: (value: { skfCode: string; content: string }) => void;
   handleAddProblem: () => void;
 }
 
@@ -20,7 +20,7 @@ const NewProblem: React.FC<NewProblemProps> = ({
       `https://api2.skafis.com/view/problem/${skfValue}`
     );
     const data = await response.json();
-    setNewProblem(data.problemText);
+    setNewProblem({ skfCode: skfValue, content: data.problemText });
     setSkfStatusColor(
       data.problemVisibility === "VISIBLE"
         ? "green"
@@ -71,8 +71,10 @@ const NewProblem: React.FC<NewProblemProps> = ({
           </div>
         </Box>
         <ContentEditor
-          value={newProblem}
-          onChange={(e) => setNewProblem(e.target.value)}
+          value={newProblem.content}
+          onChange={(e) =>
+            setNewProblem({ ...newProblem, content: e.target.value })
+          }
         />
         <Box
           sx={{

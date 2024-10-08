@@ -6,22 +6,27 @@ import NewSkfList from "../components/NewSkfList";
 import UploadDownloadEditableFile from "../components/UploadDownloadEditableFile";
 import ProblemList from "../components/ProblemList";
 
+interface ProblemList {
+  title: string;
+  problems: { skfCode: string; content: string }[];
+}
+
 function MainPage() {
-  const [problems, setProblems] = useState<{
-    title: string;
-    problems: string[];
-  }>(() => {
+  const [problems, setProblems] = useState<ProblemList>(() => {
     const savedProblems = localStorage.getItem("problems");
     if (savedProblems) {
       try {
-        const parsedProblems = JSON.parse(savedProblems);
+        const parsedProblems = JSON.parse(savedProblems) as ProblemList;
+
+        // Validate if parsedProblems matches the structure of ProblemList
         if (
-          typeof parsedProblems === "object" &&
-          parsedProblems !== null &&
+          parsedProblems &&
           typeof parsedProblems.title === "string" &&
           Array.isArray(parsedProblems.problems) &&
           parsedProblems.problems.every(
-            (problem: any) => typeof problem === "string"
+            (problem) =>
+              typeof problem.skfCode === "string" &&
+              typeof problem.content === "string"
           )
         ) {
           return parsedProblems;
@@ -30,25 +35,36 @@ function MainPage() {
         console.error("Error parsing saved problems:", e);
       }
     }
+
+    // Fallback to default value if validation fails or parsing errors
     return {
       title: "Pavyzdinis pavadinimas",
-      problems: ["Pavyzdinė užduotis"],
+      problems: [{ skfCode: "", content: "Pavyzdinė užduotis" }],
     };
   });
 
-  const [newProblem, setNewProblem] = useState<string>("");
+  const [newProblem, setNewProblem] = useState<{
+    skfCode: string;
+    content: string;
+  }>({ skfCode: "", content: "" });
 
   useEffect(() => {
     localStorage.setItem("problems", JSON.stringify(problems));
   }, [problems]);
 
+  useEffect(() => {
+    if (newProblem.content === "") {
+      setNewProblem({ skfCode: "", content: "" });
+    }
+  }, [newProblem]);
+
   const handleAddProblem = () => {
-    if (newProblem.trim()) {
+    if (newProblem.content.trim()) {
       setProblems({
         ...problems,
         problems: [...problems.problems, newProblem],
       });
-      setNewProblem("");
+      setNewProblem({ skfCode: "", content: "" });
     }
   };
 
@@ -83,7 +99,7 @@ function MainPage() {
 
     setProblems((prev) => ({
       ...prev,
-      problems: [...prev.problems, toAdd],
+      problems: [...prev.problems, { skfCode: skfCode, content: toAdd }],
     }));
   };
 

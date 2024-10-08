@@ -3,6 +3,7 @@ import ContentEditor from "./ContentEditor";
 import ContentDisplay from "./ContentDisplay";
 
 interface ProblemDisplayProps {
+  skfCode: string;
   index: number;
   isEditable: boolean;
   problem: string;
@@ -15,6 +16,7 @@ interface ProblemDisplayProps {
 }
 
 const ProblemDisplay: React.FC<ProblemDisplayProps> = ({
+  skfCode,
   index,
   isEditable,
   problem,
@@ -54,6 +56,7 @@ const ProblemDisplay: React.FC<ProblemDisplayProps> = ({
                 Išsaugoti
               </Button>
             </Box>
+            <div style={{ textAlign: "right", fontSize: 12 }}>{skfCode}</div>
           </div>
         </>
       ) : (
@@ -83,6 +86,7 @@ const ProblemDisplay: React.FC<ProblemDisplayProps> = ({
                 Redaguoti
               </Button>
             </Box>
+            <div style={{ textAlign: "right", fontSize: 12 }}>{skfCode}</div>
           </div>
         </>
       )}
