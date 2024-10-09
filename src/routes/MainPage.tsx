@@ -5,6 +5,12 @@ import NewProblem from "../components/NewProblem";
 import NewSkfList from "../components/NewSkfList";
 import UploadDownloadEditableFile from "../components/UploadDownloadEditableFile";
 import ProblemList from "../components/ProblemList";
+import { auth } from "../utils/firebaseConfig";
+import {
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithCredential,
+} from "firebase/auth";
 
 interface ProblemList {
   title: string;
@@ -57,6 +63,16 @@ function MainPage() {
       setNewProblem({ skfCode: "", content: "" });
     }
   }, [newProblem]);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User is signed in");
+      } else {
+        console.log("User is signed out");
+      }
+    });
+  }, []);
 
   const handleAddProblem = () => {
     if (newProblem.content.trim()) {

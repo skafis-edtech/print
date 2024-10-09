@@ -19,6 +19,7 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
 import LaptopChromebookIcon from "@mui/icons-material/LaptopChromebook";
 import InfoIcon from "@mui/icons-material/Info";
+import LoginIcon from "@mui/icons-material/Login";
 
 const Header: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -72,6 +73,21 @@ const Header: React.FC = () => {
       </List>
       <Divider />
       <List>
+        <ListItem
+          key="login"
+          disablePadding
+          onClick={() =>
+            (window.location.href =
+              "https://bankas.skafis.lt/login?redirect=https://www.skafis.lt")
+          }
+        >
+          <ListItemButton>
+            <ListItemIcon>
+              <LoginIcon />
+            </ListItemIcon>
+            <ListItemText primary="Prisijungti (draft)" />
+          </ListItemButton>
+        </ListItem>
         <ListItem
           key="about"
           disablePadding

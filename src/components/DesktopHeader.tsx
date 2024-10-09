@@ -30,6 +30,14 @@ const Header: React.FC = () => {
               Apie
             </a>
           </h3>
+          <h3>
+            <a
+              href="https://bankas.skafis.lt/login?redirect=https://www.skafis.lt"
+              style={{ color: "white" }}
+            >
+              Prisijungti (draft)
+            </a>
+          </h3>
         </Toolbar>
       </AppBar>
     </div>
