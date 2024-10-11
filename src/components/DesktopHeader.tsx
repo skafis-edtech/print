@@ -1,7 +1,11 @@
 import { AppBar, Toolbar, Typography } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  isLoggedIn: boolean;
+}
+
+const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
   return (
     <div id="desktop-header">
       <AppBar position="static">
@@ -30,14 +34,25 @@ const Header: React.FC = () => {
               Apie
             </a>
           </h3>
-          <h3>
-            <a
-              href="https://bankas.skafis.lt/login?redirect=https://www.skafis.lt"
-              style={{ color: "white" }}
-            >
-              Prisijungti (draft)
-            </a>
-          </h3>
+          {isLoggedIn ? (
+            <h3>
+              <a
+                href="https://bankas.skafis.lt/logout?redirect=https://www.skafis.lt"
+                style={{ color: "white" }}
+              >
+                Atsijungti
+              </a>
+            </h3>
+          ) : (
+            <h3>
+              <a
+                href="https://bankas.skafis.lt/login?redirect=https://www.skafis.lt"
+                style={{ color: "white" }}
+              >
+                Prisijungti
+              </a>
+            </h3>
+          )}
         </Toolbar>
       </AppBar>
     </div>

@@ -20,8 +20,13 @@ import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
 import LaptopChromebookIcon from "@mui/icons-material/LaptopChromebook";
 import InfoIcon from "@mui/icons-material/Info";
 import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  isLoggedIn: boolean;
+}
+
+const Header: React.FC<HeaderProps> = ({ isLoggedIn }) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -73,21 +78,39 @@ const Header: React.FC = () => {
       </List>
       <Divider />
       <List>
-        <ListItem
-          key="login"
-          disablePadding
-          onClick={() =>
-            (window.location.href =
-              "https://bankas.skafis.lt/login?redirect=https://www.skafis.lt")
-          }
-        >
-          <ListItemButton>
-            <ListItemIcon>
-              <LoginIcon />
-            </ListItemIcon>
-            <ListItemText primary="Prisijungti (draft)" />
-          </ListItemButton>
-        </ListItem>
+        {isLoggedIn ? (
+          <ListItem
+            key="logout"
+            disablePadding
+            onClick={() =>
+              (window.location.href =
+                "https://bankas.skafis.lt/logout?redirect=https://www.skafis.lt")
+            }
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary="Atsijungti" />
+            </ListItemButton>
+          </ListItem>
+        ) : (
+          <ListItem
+            key="login"
+            disablePadding
+            onClick={() =>
+              (window.location.href =
+                "https://bankas.skafis.lt/login?redirect=https://www.skafis.lt")
+            }
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <LoginIcon />
+              </ListItemIcon>
+              <ListItemText primary="Prisijungti" />
+            </ListItemButton>
+          </ListItem>
+        )}
         <ListItem
           key="about"
           disablePadding

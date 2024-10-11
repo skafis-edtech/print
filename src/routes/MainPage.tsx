@@ -5,12 +5,10 @@ import NewProblem from "../components/NewProblem";
 import NewSkfList from "../components/NewSkfList";
 import UploadDownloadEditableFile from "../components/UploadDownloadEditableFile";
 import ProblemList from "../components/ProblemList";
-import { auth } from "../utils/firebaseConfig";
-import {
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  signInWithCredential,
-} from "firebase/auth";
+import DesktopHeader from "../components/DesktopHeader";
+import MobileHeader from "../components/MobileHeader";
+import { useAuth } from "../context/AuthContext";
+import { fetchSkf } from "../services/api";
 
 interface ProblemList {
   title: string;
@@ -54,25 +52,11 @@ function MainPage() {
     content: string;
   }>({ skfCode: "", content: "" });
 
+  const { jwt } = useAuth();
+
   useEffect(() => {
     localStorage.setItem("problems", JSON.stringify(problems));
   }, [problems]);
-
-  useEffect(() => {
-    if (newProblem.content === "") {
-      setNewProblem({ skfCode: "", content: "" });
-    }
-  }, [newProblem]);
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("User is signed in");
-      } else {
-        console.log("User is signed out");
-      }
-    });
-  }, []);
 
   const handleAddProblem = () => {
     if (newProblem.content.trim()) {
@@ -99,20 +83,7 @@ function MainPage() {
   };
 
   const fetchSkfAndAdd = async (skfCode: string) => {
-    const response = await fetch(
-      `https://api2.skafis.com/view/problem/${skfCode}`
-    );
-    const data = await response.json();
-    let toAdd = "";
-
-    if (data.problemVisibility === "VISIBLE") {
-      toAdd = data.problemText;
-    } else if (data.problemVisibility === "HIDDEN") {
-      toAdd = `❗Užduotis "${skfCode}" yra paslėpta. Norėdami matyti užduotį, turite prisijungti arba pakeisti paskyrą.❗`;
-    } else {
-      toAdd = `❗Užduotis "${skfCode}" neegzistuoja arba įvyko kita klaida.❗`;
-    }
-
+    const { toAdd } = await fetchSkf(skfCode, jwt);
     setProblems((prev) => ({
       ...prev,
       problems: [...prev.problems, { skfCode: skfCode, content: toAdd }],
@@ -131,6 +102,10 @@ function MainPage() {
 
   return (
     <>
+      <header>
+        <MobileHeader isLoggedIn={jwt !== null} />
+        <DesktopHeader isLoggedIn={jwt !== null} />
+      </header>
       <main>
         <aside></aside>
         <section>
@@ -196,11 +171,9 @@ function MainPage() {
             </div>
             <div className="no-print" id="bottom">
               <NewProblem
-                {...{
-                  newProblem,
-                  setNewProblem,
-                  handleAddProblem,
-                }}
+                newProblem={newProblem}
+                setNewProblem={setNewProblem}
+                handleAddProblem={handleAddProblem}
               />
               <div id="skflist"></div>
               <NewSkfList
@@ -235,14 +208,6 @@ function MainPage() {
             </div>
           </Box>
           <div className="no-print">
-            <p>SKF užduoties rėmelio spalvos:</p>
-            <p>Balta - nepanaudota</p>
-            <p>Žalia - sėkmingai įkelta</p>
-            <p>
-              Geltona - egzistuoja, bet yra neprieinama (reikia prisijungti arba
-              naudoti kitą paskyrą)
-            </p>
-            <p>Raudona - užduotis neegzistuoja arba įvyko kita klaida</p>
             <div style={{ textAlign: "right", marginTop: 2 }}>
               <a href="#">⬆️ Grįžti į viršų ⬆️</a>
             </div>

@@ -1,6 +1,8 @@
 import { Box, Button, TextField } from "@mui/material";
 import React, { useState } from "react";
 import ContentEditor from "./ContentEditor";
+import { fetchSkf } from "../services/api";
+import { useAuth } from "../context/AuthContext";
 
 interface NewProblemProps {
   newProblem: { skfCode: string; content: string };
@@ -15,16 +17,15 @@ const NewProblem: React.FC<NewProblemProps> = ({
 }) => {
   const [skfValue, setSkfValue] = useState<string>("SKF-");
   const [skfStatusColor, setSkfStatusColor] = useState<string>("white");
+  const { jwt } = useAuth();
+
   const fetchSkfProblem = async () => {
-    const response = await fetch(
-      `https://api2.skafis.com/view/problem/${skfValue}`
-    );
-    const data = await response.json();
-    setNewProblem({ skfCode: skfValue, content: data.problemText });
+    const { toAdd, visibility } = await fetchSkf(skfValue, jwt);
+    setNewProblem({ skfCode: skfValue, content: toAdd });
     setSkfStatusColor(
-      data.problemVisibility === "VISIBLE"
+      visibility === "VISIBLE"
         ? "green"
-        : data.problemVisibility === "HIDDEN"
+        : visibility === "HIDDEN"
         ? "yellow"
         : "red"
     );
