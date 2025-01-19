@@ -1,3 +1,4 @@
+import "md-math-field";
 function AboutPage() {
   return (
     <>
